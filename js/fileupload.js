@@ -1,223 +1,101 @@
-/** *****************************************************************************
+/**
  * @description: This file provides the drag and drop file upload, along with
  *               the more traditional click and open file upload system.
  * @author: Ian Hoegen
  ******************************************************************************/
 const Dropzone = require('react-dropzone');
-const app = require('electron');
+const electron = require('electron');
+const FM = require('./js/filemodule.js');
 const {remote} = require('electron');
-const {Menu} = remote;
-var uploadedFile;
-var uploadedFileContent;
+const {Menu, MenuItem} = remote;
+const parser = require('./js/usfm-parse.js');
+const {dialog} = remote;
+
 var FileUploader = React.createClass({
   onDrop: function(files) {
-    uploadedFile = files[0];
-    readFile(files[0]);
+    if (files !== undefined) {
+      sendToReader(files[0].path);
+    }
+  },
+  onClick: function() {
+    dialog.showOpenDialog({
+      properties: ['openDirectory']
+    }, function(filename) {
+      if (filename !== undefined) {
+        sendToReader(filename[0]);
+      }
+    });
   },
 
   render: function() {
     return (
-    <div>
-      <Dropzone onDrop = {this.onDrop}>
+    <div onClick = {this.onClick}>
+      <Dropzone onDrop = {this.onDrop} disableClick={true} multiple={false}>
         <div>Drag files here to upload, or click to select a file. </div>
       </Dropzone>
     </div>
+
   );
   }
 
 });
 
-/** *****************************************************************************
- * @description: This function reads a file and returns the text that is
- *               contained within the file.
- * @author: Ian Hoegen
- * @param {File} file - A file that is to be uploaded by the user.
+// Generates the menu bar with appropriate click functions.
+
+var menubar = Menu.getApplicationMenu();
+menubar.insert(0, new MenuItem({label: 'File', submenu: [
+          {
+            label: 'Import Project',
+            click() {
+              ReactDOM.render(<FileUploader />, document.getElementById('content'));
+            }
+          } ] }));
+Menu.setApplicationMenu(menubar);
+
+
+/**
+ * @description This function is used to send a file path to the readFile()
+ * module
+ * @param {string} file The path of the directory as specified by the user.
  ******************************************************************************/
-function readFile(file) {
-  var openedFile;
-  var read = new FileReader();
-  read.readAsBinaryString(file);
-  read.onloadend = function() {
-    openedFile = read.result;
-    uploadedFileContent = openedFile;
-  };
-}
-/** *****************************************************************************
- *@author: Ian Hoegen
- *@description: The JSON outlines a template for the menu, and menu items can
- *              be added from here.
- ******************************************************************************/
-const template = [
-  {
-    label: 'File',
-    submenu: [
-      {
-        label: 'Import Project',
-        click(item, focusedWindow) {
-          ReactDOM.render(<FileUploader />, document.getElementById('content'));
-        }
-      }
-    ]
-  },
-  {
-    label: 'Edit',
-    submenu: [
-      {
-        label: 'Cut',
-        accelerator: 'CmdOrCtrl+X',
-        role: 'cut'
-      },
-      {
-        label: 'Copy',
-        accelerator: 'CmdOrCtrl+C',
-        role: 'copy'
-      },
-      {
-        label: 'Paste',
-        accelerator: 'CmdOrCtrl+V',
-        role: 'paste'
-      },
-      {
-        label: 'Delete',
-        role: 'delete'
-      },
-      {
-        label: 'Select All',
-        accelerator: 'CmdOrCtrl+A',
-        role: 'selectall'
-      }
-    ]
-  },
-  {
-    label: 'View',
-    submenu: [
-      {
-        label: 'Reload',
-        accelerator: 'CmdOrCtrl+R',
-        click(item, focusedWindow) {
-          if (focusedWindow) focusedWindow.reload();
-        }
-      },
-      {
-        label: 'Toggle Full Screen',
-        accelerator: process.platform === 'darwin' ? 'Ctrl+Command+F' : 'F11',
-        click(item, focusedWindow) {
-          if (focusedWindow)
-            focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
-        }
-      },
-      {
-        label: 'Toggle Developer Tools',
-        accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl' +
-        '+Shift+I',
-        click(item, focusedWindow) {
-          if (focusedWindow)
-            focusedWindow.webContents.toggleDevTools();
-        }
-      }
-    ]
-  },
-  {
-    label: 'Window',
-    role: 'window',
-    submenu: [
-      {
-        label: 'Minimize',
-        accelerator: 'CmdOrCtrl+M',
-        role: 'minimize'
-      },
-      {
-        label: 'Close',
-        accelerator: 'CmdOrCtrl+W',
-        role: 'close'
-      }
-    ]
-  },
-  {
-    label: 'Help',
-    role: 'help',
-    submenu: [
-      {
-        label: 'Learn More',
-        click() {
-          require('electron').shell.openExternal('https://github.com/WycliffeAssociates/8woc/');
-        }
-      }
-    ]
+function sendToReader(file) {
+  try {
+    localStorage.setItem('manifestSource', file);
+    FM.readFile(file + '\\manifest.json', readInManifest);
+  } catch (error) {
+    dialog.showErrorBox('Import Error', 'Please make sure that ' +
+    'your folder includes a manifest.json file.');
   }
-];
-
-if (process.platform === 'darwin') {
-  const name = require('electron').remote.app.getName();
-  template.unshift({
-    label: name,
-    submenu: [
-      {
-        label: 'About ' + name,
-        role: 'about'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        label: 'Services',
-        role: 'services',
-        submenu: []
-      },
-      {
-        type: 'separator'
-      },
-      {
-        label: 'Hide ' + name,
-        accelerator: 'Command+H',
-        role: 'hide'
-      },
-      {
-        label: 'Hide Others',
-        accelerator: 'Command+Alt+H',
-        role: 'hideothers'
-      },
-      {
-        label: 'Show All',
-        role: 'unhide'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        label: 'Quit',
-        accelerator: 'Command+Q',
-        click() {
-          app.quit();
-        }
-      }
-    ]
-  });
-  // Window menu.
-  template[3].submenu = [
-    {
-      label: 'Close',
-      accelerator: 'CmdOrCtrl+W',
-      role: 'close'
-    },
-    {
-      label: 'Minimize',
-      accelerator: 'CmdOrCtrl+M',
-      role: 'minimize'
-    },
-    {
-      label: 'Zoom',
-      role: 'zoom'
-    },
-    {
-      type: 'separator'
-    },
-    {
-      label: 'Bring All to Front',
-      role: 'front'
-    }
-  ];
+}
+/**
+ * @description This function takes the manifest file and parses it to JSON.
+ * @param {string} manifest - The manifest.json file
+ * @param {string} source - Manifest file source
+ ******************************************************************************/
+function readInManifest(manifest) {
+  let parsedManifest = JSON.parse(manifest);
+  let finishedChunks = parsedManifest.finished_chunks;
+  for (let chapterVerse in finishedChunks) {
+    let splitted = finishedChunks[chapterVerse].split('-');
+    openUsfmFromChunks(splitted);
+  }
+}
+/**
+ * @description This function opens the chunks defined in the manifest file.
+ * @param {array} chunkArray - An array of the chunks defined in manifest
+ * @param {string} source - Manifest file source
+ ******************************************************************************/
+function openUsfmFromChunks(chunk) {
+  var source = localStorage.getItem('manifestSource');
+  console.log(chunk);
+  try {
+    FM.readFile(source + '\\' + chunk[0] + '\\' + chunk[1] + '.txt', test);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-const menu = Menu.buildFromTemplate(template);
-Menu.setApplicationMenu(menu);
+function test(text) {
+  console.log(text);
+  console.log(parser(text));
+}
