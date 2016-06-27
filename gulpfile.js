@@ -6,7 +6,7 @@ var gulp = require('gulp'),
   babelify = require('babelify'),
   bablePresetReact = require('babel-preset-react'),
   source = require('vinyl-source-stream'),
-	shell = require('gulp-shell');
+  shell = require('gulp-shell');
 
 // Define paths
 var paths = {
