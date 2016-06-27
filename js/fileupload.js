@@ -6,9 +6,8 @@
 const Dropzone = require('react-dropzone');
 const electron = require('electron');
 const FM = require('./js/filemodule.js');
-const menubar = require('./js/menubar.js');
 const {remote} = require('electron');
-const {Menu} = remote;
+const {Menu, MenuItem} = remote;
 const parser = require('./js/usfm-parse.js');
 const {dialog} = remote;
 
@@ -42,14 +41,18 @@ var FileUploader = React.createClass({
 });
 
 // Generates the menu bar with appropriate click functions.
-menubar.template[0].submenu = [
-  {label: 'Import Project',
-  click(item, focusedWindow) {
-    ReactDOM.render(<FileUploader />, document.getElementById('content'));
-  }}];
-var template = menubar.template;
-var menu = Menu.buildFromTemplate(template);
-Menu.setApplicationMenu(menu);
+
+var menubar = Menu.getApplicationMenu();
+menubar.insert(0, new MenuItem({label: 'File', submenu: [
+          {
+            label: 'Import Project',
+            click() {
+              ReactDOM.render(<FileUploader />, document.getElementById('content'));
+            }
+          } ] }));
+Menu.setApplicationMenu(menubar);
+
+
 /**
  * @description This function is used to send a file path to the readFile()
  * module
@@ -57,7 +60,8 @@ Menu.setApplicationMenu(menu);
  ******************************************************************************/
 function sendToReader(file) {
   try {
-    FM.readFile(file + '\\manifest.json', readInManifest, file);
+    localStorage.setItem('manifestSource', file);
+    FM.readFile(file + '\\manifest.json', readInManifest);
   } catch (error) {
     dialog.showErrorBox('Import Error', 'Please make sure that ' +
     'your folder includes a manifest.json file.');
@@ -68,21 +72,12 @@ function sendToReader(file) {
  * @param {string} manifest - The manifest.json file
  * @param {string} source - Manifest file source
  ******************************************************************************/
-function readInManifest(manifest, source) {
+function readInManifest(manifest) {
   let parsedManifest = JSON.parse(manifest);
   let finishedChunks = parsedManifest.finished_chunks;
-  openChunks(finishedChunks, source);
-}
-
-/**
- * @description This function processes the chunks defined in the manifest file.
- * @param {array} chunkArray - An array of the chunks defined in manifest
- * @param {string} source - Manifest file source
- ******************************************************************************/
-function openChunks(chunkArray, source) {
-  for (let chapterVerse in chunkArray) {
-    let splitted = chunkArray[chapterVerse].split('-');
-    openUsfmFromChunks(splitted, source);
+  for (let chapterVerse in finishedChunks) {
+    let splitted = finishedChunks[chapterVerse].split('-');
+    openUsfmFromChunks(splitted);
   }
 }
 /**
@@ -90,7 +85,8 @@ function openChunks(chunkArray, source) {
  * @param {array} chunkArray - An array of the chunks defined in manifest
  * @param {string} source - Manifest file source
  ******************************************************************************/
-function openUsfmFromChunks(chunk, source) {
+function openUsfmFromChunks(chunk) {
+  var source = localStorage.getItem('manifestSource');
   console.log(chunk);
   try {
     FM.readFile(source + '\\' + chunk[0] + '\\' + chunk[1] + '.txt', test);

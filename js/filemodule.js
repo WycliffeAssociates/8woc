@@ -3,9 +3,6 @@ var FM = (function() {
   const fs = require('fs');
 
   return {
-    uploadedFile: null,
-    uploadedFileContent: null,
-
 /**
  * @description: This function reads a file and returns the text that is
  *               contained within the file.
@@ -14,9 +11,9 @@ var FM = (function() {
  * @param {function} callback - A callback function to be executed after reading
  * @param {string} source - The file path that the file is from
  ******************************************************************************/
-    readFile: function(file, callback, source) {
+    readFile: function(file, callback) {
       var inputFile = fs.readFileSync(file).toString();
-      callback(inputFile, source);
+      callback(inputFile);
     }
   };
 }

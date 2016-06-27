@@ -3,12 +3,9 @@
  *@description: The JSON outlines a template for the menu, and menu items can
  *              be added from here.
  ******************************************************************************/
-var menubar = (function() {
-  return {
-    template: [
-      {
-        label: 'File'
-      },
+ const {remote} = require('electron');
+ const {Menu} = remote;
+    var template = [
       {
         label: 'Edit',
         submenu: [
@@ -95,11 +92,6 @@ var menubar = (function() {
           }
         ]
       }
-    ],
-
-    buildMenu: null
-
-  };
-}
-)();
-module.exports = menubar;
+    ]
+    var menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
