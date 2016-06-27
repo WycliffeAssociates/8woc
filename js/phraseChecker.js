@@ -5,17 +5,57 @@ var Grid = ReactBootstrap.Grid;
 var Well = ReactBootstrap.Well;
 var FormControl = ReactBootstrap.FormControl;
 var Button = ReactBootstrap.Button;
+var ButtonGroup = ReactBootstrap.ButtonGroup;
 
 var App = React.createClass({
+  getInitialState: function(){
+    return {toCheck: "to establish the faith",
+            ref: "tit 1 1",
+            note: "AT: 'I work to establish the faith' or 'I work to build up the faith.'",
+            tlVerse: "神 的 僕 人 ， 耶 穌 基 督 的 使 徒 保 羅 ， 憑 著 神 選 民 的 信 心 與 敬 虔 真 理 的 知 識 ，",
+            selectedText: "",
+            flagState: "",
+            returnObject: []}
+  },
+  setSelectedText: function(e){
+    this.setState({selectedText: e});
+  },
+  setFlagState: function(e){
+    this.setState({flagState: e});
+  },
+  appendReturnObject: function(){
+    this.setState({returnObject: this.state.returnObject.push(
+      {
+        ref: this.state.ref,
+        selectedText: this.state.selectedText,
+        flag: this.state.flagState
+      }
+    )});
+  },
   render: function(){
     return (
       <Grid>
-        <Row>
-          <Col md={12}><ScriptureDisplay /></Col>
+        <Row className="show-grid">
+          <Col md={12}>
+            <ScriptureDisplay
+              scripture={this.state.tlVerse}
+              setSelectedText={this.setSelectedText}
+            />
+          </Col>
         </Row>
-        <Row>
-          <Col md={6} className="confirm-area"><ConfirmDisplay /></Col>
-          <Col md={6}><FlagDisplay /></Col>
+        <Row className="show-grid">
+          <Col md={6} className="confirm-area">
+            <ConfirmDisplay
+              note={this.state.note}
+              toCheck={this.state.toCheck}
+              selectedText={this.state.selectedText}
+            />
+          </Col>
+          <Col md={6}>
+            <FlagDisplay
+              setFlagState={this.state.setFlagState}
+            />
+          </Col>
         </Row>
       </Grid>
     );
@@ -23,12 +63,15 @@ var App = React.createClass({
 });
 
 var ScriptureDisplay = React.createClass({
+  getSelectedText: function(){
+    this.props.setSelectedText(window.getSelection().toString());
+  },
   render: function(){
     return (
       <div className="ScriptureDisplay">
-        <h1>JOHN<small>3:16</small></h1>
+        <h1>TITUS<small>1:1</small></h1>
         <Well>
-          <p>神 愛 世 人 ， 甚 至 將 他 的 獨 生 子 賜 給 他 們 ， 叫 一 切 信 他 的 ， 不 至 滅 亡 ， 反 得 永 生 。</p>
+          <p onClick={this.getSelectedText}>{this.props.scripture}</p>
         </Well>
       </div>
     );
@@ -39,9 +82,11 @@ var ConfirmDisplay = React.createClass({
   render: function(){
     return (
       <form>
-        <label>Phrase to select</label>
+        <label>{this.props.toCheck}</label>
+        <label>{this.props.note}</label>
         <FormControl type="text"
-        placeholder="Highlited text appears here" />
+        placeholder="Highlited text appears here"
+        value={this.props.selectedText} />
       </form>
     );
   }
@@ -50,13 +95,11 @@ var ConfirmDisplay = React.createClass({
 var FlagDisplay = React.createClass({
   render: function(){
     return (
-      <div class="col-md-6">
+      <ButtonGroup vertical block>
         <Button bsStyle="success">&#10003; Retain</Button>
-        <br />
         <Button bsStyle="warning">&#9872; Changed</Button>
-        <br />
         <Button bsStyle="danger">&#10060; Wrong</Button>
-      </div>
+      </ButtonGroup>
     );
   }
 });
