@@ -44,14 +44,13 @@ var FileUploader = React.createClass({
 
 var menubar = Menu.getApplicationMenu();
 menubar.insert(0, new MenuItem({label: 'File', submenu: [
-          {
-            label: 'Import Project',
-            click() {
-              ReactDOM.render(<FileUploader />, document.getElementById('content'));
-            }
-          } ] }));
+  {
+    label: 'Import Project',
+    click() {
+      ReactDOM.render(<FileUploader />, document.getElementById('content'));
+    }
+  }]}));
 Menu.setApplicationMenu(menubar);
-
 
 /**
  * @description This function is used to send a file path to the readFile()
@@ -70,11 +69,11 @@ function sendToReader(file) {
 /**
  * @description This function takes the manifest file and parses it to JSON.
  * @param {string} manifest - The manifest.json file
- * @param {string} source - Manifest file source
  ******************************************************************************/
 function readInManifest(manifest) {
   let parsedManifest = JSON.parse(manifest);
   let finishedChunks = parsedManifest.finished_chunks;
+  localStorage.setItem('joinedChunks', JSON.stringify({}));
   for (let chapterVerse in finishedChunks) {
     let splitted = finishedChunks[chapterVerse].split('-');
     openUsfmFromChunks(splitted);
@@ -82,20 +81,32 @@ function readInManifest(manifest) {
 }
 /**
  * @description This function opens the chunks defined in the manifest file.
- * @param {array} chunkArray - An array of the chunks defined in manifest
- * @param {string} source - Manifest file source
+ * @param {array} chunk - An array of the chunks defined in manifest
  ******************************************************************************/
 function openUsfmFromChunks(chunk) {
   var source = localStorage.getItem('manifestSource');
-  console.log(chunk);
-  try {
-    FM.readFile(source + '\\' + chunk[0] + '\\' + chunk[1] + '.txt', test);
-  } catch (error) {
-    console.log(error);
-  }
+  localStorage.setItem('currentChapter', chunk[0]);
+  FM.readFile(source + '\\' + chunk[0] + '\\' + chunk[1] +
+  '.txt', saveChunksLocal);
 }
-
-function test(text) {
-  console.log(text);
-  console.log(parser(text));
+/**
+ * @description This function saves the chunks locally as a localstorage object;
+ * @param {string} text - The text being read in from chunks
+ ******************************************************************************/
+function saveChunksLocal(text) {
+  var currentJoined = JSON.parse(localStorage.getItem('joinedChunks'));
+  var currentChapter = localStorage.getItem('currentChapter');
+  if (currentChapter === '00') {
+    currentJoined.title = text;
+  } else {
+    if (currentJoined[currentChapter] === undefined) {
+      currentJoined[currentChapter] = [];
+    }
+    var currentChunk = parser(text);
+    for (let verse in currentChunk.verses) {
+      var currentVerse = currentChunk.verses[verse];
+      currentJoined[currentChapter].push(currentVerse);
+    }
+  }
+  localStorage.setItem('joinedChunks', JSON.stringify(currentJoined));
 }
