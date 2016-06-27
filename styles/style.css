@@ -1,0 +1,22 @@
+.container{
+  width: 50%;
+  background-color: #BBB;
+  vertical-align: center;
+  margin-top: 25%;
+}
+
+.btn{
+  margin: 0px;
+  padding: 10px;
+  width: 100%;
+  border-radius: 0;
+}
+
+.well{
+  margin-bottom: 0;
+}
+
+.confirm-area{
+  margin: 10px;
+  text-align: center;
+}

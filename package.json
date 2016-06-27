@@ -29,6 +29,7 @@
     "bootstrap": "^3.3.6",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
-    "react-dropzone": "^3.5.1"
+    "react-dropzone": "^3.5.1",
+    "remarkable": "^1.6.2"
   }
 }
