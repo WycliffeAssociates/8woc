@@ -4,12 +4,12 @@
  * @author: Ian Hoegen
  ******************************************************************************/
 const Dropzone = require('react-dropzone');
-const electron = require('electron');
-const FM = require('./js/filemodule.js');
-const {remote} = require('electron');
-const {Menu, MenuItem} = remote;
-const parser = require('./js/usfm-parse.js');
+const FM = require('./filemodule.js');
+const remote = window.electron.remote;
+const parser = require('./usfm-parse.js');
 const {dialog} = remote;
+const React = require('react');
+const ReactDOM = require('react-dom');
 
 var FileUploader = React.createClass({
   onDrop: function(files) {
@@ -40,17 +40,8 @@ var FileUploader = React.createClass({
 
 });
 
-// Generates the menu bar with appropriate click functions.
-
-var menubar = Menu.getApplicationMenu();
-menubar.insert(0, new MenuItem({label: 'File', submenu: [
-  {
-    label: 'Import Project',
-    click() {
-      ReactDOM.render(<FileUploader />, document.getElementById('content'));
-    }
-  }]}));
-Menu.setApplicationMenu(menubar);
+window.FileUploader = FileUploader;
+module.exports = FileUploader;
 
 /**
  * @description This function is used to send a file path to the readFile()

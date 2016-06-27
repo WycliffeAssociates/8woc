@@ -1,6 +1,6 @@
 
 var FM = (function() {
-  const fs = require('fs');
+  const fs = window.fs;
 
   return {
 /**
