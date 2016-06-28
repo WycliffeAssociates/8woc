@@ -24,13 +24,16 @@ var App = React.createClass({
     this.setState({flagState: e});
   },
   appendReturnObject: function(){
-    this.setState({returnObject: this.state.returnObject.push(
+    var object = this.state.returnObject;
+    object.push(
       {
         ref: this.state.ref,
         selectedText: this.state.selectedText,
         flag: this.state.flagState
       }
-    )});
+    );
+    this.setState({returnObject: object});
+    console.log(this.state.returnObject);
   },
   render: function(){
     return (
@@ -53,8 +56,13 @@ var App = React.createClass({
           </Col>
           <Col md={6}>
             <FlagDisplay
-              setFlagState={this.state.setFlagState}
+              setFlagState={this.setFlagState}
             />
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12} className="next-button">
+            <NextButton nextItem={this.appendReturnObject}/>
           </Col>
         </Row>
       </Grid>
@@ -94,12 +102,33 @@ var ConfirmDisplay = React.createClass({
 
 var FlagDisplay = React.createClass({
   render: function(){
+    var _this = this;
     return (
       <ButtonGroup vertical block>
-        <Button bsStyle="success">&#10003; Retain</Button>
-        <Button bsStyle="warning">&#9872; Changed</Button>
-        <Button bsStyle="danger">&#10060; Wrong</Button>
+        <Button bsStyle="success" onClick={
+          function() {
+            _this.props.setFlagState("Retained")
+          }
+          }>&#10003; Retain</Button>
+        <Button bsStyle="warning" onClick={
+          function() {
+            _this.props.setFlagState("Changed")
+          }
+          }>&#9872; Changed</Button>
+        <Button bsStyle="danger" onClick={
+          function() {
+            _this.props.setFlagState("Wrong")
+          }
+        }>&#10060; Wrong</Button>
       </ButtonGroup>
+    );
+  }
+});
+
+var NextButton = React.createClass({
+  render: function(){
+    return (
+      <Button onClick={this.props.nextItem}>Next &#8594;</Button>
     );
   }
 });

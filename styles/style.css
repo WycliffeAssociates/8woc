@@ -22,3 +22,7 @@
   margin: 10px;
   text-align: center;
 }
+
+.next-button{
+  float: right;
+}
