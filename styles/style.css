@@ -26,3 +26,7 @@
 .next-button{
   float: right;
 }
+
+::selection{
+  background: yellow;
+}
