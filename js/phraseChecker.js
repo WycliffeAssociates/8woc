@@ -33,7 +33,22 @@ var App = React.createClass({
       }
     );
     this.setState({returnObject: object});
-    console.log(this.state.returnObject);
+  },
+  getTN: function(){
+    var html = new HTMLScraper();
+    var book;
+    html.downloadEntireBook('tit',
+                            function(dbook,tbook){
+                              console.log(dbook/tbook*100 + "%");
+                            },
+                            function(){
+                              book = html.getBook('tit');
+                              console.dir(book);
+                            }
+                          );
+  },
+  componentWillMount: function(){
+    this.getTN();
   },
   render: function(){
     return (
