@@ -55,6 +55,7 @@ function sendToReader(file) {
   } catch (error) {
     dialog.showErrorBox('Import Error', 'Please make sure that ' +
     'your folder includes a manifest.json file.');
+    console.log(error);
   }
 }
 /**
@@ -77,8 +78,13 @@ function readInManifest(manifest) {
 function openUsfmFromChunks(chunk) {
   var source = localStorage.getItem('manifestSource');
   localStorage.setItem('currentChapter', chunk[0]);
-  FM.readFile(source + '\\' + chunk[0] + '\\' + chunk[1] +
+  try {
+    FM.readFile(source + '\\' + chunk[0] + '\\' + chunk[1] +
   '.txt', saveChunksLocal);
+  } catch (error) {
+    dialog.showErrorBox('Import Error', 'Unknown error has occurred');
+    console.log(error);
+  }
 }
 /**
  * @description This function saves the chunks locally as a localstorage object;

@@ -1,2 +1,2 @@
 window.electron = require('electron');
-window.fs = require('fs');
+window.__base = __dirname + '\\';

@@ -11,7 +11,7 @@ var gulp = require('gulp'),
 // Define paths
 var paths = {
   indexJS: ['./src/js/index.js'],
-  js: ['src/js/*.js', 'src/js/vendor/*.js']
+  js: ['src/js/*.js']
 };
 
 // The default task (called when we run `gulp` from cli)
@@ -20,6 +20,7 @@ gulp.task('default', ['watch', 'js']);
 // Rerun tasks whenever a file changes.
 gulp.task('watch', function() {
   gulp.watch(paths.js, ['js']);
+  gulp.watch(paths.js, ['lint']);
 });
 
 // An example of a dependency task, it will be run before the css/js tasks.
@@ -33,20 +34,20 @@ gulp.task('watch', function() {
 gulp.task('js', function() {
 // Browserify/bundle the JS.
   browserify(paths.indexJS)
-.transform('babelify', {presets: ['react']})
-.bundle()
-.on('error', swallowError)
-.pipe(source('app.js'))
-.pipe(gulp.dest('./dist/js/'));
+  .transform('babelify', {presets: ['react']})
+  .bundle()
+  .on('error', swallowError)
+  .pipe(source('app.js'))
+  .pipe(gulp.dest('./dist/js/'));
 });
 
 gulp.task('lint', shell.task([
   'eslint src/js/*'
-])).on('error', swallowError);
+])).on('error', silentError);
 
 gulp.task('fixLint', shell.task([
   'eslint --fix src/js/*'
-]));
+])).on('error', silentError)
 /**
  * @description: Error handling to keep gulp open
  * @param {error} error - The error to be handled
@@ -54,4 +55,11 @@ gulp.task('fixLint', shell.task([
 function swallowError(error) {
   console.log(error.toString());
   this.emit('end');
+}
+/**
+ * @description: Error handling to keep gulp open, done silently
+ * @param {error} error - The error to be handled
+ ******************************************************************************/
+function silentError(error) {
+  this.emit('end')
 }

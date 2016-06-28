@@ -1,6 +1,6 @@
 
 var FM = (function() {
-  const fs = window.fs;
+  const fs = require(window.__base + 'node_modules\\fs-extra');
 
   return {
 /**
