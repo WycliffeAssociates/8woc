@@ -1,11 +1,11 @@
 module.exports = {
   "AddCheck": "ADD_CHECK",
-  "Nextverse": "NEW_VERSE",
+  "NextVerse": "NEW_VERSE",
   "PrevVerse": "NEW_VERSE",
 }
 
 /**
-Array that maps words to consts for use in actions
+Object that maps words to consts for use in actions
 For example, in a register callback in a Store, it is recommended
 that when you check the action type, you do it in the following manner:
 
