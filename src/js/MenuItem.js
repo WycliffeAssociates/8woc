@@ -1,6 +1,5 @@
 // MenuItem.js
 var Glyphicon = require('react-bootstrap/lib/Glyphicon.js');
-var Well = require('react-bootstrap/lib/Well.js');
 var React = require('react');
 var ReactDOM = require('react-dom');
 
@@ -76,71 +75,42 @@ var MenuItem = React.createClass({
 
     return (
       <span>
-        <Well>
+        <Glyphicon
+          glyph = "flag"
+          style = {style}
+          onClick = {this.toggleFlag}
+        />
+        <span>
+            {" " + this.props.check.book + " "}
+        </span>
+        <span>
+             {this.props.check.chapter}
+        </span>
+         : 
+        <span>
+             {this.props.check.verse}
+        </span>
+        <span>
           <Glyphicon
-            glyph = "flag"
-            style = {style}
-            onClick = {this.toggleFlag}
+            glyph = "remove"
+            style = {style1}
           />
-          <span>
-            <button
-              onClick = {this.navigateChapter}
-            >
-              {this.props.check.book}
-            </button>
-          </span>
-
-          <span>
-            <button
-              onClick = {this.navigateChapter}
-            >
-              Chapter {this.props.check.chapter}
-            </button>
-          </span>
-
-          <span>
-            <button
-              onClick = {this.navigateVerses}
-            >
-              Verse {this.props.check.verse}
-            </button>
-          </span>
-
-            <span>
-              <Glyphicon
-                glyph = "remove"
-                style = {style1}
-                onClick = {this.toggleWrong}
-              />
-            </span>
-
-            <span>
-              <Glyphicon
-                glyph = "random"
-                style = {style2}
-                onClick = {this.toggleSwitch}
-              />
-            </span>
-
-            <span>
-              <Glyphicon
-                glyph = "ok"
-                style = {style3}
-                onClick = {this.toggleOk}
-              />
-            </span>
-
-        </Well>
+        </span>
+        <span>
+          <Glyphicon
+            glyph = "random"
+            style = {style2}
+          />
+        </span>
+        <span>
+          <Glyphicon
+            glyph = "ok"
+            style = {style3}
+          />
+        </span>
       </span>
     );
   },
-
-  navigateChapter: function() {
-    console.log("chapter 1");
-  },
-  navigateVerses: function() {
-    console.log("1");
-  }
 
 });
 
