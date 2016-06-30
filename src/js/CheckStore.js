@@ -30,5 +30,8 @@ module.exports = {
   },
   getCurrentCheck: function() {
     return checks[checkIndex];
+  },
+  getCheckIndex: function() {
+    return checkIndex;
   }
 };

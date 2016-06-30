@@ -9,25 +9,35 @@ var CheckStore = require('./CheckStore');
 module.exports = React.createClass({   // checkecking screen has menu item and check module in it
   getInitialState: function() {
     return {
-      check: CheckStore.getCurrentCheck()
+      checks: CheckStore.getAllChecks()
     };
   },
 
   // changes the status of checked status to the parameter "status"
   changeCheckedStatus: function(status) {
+    var checkIndex = CheckStore.getCheckIndex();
     var newState = update(this.state, {
-      check: {
-        checkedStatus: {$set: status}
+      checks: {
+        [checkIndex]: {
+          checkedStatus: {$set: status}
+        }
       }
     });
     this.setState(newState);
   },
 
   render: function() {
+    var menuItems = this.state.checks.map(function(check){
+      return (
+        <div>
+          <MenuItem check={check} />
+        </div>
+      );
+    });
     return (
       <div>
           <Well>
-            <MenuItem check={this.state.check} />
+            {menuItems}
           </Well>
           <CheckModule onCheckedStatusChanged={this.changeCheckedStatus} />
       </div>
