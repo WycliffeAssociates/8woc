@@ -30,3 +30,19 @@
 ::selection{
   background: yellow;
 }
+
+.listhead{
+  text-align: center;
+  text-decoration: underline;
+  font-size: 100%;
+}
+
+.verseReference{
+  text-align: center;
+  color: #000;
+}
+
+.verseReference:hover{
+  color: #000;
+  text-decoration: none;
+}
