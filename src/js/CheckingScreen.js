@@ -6,7 +6,8 @@ var MenuItem = require('./MenuItem');
 var CheckModule = require('./CheckModule');
 var CheckStore = require('./CheckStore');
 
-module.exports = React.createClass({   // checkecking screen has menu item and check module in it
+// checkecking screen has menu item and check module in it
+module.exports = React.createClass({
   getInitialState: function() {
     return {
       checks: CheckStore.getAllChecks()
@@ -39,7 +40,7 @@ module.exports = React.createClass({   // checkecking screen has menu item and c
           <Well>
             {menuItems}
           </Well>
-          <CheckModule onCheckedStatusChanged={this.changeCheckedStatus} />
+          <CheckModule check={CheckStore.getCurrentCheck()} onCheckedStatusChanged={this.changeCheckedStatus} />
       </div>
     );
   }
