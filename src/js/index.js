@@ -17,7 +17,7 @@
       Menu.setApplicationMenu(menu);
       var Application = (
         <div>
-          <TPane />
+          <CheckingScreen />
           <UploadModal />
         </div>
       );

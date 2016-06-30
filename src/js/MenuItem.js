@@ -19,7 +19,7 @@ var MenuItem = React.createClass({
     });
   },
   render: function() {
-    var checkedStatus = this.props.checkedStatus; // getting check status as a prop and putting it in variable checkedStatus
+    var checkedStatus = this.props.check.checkedStatus; // getting check status as a prop and putting it in variable checkedStatus
 
     var style;
     if (this.state.flagged) {
@@ -84,17 +84,25 @@ var MenuItem = React.createClass({
           />
           <span>
             <button
-              onClick = {this.navigateChapter} // makes a chapter button
+              onClick = {this.navigateChapter}
             >
-              Chapter
+              {this.props.check.book}
             </button>
           </span>
 
           <span>
             <button
-              onClick = {this.navigateVerses} // makes a verse button
+              onClick = {this.navigateChapter}
             >
-              Verse
+              Chapter {this.props.check.chapter}
+            </button>
+          </span>
+
+          <span>
+            <button
+              onClick = {this.navigateVerses}
+            >
+              Verse {this.props.check.verse}
             </button>
           </span>
 
