@@ -59,13 +59,17 @@ var App = React.createClass({
   setNote: function(e){
     this.setState({note: e});
   },
+  setRef: function(e){
+    this.setState({ref: e});
+  },
   appendReturnObject: function(){
     var object = this.state.returnObject;
     object.push(
       {
         ref: this.state.ref,
         selectedText: this.state.selectedText,
-        flag: this.state.flagState
+        flag: this.state.flagState,
+        note: this.state.note
       }
     );
     this.setState({returnObject: object});
@@ -92,6 +96,8 @@ var App = React.createClass({
             <ScriptureDisplay
               scripture={this.state.tlVerse}
               setSelectedText={this.setSelectedText}
+              currentVerse={this.state.ref}
+              ref="ScriptureDisplay"
             />
           </Col>
         </Row>
@@ -117,7 +123,8 @@ var App = React.createClass({
         <Row>
           <Col md={12}>
             <TempMenu verses={this.state.chapterData}
-                      setNote={this.setNote}/>
+                      setNote={this.setNote}
+                      setRef={this.setRef}/>
           </Col>
         </Row>
       </Grid>
@@ -171,9 +178,10 @@ var ScriptureDisplay = React.createClass({
         );
       }
     }
+    var verseDisplay = this.props.currentVerse.split(" ");
     return (
       <div className="ScriptureDisplay">
-        <h1>TITUS<small>1:1</small></h1>
+        <h1>{verseDisplay[0].toUpperCase()}<small>{verseDisplay[1]}</small></h1>
         <Glyph
           glyph="remove"
           style={{float: 'right'}}
@@ -232,14 +240,19 @@ var NextButton = React.createClass({
 });
 
 var TempMenu = React.createClass({
-  phraseInfo: function(k){
+  getInitialState: function(){
+    return {current: 0}
+  },
+  passInfo: function(k, j, i){
     this.props.setNote(k);
+    this.props.setRef(j);
+    this.setState({current: i});
   },
   render: function(){
     var verseList = [];
     var scripture = this.props.verses;
     var _this = this;
-        console.log(scripture);
+    let i = 0;
     for(let type in scripture){
       verseList.push(
         <h3 className="listhead" key={type}>{type}</h3>
@@ -247,11 +260,12 @@ var TempMenu = React.createClass({
       for(let verse in scripture[type]){
         verseList.push(
           <a
-            key={type+verse+Date.now()}
+            key={i++}
+            num={i}
             className="verseReference"
             onClick={
               function(){
-                _this.phraseInfo(scripture[type][verse])
+                _this.passInfo(scripture[type][verse], verse, i)
               }
             }
             >
@@ -267,6 +281,34 @@ var TempMenu = React.createClass({
     );
   }
 });
+
+/* This would eventually replace the anchor tags in the TempMenu however I do
+   not want to waste time writing a new component if lance is working on a be
+   tter menu anyways. Placing this on hold for now.
+*/
+// var MenuElement = React.createClass({
+//   getInitialState: function(){
+//     return {type: "",
+//             verse: "",
+//             index: 0}
+//   },
+//   render: function(){
+//     var i = 0;
+//     var _this = this;
+//     return (
+//       <a
+//         key={i++}
+//         index={i}
+//         className="verseReference"
+//         onClick{
+//           function(){
+//             _this.props.passInfo()
+//           }
+//         }
+//
+//     );
+//   }
+// });
 
 var Progress = React.createClass({
   render: function(){
