@@ -29,48 +29,39 @@ var MenuItem = React.createClass({
     }
     else {
       style = {
-        color: "grey" // when it is not being used it dos not show itself to
-        // the user
+        color: "grey"
       };
     }
 
-    var style1;
-    if (checkedStatus === "WRONG") { // if  checkedStatus equas wrong red X glypghicon appears
-      style1 = {
-        color: "red",
-        display: 'initial'
-      };
-    }
-    else {
-      style1 = {
-        display: 'none'
-      };
-    }
-
-    var style2;
-    if (checkedStatus === "REPLACED") { // gold glyphicon appears
-      style2 = {
-        color: "gold",
-        display: 'initial'
-      };
-    }
-    else {
-      style2 = {
-        display: 'none'
-      };
-    }
-
-    var style3;
-    if (checkedStatus === "RETAINED") { // green check glyphicon appears
-      style3 = {
-        color: "green",
-        display: 'initial'
-      };
-    }
-    else {
-      style3 = {
-        display: 'none'
-      };
+    var checkedStatusStyle;
+    var glyphIcon;
+    switch(checkedStatus) {
+      case "WRONG": 
+        glyphIcon = "remove";
+        checkedStatusStyle = {
+          color: "red",
+          display: 'initial'
+        };
+        break;
+      case "REPLACED":
+        glyphIcon = "random";
+        checkedStatusStyle = {
+          color: "gold",
+          display: 'initial'
+        };
+        break;
+      case "RETAINED":
+        glyphIcon = "ok";
+        checkedStatusStyle = {
+          color: "green",
+          display: 'initial'
+        };
+        break;
+      default:
+        glyphIcon = '';
+        checkedStatusStyle = {
+          display: 'none'
+        };
     }
 
     return (
@@ -92,20 +83,8 @@ var MenuItem = React.createClass({
         </span>
         <span>
           <Glyphicon
-            glyph = "remove"
-            style = {style1}
-          />
-        </span>
-        <span>
-          <Glyphicon
-            glyph = "random"
-            style = {style2}
-          />
-        </span>
-        <span>
-          <Glyphicon
-            glyph = "ok"
-            style = {style3}
+            glyph = {glyphIcon}
+            style = {checkedStatusStyle}
           />
         </span>
       </span>
