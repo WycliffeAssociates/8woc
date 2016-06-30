@@ -8,7 +8,6 @@ be dispatched to all of the stores that have registered
 listener
 (See ExampleComponent.js)
 
-
 */
 module.exports = {
   nextCheck: function(newVerse) {
