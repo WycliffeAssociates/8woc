@@ -1,6 +1,8 @@
 var EventEmitter = require('events').EventEmitter;
 var Dispatcher = require('./Dispatcher');
 var consts = require("./CoreActionConsts.js");
+
+var CHANGE_EVENT = 'change';
 /**
 
 Keep pretty much all business logic and data in 
@@ -13,11 +15,11 @@ methods to get whatever data you need. Also include
 the following snippet in your component:
 
   componentWillMount() {
-    CoreStore.on("change", ...some component method here...);
+    CoreStore.addChangeListener(this.{YOUR METHOD HERE});
   }
 
   componentWillUnmount() {
-    CoreStore.removeListener("change", ...that component method here...);
+    CoreStore.removeChangeListener(this.{YOUR METHOD HERE});
   }
 
 This will make it so your component will be subscribed
@@ -40,33 +42,49 @@ class CoreStore extends EventEmitter {
     return this.exampleComponentText;
   }
 
+  emitChange() {
+    this.emit(CHANGE_EVENT);
+  }
+
+  /**
+   * @param {function} callback
+   */
+  addChangeListener(callback) {
+    this.on(CHANGE_EVENT, callback);
+  }
+
+  removeChangeListener(callback) {
+    this.removeListener(CHANGE_EVENT, callback);
+  }
+
   handleActions(action) {
     switch(action.type) {
-      case consts["AddCheck"]: {
+      case consts["AddCheck"]: 
         // change some data here...
 
-        // Emits that a change was made, so any
-        // component listening for this store
-        // can update its data
-        this.emit("change");
+        // Emits that a change was made, so any component listening for 
+        // this store can update its data
+        this.emitChange();
         break;
-      }
-      case consts["NextVerse"]: {
+      
+      case consts["NextVerse"]: 
         // change some data here...
-        this.emit("change");
+        this.emitChange();
         break;
-      }
-      case consts["PrevVerse"]: {
+      
+      case consts["PrevVerse"]: 
         // change some data here...
-        this.emit("change");
+        this.emitChange();
         break;
-      }
+      
       // For ExampleComponent
-      case "ADD_TO_TEXT": {
+      case "ADD_TO_TEXT": 
         this.exampleComponentText += "a";
-        this.emit("change");
+        this.emitChange();
         break;
-      }
+
+      default:
+        // do nothing
     }
   }
 
@@ -74,5 +92,4 @@ class CoreStore extends EventEmitter {
 
 const coreStore = new CoreStore;
 Dispatcher.register(coreStore.handleActions.bind(coreStore));
-window.CoreStore = coreStore;
 module.exports = coreStore;

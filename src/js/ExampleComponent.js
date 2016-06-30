@@ -19,7 +19,6 @@ class ExampleComponent extends React.Component {
   }
 
   getText() {
-    console.log(this);
     this.setState({
       ptext: CoreStore.getExampleComponentText()
     });
@@ -32,11 +31,11 @@ class ExampleComponent extends React.Component {
   // ExampleComponent listens for CoreStore's emits
   // so it can know when it needs to update its data
   componentWillMount() {
-    CoreStore.on("change", this.getText.bind(this));
+    CoreStore.addChangeListener(this.getText.bind(this));
   }
 
   componentWillUnmount() {
-    CoreStore.removeListener("change", this.getText.bind(this));
+    CoreStore.removeChangeListener(this.getText.bind(this));
   }
 
   render() {

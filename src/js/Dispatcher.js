@@ -7,7 +7,6 @@ Dispatcher.handleAction = function(action) {
       action
   );
 };
-window.Dispatcher = Dispatcher;
 module.exports = Dispatcher;
 /**
 Stores can require this file and call register(callback)
