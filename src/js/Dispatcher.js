@@ -2,12 +2,12 @@ var fluxDispatch = require('flux').Dispatcher;
 var Dispatcher = new fluxDispatch();
 
 Dispatcher.handleAction = function(action) {
-  this.dispatch({
-      source: 'VIEW_ACTION',
-      action: action
-  });
+  action.source = 'VIEW_ACTION';
+  this.dispatch(
+      action
+  );
 };
-
+window.Dispatcher = Dispatcher;
 module.exports = Dispatcher;
 /**
 Stores can require this file and call register(callback)

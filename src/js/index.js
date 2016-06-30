@@ -6,13 +6,14 @@
   const remote = window.electron.remote;
   const {Menu} = remote;
   const menubar = require('./menubar');
-  const CommentBox = require('./CommentBox');
-  const NextButton = require('./NextButton');
+  const ExampleComponent = require('./ExampleComponent');
 
   var App = {
     init: function() {
       var menu = Menu.buildFromTemplate(menubar.template);
       Menu.setApplicationMenu(menu);
+      ReactDOM.render(<ExampleComponent />,
+        document.getElementById('content'));
     }
   };
 
