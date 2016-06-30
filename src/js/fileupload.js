@@ -15,6 +15,7 @@ var manifestSource = '';
 var bookName = '';
 var joinedChunks = {};
 var currentChapter = '';
+var bookTitle = "";
 
 var FileUploader = React.createClass({
   onDrop: function(files) {
@@ -94,14 +95,14 @@ function sendToReader(file) {
  ******************************************************************************/
 function readInManifest(manifest) {
   let parsedManifest = JSON.parse(manifest);
-  let bookTitle = parsedManifest.project.name;
+  bookTitle = parsedManifest.project.name;
   let bookTitleSplit = bookTitle.split(' ');
   bookName = bookTitleSplit.join('');
   let bookFileName = bookName + '.json';
   try {
     FM.readFile('data/ulgb/' + bookFileName, openOriginal);
   } catch (error) {
-    console.log("File not found");
+    console.log(error);
   }
   let finishedChunks = parsedManifest.finished_chunks;
   for (let chapterVerse in finishedChunks) {
@@ -155,5 +156,6 @@ function saveChunksLocal(text) {
  ******************************************************************************/
 function openOriginal(text) {
   var input = JSON.parse(text);
+  input[bookName].title = bookTitle;
   FileActions.changeOriginalText(<Book input={input[bookName]} />);
 }
