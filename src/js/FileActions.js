@@ -3,7 +3,7 @@
  * @description: This handles the events for all things relating to the upload
  *               of the files.
  ******************************************************************************/
-var EventEmitter = require('events').EventEmitter;
+const EventEmitter = require('events').EventEmitter;
 
 class FileActions extends EventEmitter {
   constructor(text) {

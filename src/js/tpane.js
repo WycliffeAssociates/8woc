@@ -3,13 +3,16 @@
  * @description This component displays the Original Language, Gateway Language,
  *              and the Target Language. It takes it's input from uploads.
  ******************************************************************************/
-const Row = require('react-bootstrap/lib/Row.js');
-const Grid = require('react-bootstrap/lib/Grid.js');
-const React = require('react');
-const FileActions = require('./FileActions');
-const Pane = require('./pane');
+ const React = require('react');
 
-var TPane = React.createClass({
+const Grid = require('react-bootstrap/lib/Grid.js');
+const Row = require('react-bootstrap/lib/Row.js');
+
+const FileActions = require('./FileActions');
+const Pane = require('./Pane');
+
+
+const TPane = React.createClass({
   getInitialState: function() {
     return ({
       ol: "",

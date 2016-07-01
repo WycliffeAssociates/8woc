@@ -1,19 +1,11 @@
-const Col = require('react-bootstrap/lib/Col.js');
-const Well = require('react-bootstrap/lib/Well.js');
 const React = require('react');
 
-var style = {
-  header: {
-    textAlign: 'center'
-  },
-  content: {
-    overflowY: 'scroll',
-    width: '100%',
-    height: '250px'
-  }
-};
+const Col = require('react-bootstrap/lib/Col.js');
+const Well = require('react-bootstrap/lib/Well.js');
 
-var Pane = React.createClass({
+const style = require('./Style');
+
+const Pane = React.createClass({
   render: function() {
     return (
       <Col md={4} sm={4} xs={12}>
