@@ -1,12 +1,14 @@
 (function() {
   const ReactDOM = require('react-dom');
   const React = require('react');
-  const TPane = require('./tpane');
-// var db = require('./db-init');
-  const UploadModal = require('./uploadmodal');
+
   const remote = window.electron.remote;
   const {Menu} = remote;
-  const menubar = require('./menubar');
+
+  const TPane = require('../components/TPane');
+// var db = require('./db-init');
+  const UploadModal = require('../components/UploadModal');
+  const menubar = require('../components/MenuBar');
 
   var App = {
     init: function() {
