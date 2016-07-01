@@ -27,6 +27,34 @@ module.exports = {
     Dispatcher.handleAction({
       type: "ADD_TO_TEXT"
     });
+  },
+
+  updateOriginalLanguage: function(book) {
+    Dispatcher.handleAction({
+      type: consts["UpdateOl"],
+      bookOl: book
+    });
+  },
+
+  updateTargetLanguage: function(book) {
+    Dispatcher.handleAction({
+      type: consts["UpdateTl"],
+      bookTl: book
+    });
+  },
+
+  updateGatewayLanguage: function(book) {
+    Dispatcher.handleAction({
+      type: consts["UpdateGl"],
+      bookGl: book
+    });
+  },
+
+  updateModal: function(boolean) {
+    Dispatcher.handleAction({
+      type: consts["UpdateModal"],
+      modalOption: boolean
+    });
   }
 
 };

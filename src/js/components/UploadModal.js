@@ -7,18 +7,19 @@ const React = require('react');
 const Button = require('react-bootstrap/lib/Button.js');
 const Modal = require('react-bootstrap/lib/Modal.js');
 
-const FileActions = require('../FileActions');
+const CoreStore = require('../stores/CoreStore.js');
+
 const FileUpload = require('./FileUpload');
 
 const UploadModal = React.createClass({
   componentWillMount: function() {
-    FileActions.on('upload', this.userChoice);
+    CoreStore.addChangeListener(this.updateModal);
+  },
+  updateModal: function() {
+    this.setState({showModal: CoreStore.getModal()});
   },
   getInitialState: function() {
     return {showModal: false};
-  },
-  userChoice: function(boolean) {
-    this.setState({showModal: boolean});
   },
   close: function() {
     this.setState({showModal: false});

@@ -5,13 +5,15 @@ const Well = require('react-bootstrap/lib/Well.js');
 
 const style = require('./Style');
 
+const Book = require('./Book');
+
 const Pane = React.createClass({
   render: function() {
     return (
       <Col md={4} sm={4} xs={12}>
         <h3 style={style.header}> {this.props.title} </h3>
           <Well style={style.content}>
-            <div>{this.props.content}</div>
+            <Book input={this.props.content} />
           </Well>
       </Col>
     );

@@ -42,6 +42,22 @@ class CoreStore extends EventEmitter {
     return this.exampleComponentText;
   }
 
+  getOriginalLanugage() {
+    return this.ol;
+  }
+
+  getTargetLanugage() {
+    return this.tl;
+  }
+
+  getGatewayLanguage() {
+    return this.gl;
+  }
+
+  getModal() {
+    return this.modalVisibility;
+  }
+
   emitChange() {
     this.emit(CHANGE_EVENT);
   }
@@ -58,7 +74,7 @@ class CoreStore extends EventEmitter {
   }
 
   handleActions(action) {
-    switch(action.type) {
+    switch (action.type) {
       case consts["AddCheck"]:
         // change some data here...
 
@@ -83,6 +99,26 @@ class CoreStore extends EventEmitter {
         this.emitChange();
         break;
 
+      case consts["UpdateOl"]:
+        this.ol = action.bookOl;
+        this.emitChange();
+        break;
+
+      case consts["UpdateTl"]:
+        this.tl = action.bookTl;
+        this.emitChange();
+        break;
+
+      case consts["UpdateGl"]:
+        this.gl = action.bookGl;
+        this.emitChange();
+        break;
+
+      case consts["UpdateModal"]:
+        this.modalVisibility = action.modalOption;
+        this.emitChange();
+        break;
+        
       default:
         // do nothing
     }

@@ -11,8 +11,9 @@ const FileModule = require('./FileModule');
 const remote = window.electron.remote;
 const {dialog} = remote;
 
+const CoreActions = require('../actions/CoreActions.js');
+
 const Book = require('./Book');
-const FileActions = require('../FileActions');
 
 const parser = require('./usfm-parse.js');
 const style = require('./Style');
@@ -68,7 +69,6 @@ function sendToReader(file) {
   try {
     manifestSource = file;
     FileModule.readFile(file + '/manifest.json', readInManifest);
-    FileActions.setState(false);
   } catch (error) {
     dialog.showErrorBox('Import Error', 'Please make sure that ' +
     'your folder includes a manifest.json file.');
@@ -80,6 +80,7 @@ function sendToReader(file) {
  * @param {string} manifest - The manifest.json file
  ******************************************************************************/
 function readInManifest(manifest) {
+  CoreActions.updateModal(false);
   let parsedManifest = JSON.parse(manifest);
   bookTitle = parsedManifest.project.name;
   let bookTitleSplit = bookTitle.split(' ');
@@ -97,7 +98,7 @@ function readInManifest(manifest) {
       openUsfmFromChunks(splitted);
     }
   }
-  FileActions.changeTargetText(<Book input={joinedChunks}/>);
+  CoreActions.updateTargetLanguage(joinedChunks);
 }
 /**
  * @description This function opens the chunks defined in the manifest file.
@@ -143,5 +144,5 @@ function joinChunks(text) {
 function openOriginal(text) {
   var input = JSON.parse(text);
   input[bookName].title = bookTitle;
-  FileActions.changeOriginalText(<Book input={input[bookName]} />);
+  CoreActions.updateOriginalLanguage(input[bookName]);
 }

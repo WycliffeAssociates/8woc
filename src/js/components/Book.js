@@ -11,6 +11,12 @@
  const Book = React.createClass({
    render: function() {
      var chapterArray = [];
+     var title = "";
+     if (this.props.input !== undefined) {
+       if (this.props.input.hasOwnProperty('title')) {
+         title = this.props.input.title;
+       }
+     }
      for (var key in this.props.input) {
        if (this.props.input.hasOwnProperty(key) && key !== 'title') {
          var chapterNum = parseInt(key);
@@ -33,7 +39,7 @@
      }
      return (
         <div>
-          <BookTitle title = {this.props.input.title} />
+          <BookTitle title ={title} />
           {chapterArray}
         </div>
       );

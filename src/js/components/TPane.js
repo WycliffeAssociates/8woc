@@ -8,7 +8,8 @@
  const Grid = require('react-bootstrap/lib/Grid.js');
  const Row = require('react-bootstrap/lib/Row.js');
 
- const FileActions = require('../FileActions');
+ const CoreStore = require('../stores/CoreStore.js');
+
  const Pane = require('./Pane');
 
  const TPane = React.createClass({
@@ -20,17 +21,23 @@
      });
    },
    componentWillMount: function() {
-     FileActions.on('changeTL', this.updateTargetLanguage);
-     FileActions.on('changeOL', this.updateOriginalLanguage);
+     CoreStore.addChangeListener(this.updateOriginalLanguage);
+     CoreStore.addChangeListener(this.updateTargetLanguage);
+     CoreStore.addChangeListener(this.updateGatewayLanguage);
    },
-   updateTargetLanguage: function(text) {
+   updateTargetLanguage: function() {
      this.setState({
-       tl: FileActions.tlText
+       tl: CoreStore.getTargetLanugage()
      });
    },
-   updateOriginalLanguage: function(text) {
+   updateOriginalLanguage: function() {
      this.setState({
-       ol: FileActions.olText
+       ol: CoreStore.getOriginalLanugage()
+     });
+   },
+   updateGatewayLanguage: function() {
+     this.setState({
+       gl: CoreStore.getGatewayLanguage()
      });
    },
    render: function() {
