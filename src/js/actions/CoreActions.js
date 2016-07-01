@@ -1,4 +1,4 @@
-var Dispatcher = require('./Dispatcher');
+var Dispatcher = require('../dispatchers/Dispatcher');
 var consts = require('./CoreActionConsts');
 /**
 How to use the actions:

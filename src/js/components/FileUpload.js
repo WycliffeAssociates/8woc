@@ -12,7 +12,7 @@ const remote = window.electron.remote;
 const {dialog} = remote;
 
 const Book = require('./Book');
-const FileActions = require('./FileActions');
+const FileActions = require('../FileActions');
 
 const parser = require('./usfm-parse.js');
 const style = require('./Style');
@@ -42,17 +42,16 @@ const FileUploader = React.createClass({
   render: function() {
     return (
     <div onClick = {this.onClick} >
-      <Dropzone onDrop = {this.onDrop}
+        <Dropzone onDrop = {this.onDrop}
         disableClick={true} multiple={false} style={style.dropzone}
         activeStyle={style.dropzoneActive}>
-        <div style={style.dropzoneText}>
-          <center>
-            Drag files here to upload, or click to select a file
-          </center>
-          </div>
+            <div style={style.dropzoneText}>
+              <center>
+                Drag files here to upload, or click to select a file
+              </center>
+            </div>
       </Dropzone>
     </div>
-
   );
   }
 

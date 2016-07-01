@@ -9,7 +9,8 @@ const Chapter = React.createClass({
     return (
    <div>
        <h5>
-       <strong>Chapter {this.props.chapterNum}</strong></h5>
+           <strong>Chapter {this.props.chapterNum}</strong>
+       </h5>
        <div>{this.props.arrayOfVerses}</div>
    </div>
  );

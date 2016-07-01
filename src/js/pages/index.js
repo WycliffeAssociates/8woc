@@ -5,10 +5,10 @@
   const remote = window.electron.remote;
   const {Menu} = remote;
 
-  const TPane = require('./TPane');
+  const TPane = require('../components/TPane');
 // var db = require('./db-init');
-  const UploadModal = require('./UploadModal');
-  const menubar = require('./MenuBar');
+  const UploadModal = require('../components/UploadModal');
+  const menubar = require('../components/MenuBar');
 
   var App = {
     init: function() {

@@ -7,7 +7,7 @@ const React = require('react');
 const Button = require('react-bootstrap/lib/Button.js');
 const Modal = require('react-bootstrap/lib/Modal.js');
 
-const FileActions = require('./FileActions');
+const FileActions = require('../FileActions');
 const FileUpload = require('./FileUpload');
 
 const UploadModal = React.createClass({

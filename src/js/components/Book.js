@@ -8,7 +8,6 @@
  const Chapter = require('./Chapter');
  const Verse = require('./Verse');
 
-
  const Book = React.createClass({
    render: function() {
      var chapterArray = [];
@@ -26,15 +25,17 @@
            }
          }
          chapterArray.push(
-            <Chapter key={chapterNum} chapterNum={chapterNum} arrayOfVerses={arrayOfVerses}/>
+            <Chapter key = {chapterNum}
+            chapterNum = {chapterNum}
+            arrayOfVerses = {arrayOfVerses}/>
           );
        }
      }
      return (
         <div>
-        <BookTitle title = {this.props.input.title} />
+          <BookTitle title = {this.props.input.title} />
           {chapterArray}
-          </div>
+        </div>
       );
    }
  });

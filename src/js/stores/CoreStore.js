@@ -1,11 +1,11 @@
 var EventEmitter = require('events').EventEmitter;
-var Dispatcher = require('./Dispatcher');
-var consts = require("./CoreActionConsts.js");
+var Dispatcher = require('../dispatchers/Dispatcher');
+var consts = require("../actions/CoreActionConsts.js");
 
 var CHANGE_EVENT = 'change';
 /**
 
-Keep pretty much all business logic and data in 
+Keep pretty much all business logic and data in
 here. Make methods so components can retrieve
 that data.
 
@@ -23,7 +23,7 @@ the following snippet in your component:
   }
 
 This will make it so your component will be subscribed
-to the store and listen for the store's emits. The store 
+to the store and listen for the store's emits. The store
 sends an emit when its data changes, and any subscribed
 component will hear it and be able to ask for updated data.
 (See ExampleComponent.js)
@@ -59,26 +59,26 @@ class CoreStore extends EventEmitter {
 
   handleActions(action) {
     switch(action.type) {
-      case consts["AddCheck"]: 
+      case consts["AddCheck"]:
         // change some data here...
 
-        // Emits that a change was made, so any component listening for 
+        // Emits that a change was made, so any component listening for
         // this store can update its data
         this.emitChange();
         break;
-      
-      case consts["NextVerse"]: 
+
+      case consts["NextVerse"]:
         // change some data here...
         this.emitChange();
         break;
-      
-      case consts["PrevVerse"]: 
+
+      case consts["PrevVerse"]:
         // change some data here...
         this.emitChange();
         break;
-      
+
       // For ExampleComponent
-      case "ADD_TO_TEXT": 
+      case "ADD_TO_TEXT":
         this.exampleComponentText += "a";
         this.emitChange();
         break;

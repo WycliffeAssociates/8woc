@@ -3,7 +3,7 @@
  *@description: The JSON outlines a template for the menu, and menu items can
  *              be added from here.
  ******************************************************************************/
-const FileActions = require('./FileActions.js');
+const FileActions = require('../FileActions.js');
 
 var template = [
   {
