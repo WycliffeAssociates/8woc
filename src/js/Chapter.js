@@ -1,3 +1,7 @@
+/**
+ * @description: This file builds the chapters
+ * @author: Ian Hoegen
+ ******************************************************************************/
 const React = require('react');
 
 const Chapter = React.createClass({

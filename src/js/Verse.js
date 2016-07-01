@@ -1,3 +1,7 @@
+/**
+ * @description: This file builds the verses
+ * @author: Ian Hoegen
+ ******************************************************************************/
 const React = require('react');
 
 const Verse = React.createClass({

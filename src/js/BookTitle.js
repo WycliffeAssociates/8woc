@@ -1,3 +1,7 @@
+/**
+ * @description: This file builds the BookTitle
+ * @author: Ian Hoegen
+ ******************************************************************************/
 const React = require('react');
 
 const BookTitle = React.createClass({
