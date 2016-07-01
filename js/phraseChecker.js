@@ -1,5 +1,5 @@
 var Row = ReactBootstrap.Row;
-var Col = ReactBootstrap.Row;
+var Col = ReactBootstrap.Col;
 var Grid = ReactBootstrap.Grid;
 var Well = ReactBootstrap.Well;
 var FormControl = ReactBootstrap.FormControl;
@@ -9,45 +9,18 @@ var Label = ReactBootstrap.Label;
 var Glyph = ReactBootstrap.Glyphicon;
 var ProgressBar = ReactBootstrap.ProgressBar;
 
-var titus = {
-  "Assumed Knowledge" : {
-    "tit 1:1" : "a servant of God and an apostle of Jesus Christ - The phrase 'I am' is implied."
-  },
-  "doubleNegatives" : {
-    "tit 1:6" : "An elder must be without blame - This is a double negative emphasizing moral character.",
-    "tit 3:14" : "so that they may not be unfruitful - so that they will be fruitful"
-  },
-  "hyperbole" : {
-    "tit 1:12" : "Cretans are unceasing liars - Cretans are lying all the time or Cretans never stop lying."
-  },
-  "synedoche" : {
-    "tit 1:12" : "lazy bellies - lazy gluttons or people who do nothing but eat too much food. This figure of speech uses the image of their stomachs to describe the whole person."
-  },
-  "hypotheticals" : {
-    "tit 2:6" : "would bring shame upon someone if he tried to oppose you - This presents a hypothetical situation where someone opposes Titus and is himself shamed as a result. It is not expressing a current event. Your language may have a way of expressing this."
-  },
-  "personification" : {
-    "tit 2:11" : "trains us - This is a figure of speech that presents the grace of God as a person who trains and disciplines people to live holy lives."
-  },
-  "metaphor" : {
-    "tit 2:14" : "to set us free from lawlessness - to release us from our sinful condition. This is a metaphor that compares being released from sin's control to the freedom of a slave being purchased by someone.",
-    "tit 3:3" : "led astray and enslaved by various passions and pleasures - This metaphor compares the way our sinful desires control us to slavery.",
-    "tit 3:6" : "poured the Holy Spirit on us - This is a metaphor resembling the anointing of priests."
-  }
-};
-
 var App = React.createClass({
   getInitialState: function(){
     return {toCheck: "",
             ref: "",
             note: "",
-            chapterData: titus,
+            chapterData: {},
             tlVerse: "This is selectable placeholder text. Eventually the target language text will appear here",
             selectedText: "",
             flagState: "",
             returnObject: [],
             progress:  0,
-            isLoading: false}
+            isLoading: true}
   },
 
   setSelectedText: function(e){
@@ -61,6 +34,25 @@ var App = React.createClass({
   },
   setRef: function(e){
     this.setState({ref: e});
+  },
+  parseTn: function(){
+    var http = new TNHTMLScraper();
+    var _this = this;
+    http.downloadEntireBook(
+      'psa',
+      function(done, total){
+        _this.setState({progress: done/total*100});
+      },
+      function(){
+        var book = http.getBook('psa');
+        var parsedBook = TNParser(book, 'psa', function(a){console.log(a*100+"%")});
+        _this.setState({chapterData: parsedBook,
+                        isLoading: false});
+      }
+    );
+  },
+  componentWillMount: function(){
+    this.parseTn();
   },
   appendReturnObject: function(){
     var object = this.state.returnObject;
@@ -85,48 +77,47 @@ var App = React.createClass({
           }}
         >
           <Col md={12}>
-            <Progress progress={this.state.progress} />
+            <Loader progress={this.state.progress} />
           </Col>
         </Row>
-        <Row
-          className="show-grid"
-          style={{display: this.state.isLoading ? "none" : "block"}}
-        >
-          <Col md={12}>
-            <ScriptureDisplay
-              scripture={this.state.tlVerse}
-              setSelectedText={this.setSelectedText}
-              currentVerse={this.state.ref}
-              ref="ScriptureDisplay"
-            />
-          </Col>
-        </Row>
-        <Row className="show-grid">
-          <Col md={6} className="confirm-area">
-            <ConfirmDisplay
-              note={this.state.note}
-              toCheck={this.state.toCheck}
-              selectedText={this.state.selectedText}
-            />
-          </Col>
-          <Col md={6}>
-            <FlagDisplay
-              setFlagState={this.setFlagState}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col md={12} className="next-button">
-            <NextButton nextItem={this.appendReturnObject}/>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={12}>
-            <TempMenu verses={this.state.chapterData}
-                      setNote={this.setNote}
-                      setRef={this.setRef}/>
-          </Col>
-        </Row>
+        <div style={{display: this.state.isLoading ? "none" : "block"}}>
+          <Row className="show-grid">
+            <Col md={12}>
+              <ScriptureDisplay
+                scripture={this.state.tlVerse}
+                setSelectedText={this.setSelectedText}
+                currentVerse={this.state.ref}
+                ref="ScriptureDisplay"
+              />
+            </Col>
+          </Row>
+          <Row className="show-grid">
+            <Col md={5} className="confirm-area">
+              <ConfirmDisplay
+                note={this.state.note}
+                toCheck={this.state.toCheck}
+                selectedText={this.state.selectedText}
+              />
+            </Col>
+            <Col md={6}>
+              <FlagDisplay
+                setFlagState={this.setFlagState}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col md={12} className="next-button">
+              <NextButton nextItem={this.appendReturnObject}/>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={12}>
+              <TempMenu verses={this.state.chapterData}
+                        setNote={this.setNote}
+                        setRef={this.setRef}/>
+            </Col>
+          </Row>
+        </div>
       </Grid>
     );
   }
@@ -257,7 +248,11 @@ var TempMenu = React.createClass({
       verseList.push(
         <h3 className="listhead" key={type}>{type}</h3>
       );
-      for(let verse in scripture[type]){
+      for(let verse in scripture[type].verses){
+        let Book = scripture[type].verses[verse].book;
+        let Chapter = scripture[type].verses[verse].chapter;
+        let thisVerse = scripture[type].verses[verse].verse;
+        let referenceString = Chapter + ":" + thisVerse;
         verseList.push(
           <a
             key={i++}
@@ -265,11 +260,15 @@ var TempMenu = React.createClass({
             className="verseReference"
             onClick={
               function(){
-                _this.passInfo(scripture[type][verse], verse, i)
+                _this.passInfo(
+                  scripture[type].verses[verse].phrase,
+                  referenceString,
+                  i
+                )
               }
             }
             >
-            {verse}<br />
+            {scripture[type].verses[verse].book + " " + referenceString}<br />
           </a>
         );
       }
@@ -310,10 +309,13 @@ var TempMenu = React.createClass({
 //   }
 // });
 
-var Progress = React.createClass({
+var Loader = React.createClass({
   render: function(){
     return (
-      <ProgressBar now={this.props.progress} />
+      <ProgressBar
+        now={this.props.progress}
+        style={{verticaAlign: 'middle'}}
+      />
     );
   }
 });
