@@ -20,15 +20,15 @@ var MenuItem = React.createClass({
   render: function() {
     var checkedStatus = this.props.check.checkedStatus; // getting check status as a prop and putting it in variable checkedStatus
 
-    var style;
+    var flagStyle;
     if (this.state.flagged) {
-      style = {
+      flagStyle = {
         color: "blue",
         display: 'initial' // when it is toggled it turns blue
       };
     }
     else {
-      style = {
+      flagStyle = {
         color: "grey"
       };
     }
@@ -68,7 +68,7 @@ var MenuItem = React.createClass({
       <span>
         <Glyphicon
           glyph = "flag"
-          style = {style}
+          style = {flagStyle}
           onClick = {this.toggleFlag}
         />
         <span>

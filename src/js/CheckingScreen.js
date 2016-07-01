@@ -5,10 +5,27 @@ var Well = require('react-bootstrap/lib/Well.js');
 var MenuItem = require('./MenuItem');
 var CheckModule = require('./CheckModule');
 var CheckStore = require('./CheckStore');
+var CheckStore = require('./CheckStore');
 
 // checkecking screen has menu item and check module in it
 module.exports = React.createClass({
   getInitialState: function() {
+    return this.getAllChecks();
+  },
+
+  componentWillMount: function() {
+    CheckStore.addChangeListener(this.getAllChecks);
+  },
+
+  componentWillUnmount: function() {
+    CheckStore.removeChangeListener(this.getAllChecks);
+  },
+
+  changeState: function() {
+    setState(getAllChecks);
+  },
+
+  getAllChecks: function() {
     return {
       checks: CheckStore.getAllChecks()
     };
@@ -28,10 +45,10 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    var menuItems = this.state.checks.map(function(check){
+    var menuItems = this.state.checks.map(function(check, index){
       return (
-        <div>
-          <MenuItem check={check} />
+        <div key={index}>
+          <MenuItem check={check} isCurrentCheck={index == CheckStore.getCheckIndex()} />
         </div>
       );
     });

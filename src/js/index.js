@@ -7,7 +7,7 @@
   const remote = window.electron.remote;
   const {Menu} = remote;
   const menubar = require('./menubar');
-  const CheckingScreen = require('./CheckingScreen')
+  const CheckingScreen = require('./CheckingScreen');
 
   var App = {
     init: function() {
