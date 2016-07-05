@@ -118,7 +118,7 @@ class CoreStore extends EventEmitter {
         this.modalVisibility = action.modalOption;
         this.emitChange();
         break;
-        
+
       default:
         // do nothing
     }

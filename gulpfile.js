@@ -11,11 +11,7 @@ var gulp = require('gulp'),
 // Define paths
 var paths = {
   indexJS: ['./src/js/pages/index.js'],
-  js: ['src/js/*.js',
-       'src/js/components/*.js',
-       'src/js/dispatchers/*.js',
-       'src/js/pages/*.js',
-       'src/js/stores/*.js']
+  js: ['src/js/**/*.js']
 };
 
 // The default task (called when we run `gulp` from cli)

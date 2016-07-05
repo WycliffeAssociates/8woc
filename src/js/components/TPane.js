@@ -44,9 +44,9 @@
      return (
       <Grid>
         <Row>
-          <Pane title = "Original Language" content = {this.state.ol}/>
-          <Pane title = "Gateway Language" content = {this.state.gl}/>
-          <Pane title = "Target Language" content = {this.state.tl}/>
+          <Pane title="Original Language" content={this.state.ol}/>
+          <Pane title="Gateway Language" content={this.state.gl}/>
+          <Pane title="Target Language" content={this.state.tl}/>
         </Row>
       </Grid>
   );

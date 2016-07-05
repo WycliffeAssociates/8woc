@@ -44,9 +44,9 @@ const FileUploader = React.createClass({
     return (
     <div onClick = {this.onClick} >
         <Dropzone onDrop = {this.onDrop}
-        disableClick={true} multiple={false} style={style.dropzone}
-        activeStyle={style.dropzoneActive}>
-            <div style={style.dropzoneText}>
+        disableClick={true} multiple={false} style={style.dropzone.main}
+        activeStyle={style.dropzone.active}>
+            <div style={style.dropzone.text}>
               <center>
                 Drag files here to upload, or click to select a file
               </center>
