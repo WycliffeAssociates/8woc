@@ -4,11 +4,11 @@ const consts = require("./CoreActionConsts.js");
 
 const CHANGE_EVENT = 'change';
 
-class CoreStore extends EventEmitter {
+class CheckStore extends EventEmitter {
   constructor() {
     super();
 
-    // Initialize CoreStore's fields here...
+    // Initialize CheckStore's fields here...
     this.exampleComponentText = "init";
     this.checkIndex = 0;
     this.checks = [
@@ -77,6 +77,6 @@ class CoreStore extends EventEmitter {
 
 }
 
-const coreStore = new CoreStore;
-Dispatcher.register(coreStore.handleActions.bind(coreStore));
-module.exports = coreStore;
+const checkStore = new CheckStore;
+Dispatcher.register(checkStore.handleActions.bind(checkStore));
+module.exports = checkStore;
