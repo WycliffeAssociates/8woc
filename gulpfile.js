@@ -2,6 +2,7 @@
 var gulp = require('gulp'),
   browserify = require('browserify'),  // Bundles JS.
   del = require('del'),  // Deletes files.
+  watchify = require('watchify'),
 // reactify = require('reactify'),  // Transforms React JSX to JS.
   babelify = require('babelify'),
   bablePresetReact = require('babel-preset-react'),
@@ -14,6 +15,9 @@ var paths = {
   js: ['src/js/**/*.js']
 };
 
+var b = watchify(browserify(paths.indexJS));
+b.on('update', bundle);
+b.transform('babelify', {presets: ['react']});
 // The default task (called when we run `gulp` from cli)
 gulp.task('default', ['watch', 'js']);
 
@@ -31,7 +35,7 @@ gulp.task('watch', function() {
 // });
 
 // Our JS task. It will Browserify our code and compile React JSX files.
-gulp.task('js', function() {
+/* gulp.task('js', function() {
 // Browserify/bundle the JS.
   browserify(paths.indexJS)
   .transform('babelify', {presets: ['react']})
@@ -39,7 +43,18 @@ gulp.task('js', function() {
   .on('error', swallowError)
   .pipe(source('app.js'))
   .pipe(gulp.dest('./dist/js/'));
-});
+});*/
+
+gulp.task('js', bundle);
+
+function bundle() {
+  {
+    return b.bundle()
+    .on('error', swallowError)
+    .pipe(source('app.js'))
+    .pipe(gulp.dest('./dist/js/'));
+  }
+}
 
 gulp.task('lint', shell.task([
   'eslint src/js/*'
