@@ -1,3 +1,4 @@
+var ReactBootstrap = require('react-bootstrap');
 var Row = ReactBootstrap.Row;
 var Col = ReactBootstrap.Col;
 var Grid = ReactBootstrap.Grid;
@@ -8,6 +9,10 @@ var ButtonGroup = ReactBootstrap.ButtonGroup;
 var Label = ReactBootstrap.Label;
 var Glyph = ReactBootstrap.Glyphicon;
 var ProgressBar = ReactBootstrap.ProgressBar;
+var React = require('react');
+var HTMLScraper = require('./HTMLscraper');
+var TNParser = require('./tnParser');
+
 
 var App = React.createClass({
   getInitialState: function(){
@@ -36,16 +41,16 @@ var App = React.createClass({
     this.setState({ref: e});
   },
   parseTn: function(){
-    var http = new TNHTMLScraper();
+    var http = new HTMLScraper();
     var _this = this;
     http.downloadEntireBook(
-      'psa',
+      'mat',
       function(done, total){
         _this.setState({progress: done/total*100});
       },
       function(){
-        var book = http.getBook('psa');
-        var parsedBook = TNParser(book, 'psa', function(a){console.log(a*100+"%")});
+        var book = http.getBook('mat');
+        var parsedBook = TNParser(book, 'mat', function(a){console.log(a*100+"%")});
         _this.setState({chapterData: parsedBook,
                         isLoading: false});
       }
@@ -122,7 +127,7 @@ var App = React.createClass({
     );
   }
 });
-
+module.exports = App;
 var ScriptureDisplay = React.createClass({
   getInitialState: function(){
     return {selectedPos: [],
@@ -319,5 +324,4 @@ var Loader = React.createClass({
     );
   }
 });
-
-ReactDOM.render(<App />, document.getElementById('module'));
+console.log("Rendering");

@@ -13,7 +13,7 @@ function createWindow () {
   mainWindow = new BrowserWindow({width: 800, height: 600,icon: 'https://s-media-cache-ak0.pinimg.com/236x/89/c1/30/89c13062417a719f4899b62bf340603e.jpg'});
 
   // and load the index.html of the app.
-  mainWindow.loadURL(`file://${__dirname}/phrasechecker.html`)
+  mainWindow.loadURL(`file://${__dirname}/index.html`)
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools()
