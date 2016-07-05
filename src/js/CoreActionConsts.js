@@ -1,7 +1,8 @@
 module.exports = {
   "AddCheck": "ADD_CHECK",
   "NextVerse": "NEW_VERSE",
-  "PrevVerse": "NEW_VERSE"
+  "PrevVerse": "NEW_VERSE",
+  "ChangeCheckType": "CHANGE_CHECK_TYPE"
 };
 
 /**

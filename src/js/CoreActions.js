@@ -22,7 +22,12 @@ module.exports = {
       newCheck: newCheck
     });
   },
-
+  changeCheckType: function(newType) {
+    Dispatcher.handleAction({
+      type: consts["ChangeCheckType"],
+      newType: newType
+    });
+  },
   addToExampleComponentText: function() {
     Dispatcher.handleAction({
       type: "ADD_TO_TEXT"
