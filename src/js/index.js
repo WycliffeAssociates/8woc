@@ -7,7 +7,7 @@
   const remote = window.electron.remote;
   const {Menu} = remote;
   const menubar = require('./menubar');
-  const CheckingScreen = require('./CheckingScreen');
+  const TempCheckingScreen = require('./TempCheckingScreen');
 
   var App = {
     init: function() {
@@ -15,7 +15,7 @@
       Menu.setApplicationMenu(menu);
       var Application = (
         <div>
-          <CheckingScreen />
+          <TempCheckingScreen />
           <UploadModal />
         </div>
       );

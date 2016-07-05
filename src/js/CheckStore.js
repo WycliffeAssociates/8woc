@@ -1,8 +1,8 @@
-var EventEmitter = require('events').EventEmitter;
-var Dispatcher = require('./Dispatcher');
-var consts = require("./CoreActionConsts.js");
+const EventEmitter = require('events').EventEmitter;
+const Dispatcher = require('./Dispatcher');
+const consts = require("./CoreActionConsts.js");
 
-var CHANGE_EVENT = 'change';
+const CHANGE_EVENT = 'change';
 
 class CoreStore extends EventEmitter {
   constructor() {

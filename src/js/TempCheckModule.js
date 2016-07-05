@@ -1,8 +1,8 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-var Well = require('react-bootstrap/lib/Well.js');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const Well = require('react-bootstrap/lib/Well.js');
 
-var CheckModule = React.createClass({
+const TempCheckModule = React.createClass({
   render: function() {
     return (
       <div>
@@ -23,7 +23,7 @@ var CheckModule = React.createClass({
   }
 });
 
-var RetainedButton = React.createClass({
+const RetainedButton = React.createClass({
   handleClick: function() {
     this.props.onCheckedStatusChanged("RETAINED");
   },
@@ -34,7 +34,7 @@ var RetainedButton = React.createClass({
   }
 });
 
-var ReplacedButton = React.createClass({
+const ReplacedButton = React.createClass({
   handleClick: function() {
     this.props.onCheckedStatusChanged("REPLACED");
   },
@@ -45,7 +45,7 @@ var ReplacedButton = React.createClass({
   }
 });
 
-var WrongButton = React.createClass({
+const WrongButton = React.createClass({
   handleClick: function() {
     this.props.onCheckedStatusChanged("WRONG");
   },
@@ -56,7 +56,7 @@ var WrongButton = React.createClass({
   }
 });
 
-var UncheckButton = React.createClass({
+const UncheckButton = React.createClass({
   handleClick: function() {
     this.props.onCheckedStatusChanged("NOT_CHECKED");
   },
@@ -67,4 +67,4 @@ var UncheckButton = React.createClass({
   }
 });
 
-module.exports = CheckModule;
+module.exports = TempCheckModule;

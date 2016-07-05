@@ -1,13 +1,12 @@
-var React = require('react');
-var update = require('react-addons-update');
-var Well = require('react-bootstrap/lib/Well.js');
+const React = require('react');
+const update = require('react-addons-update');
+const Well = require('react-bootstrap/lib/Well.js');
 
-var MenuItem = require('./MenuItem');
-var CheckModule = require('./CheckModule');
-var CheckStore = require('./CheckStore');
-var CheckStore = require('./CheckStore');
+const MenuItem = require('./MenuItem');
+const CheckModule = require('./TempCheckModule');
+const CheckStore = require('./CheckStore');
 
-// checkecking screen has menu item and check module in it
+// checking screen has menu item and check module in it
 module.exports = React.createClass({
   getInitialState: function() {
     return this.getAllChecks();

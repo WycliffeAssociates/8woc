@@ -1,30 +1,31 @@
 // MenuItem.js
-var Glyphicon = require('react-bootstrap/lib/Glyphicon.js');
-var React = require('react');
-var ReactDOM = require('react-dom');
+const Glyphicon = require('react-bootstrap/lib/Glyphicon.js');
+const React = require('react');
+const ReactDOM = require('react-dom');
 
-var MenuItem = React.createClass({
+const MenuItem = React.createClass({
 
-  getInitialState: function() { // sets initial state of flagged as false color grey until user clicks it them it becomes true and looks blue
+  // sets initial state of flagged as false color grey until user clicks it them it becomes true and looks blue
+  getInitialState: function() {
     return {
       flagged: false
     };
   },
-
-  toggleFlag: function(e) { // this toggles the text as flagged or not flagged
-                            // every time it is clicked
+  // this toggles the text as flagged or not flagged every time it is clicked
+  toggleFlag: function(e) {
     this.setState({ // this.setState makes the state able to be changed
       flagged: !this.state.flagged
     });
   },
   render: function() {
-    var checkedStatus = this.props.check.checkedStatus; // getting check status as a prop and putting it in variable checkedStatus
+    var checkedStatus = this.props.check.checkedStatus;
 
+    // when the flag is toggled it turns blue
     var flagStyle;
     if (this.state.flagged) {
       flagStyle = {
         color: "blue",
-        display: 'initial' // when it is toggled it turns blue
+        display: 'initial'
       };
     }
     else {
@@ -66,26 +67,10 @@ var MenuItem = React.createClass({
 
     return (
       <span>
-        <Glyphicon
-          glyph = "flag"
-          style = {flagStyle}
-          onClick = {this.toggleFlag}
-        />
+        <Glyphicon glyph="flag" style={flagStyle} onClick={this.toggleFlag} />
+        <span>{" " + this.props.check.book + " " + this.props.check.chapter + ":" + this.props.check.verse}</span>
         <span>
-            {" " + this.props.check.book + " "}
-        </span>
-        <span>
-             {this.props.check.chapter}
-        </span>
-         : 
-        <span>
-             {this.props.check.verse}
-        </span>
-        <span>
-          <Glyphicon
-            glyph = {glyphIcon}
-            style = {checkedStatusStyle}
-          />
+          <Glyphicon glyph={glyphIcon} style={checkedStatusStyle} />
         </span>
       </span>
     );
