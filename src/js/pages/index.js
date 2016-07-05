@@ -1,17 +1,19 @@
 (function() {
   const ReactDOM = require('react-dom');
   const React = require('react');
-  const TPane = require('./tpane');
-  const PhraseChecker = require('./PhraseChecker');
-// var db = require('./db-init');
-  const UploadModal = require('./uploadmodal');
+  const PhraseChecker = require('../components/modules/PhraseChecker');
+
   const remote = window.electron.remote;
   const {Menu} = remote;
-  const menubar = require('./menubar');
+
+  const TPane = require('../components/core/TPane');
+// var db = require('./db-init');
+  const UploadModal = require('../components/core/UploadModal');
+  const MenuBar = require('../components/core/MenuBar');
 
   var App = {
     init: function() {
-      var menu = Menu.buildFromTemplate(menubar.template);
+      var menu = Menu.buildFromTemplate(MenuBar.template);
       Menu.setApplicationMenu(menu);
       var Application = (
         <div>

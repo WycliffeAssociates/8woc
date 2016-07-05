@@ -253,5 +253,4 @@ function getItemsBehindLink(htmlString) {
     }
     return returnValue;
 }
-
 module.exports = HTMLScraper;
