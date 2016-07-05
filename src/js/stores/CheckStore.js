@@ -1,6 +1,6 @@
 const EventEmitter = require('events').EventEmitter;
-const Dispatcher = require('./Dispatcher');
-const consts = require("./CoreActionConsts.js");
+const Dispatcher = require('../dispatchers/Dispatcher');
+const consts = require("../actions/CoreActionConsts.js");
 
 const CHANGE_EVENT = 'change';
 

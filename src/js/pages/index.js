@@ -9,7 +9,7 @@
 // var db = require('./db-init');
   const UploadModal = require('../components/UploadModal');
   const MenuBar = require('../components/MenuBar');
-  const TempCheckingScreen = require('./TempCheckingScreen');
+  const TempCheckingScreen = require('../components/TempCheckingScreen');
 
   var App = {
     init: function() {

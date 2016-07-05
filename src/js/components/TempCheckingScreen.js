@@ -4,7 +4,7 @@ const Well = require('react-bootstrap/lib/Well.js');
 
 const MenuItem = require('./MenuItem');
 const CheckModule = require('./TempCheckModule');
-const CheckStore = require('./CheckStore');
+const CheckStore = require('../stores/CheckStore');
 
 // checking screen has menu item and check module in it
 module.exports = React.createClass({
