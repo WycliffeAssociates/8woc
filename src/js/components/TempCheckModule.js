@@ -1,21 +1,51 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
+const update = require('react-addons-update');
 const Well = require('react-bootstrap/lib/Well.js');
 
+const CheckStore = require('../stores/CheckStore');
+
 const TempCheckModule = React.createClass({
+  getInitialState: function() {
+    return this.getAllChecks();
+  },
+
+  changeState: function() {
+    setState(getAllChecks);
+  },
+
+  getAllChecks: function() {
+    return {
+      checks: CheckStore.getAllChecks()
+    };
+  },
+
+  // changes the status of checked status to the parameter "status"
+  changeCheckedStatus: function(status) {
+    var checkIndex = CheckStore.getCheckIndex();
+    var newState = update(this.state, {
+      checks: {
+        [checkIndex]: {
+          checkedStatus: {$set: status}
+        }
+      }
+    });
+    this.setState(newState);
+  },
+  
   render: function() {
     return (
       <div>
         <Well>
           <div>
-            {this.props.check.phrase}
+            {CheckStore.getCurrentCheck().phrase}
           </div>
           <div>
             {/* rendering the buttons and passing the call backs as props */ }
-            <RetainedButton onCheckedStatusChanged={this.props.onCheckedStatusChanged} />
-            <ReplacedButton onCheckedStatusChanged={this.props.onCheckedStatusChanged} />
-            <WrongButton onCheckedStatusChanged={this.props.onCheckedStatusChanged} />
-            <UncheckButton onCheckedStatusChanged={this.props.onCheckedStatusChanged} />
+            <RetainedButton onCheckedStatusChanged={this.changeCheckedStatus} />
+            <ReplacedButton onCheckedStatusChanged={this.changeCheckedStatus} />
+            <WrongButton onCheckedStatusChanged={this.changeCheckedStatus} />
+            <UncheckButton onCheckedStatusChanged={this.changeCheckedStatus} />
           </div>
         </Well>
       </div>
