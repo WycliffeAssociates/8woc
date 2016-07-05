@@ -55,6 +55,13 @@ module.exports = {
       type: consts["UpdateModal"],
       modalOption: boolean
     });
+  },
+
+  updateSettings: function(boolean) {
+    Dispatcher.handleAction({
+      type: consts["SettingsView"],
+      settingsView: boolean
+    })
   }
 
 };
