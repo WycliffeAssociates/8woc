@@ -8,11 +8,11 @@
   const TPane = require('../components/TPane');
 // var db = require('./db-init');
   const UploadModal = require('../components/UploadModal');
-  const menubar = require('../components/MenuBar');
+  const MenuBar = require('../components/MenuBar');
 
   var App = {
     init: function() {
-      var menu = Menu.buildFromTemplate(menubar.template);
+      var menu = Menu.buildFromTemplate(MenuBar.template);
       Menu.setApplicationMenu(menu);
       var Application = (
         <div>
