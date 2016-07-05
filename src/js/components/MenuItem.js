@@ -3,6 +3,8 @@ const Glyphicon = require('react-bootstrap/lib/Glyphicon.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
+const style = require('./Style');
+
 class MenuItem extends React.Component {
   constructor() {
     super();
@@ -23,46 +25,30 @@ class MenuItem extends React.Component {
     // when the flag is toggled it turns blue
     var flagStyle;
     if (this.state.flagged) {
-      flagStyle = {
-        color: "blue",
-        display: 'initial'
-      };
+      flagStyle = style.menu_item_flag_enabled;
     }
     else {
-      flagStyle = {
-        color: "grey"
-      };
+      flagStyle = style.menu_item_flag_disabled;
     }
 
     var checkedStatusStyle;
     var glyphIcon;
     switch(checkedStatus) {
-      case "WRONG": 
-        glyphIcon = "remove";
-        checkedStatusStyle = {
-          color: "red",
-          display: 'initial'
-        };
+      case "RETAINED":
+        glyphIcon = "ok";
+        checkedStatusStyle = style.menu_item_status_icon_retained;
         break;
       case "REPLACED":
         glyphIcon = "random";
-        checkedStatusStyle = {
-          color: "gold",
-          display: 'initial'
-        };
+        checkedStatusStyle = style.menu_item_status_icon_replaced;
         break;
-      case "RETAINED":
-        glyphIcon = "ok";
-        checkedStatusStyle = {
-          color: "green",
-          display: 'initial'
-        };
+      case "WRONG": 
+        glyphIcon = "remove";
+        checkedStatusStyle = style.menu_item_status_icon_wrong;
         break;
       default:
         glyphIcon = '';
-        checkedStatusStyle = {
-          display: 'none'
-        };
+        checkedStatusStyle = style.menu_item_status_icon_unchecked;
     }
 
     return (

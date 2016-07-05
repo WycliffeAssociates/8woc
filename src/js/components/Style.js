@@ -27,6 +27,28 @@ var style = {
       borderRadius: '5px',
       fontSize: '25px'
     }
+  },
+  menu_item_flag_enabled: {
+    color: 'blue',
+    display: 'initial'
+  },
+  menu_item_flag_disabled: {
+    color: 'grey'
+  },
+  menu_item_status_icon_retained: {
+    color: 'green',
+    display: 'initial'
+  },
+  menu_item_status_icon_replaced: {
+    color: 'gold',
+    display: 'initial'
+  },
+  menu_item_status_icon_wrong: {
+    color: 'red',
+    display: 'initial'
+  },
+  menu_item_status_icon_unchecked: {
+    display: 'none'
   }
 };
 
