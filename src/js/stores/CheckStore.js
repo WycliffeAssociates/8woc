@@ -9,7 +9,7 @@ class CheckStore extends EventEmitter {
   constructor() {
     super();
     // For ExampleCheckModule
-    this.currentCheck = { checkStatus: "UNCHECKED", comments: "" };
+    this.currentCheck = {checkStatus: "UNCHECKED", comments: ""};
   }
 
   // Public function to return a deep clone of the current check

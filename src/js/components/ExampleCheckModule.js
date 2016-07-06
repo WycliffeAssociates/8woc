@@ -28,7 +28,7 @@ class ExampleCheckModule extends AbstractCheckModule {
     // You can put objects in for the property value too, not just strings
     CheckActions.changeCheckProperty("checkStatus", "RETAINED");
   }
-  
+
   render() {
     return (
       <div>

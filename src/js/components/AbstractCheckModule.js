@@ -15,7 +15,7 @@ class AbstractCheckModule extends React.Component {
   constructor() {
     super();
 
-    this.state = {currentCheck : CheckStore.getCurrentCheck()};
+    this.state = {currentCheck: CheckStore.getCurrentCheck()};
     this.refreshCurrentCheck = this.refreshCurrentCheck.bind(this);
   }
 
@@ -32,7 +32,7 @@ class AbstractCheckModule extends React.Component {
   refreshCurrentCheck() {
     this.setState({currentCheck: CheckStore.getCurrentCheck()});
   }
-  
+
   // Returns the current check in this.state
   // This is what subclasses should call to get data
   getCurrentCheck() {

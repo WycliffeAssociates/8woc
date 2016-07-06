@@ -9,7 +9,8 @@ module.exports = {
         if (obj === null || typeof obj !== 'object') {
             return obj;
         }
-        var temp = obj.constructor(); // give temp the original obj's constructor
+        // give temp the original obj's constructor
+        var temp = obj.constructor();
         for (var key in obj) {
             temp[key] = this.cloneObject(obj[key]);
         }
