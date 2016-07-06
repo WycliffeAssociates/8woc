@@ -1,7 +1,7 @@
 (function() {
   const ReactDOM = require('react-dom');
   const React = require('react');
-  const PhraseChecker = require('../components/modules/PhraseChecker');
+  const CheckModuleView = require('../components/modules/phrase_check_module/CheckModuleView');
 
   const remote = window.electron.remote;
   const {Menu} = remote;
@@ -19,7 +19,7 @@
         <div>
           <TPane />
           <UploadModal />
-          <PhraseChecker />
+          <CheckModuleView />
         </div>
       );
       ReactDOM.render(Application, document.getElementById('content'));

@@ -6,7 +6,6 @@
 // the percentage of the way through the function
 // @return The book data
 var TNParser = function(book, bookAbbr, progCallback = () => {}) {
-    console.log("Starting Parser");
     book = book.chapters;
     let numChapters = Object.keys(book).length;
     let i = 1;
