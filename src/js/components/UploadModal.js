@@ -10,6 +10,7 @@ const NavItem = require('react-bootstrap/lib/NavItem.js');
 const Modal = require('react-bootstrap/lib/Modal.js');
 
 const CoreStore = require('../stores/CoreStore.js');
+const CoreActions = require('../actions/CoreActions.js');
 
 const OnlineInput = require('./OnlineInput');
 const FileUpload = require('./FileUpload');
@@ -25,7 +26,7 @@ const UploadModal = React.createClass({
     return {showModal: false, active: 1, showFile: true};
   },
   close: function() {
-    this.setState({showModal: false});
+    CoreActions.updateModal(false);
   },
   open: function() {
     this.setState({showModal: true});

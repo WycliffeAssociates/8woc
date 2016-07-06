@@ -72,6 +72,12 @@ var template = [
           if (focusedWindow)
             focusedWindow.webContents.toggleDevTools();
         }
+      },
+      {
+        label: 'Settings',
+        click() {
+          CoreActions.updateSettings(true);
+        }
       }
     ]
   },
