@@ -28,6 +28,9 @@ var style = {
       fontSize: '25px'
     }
   },
+  menu_item_text: {
+    cursor: 'pointer'
+  },
   menu_item_flag_enabled: {
     color: 'blue',
     display: 'initial'

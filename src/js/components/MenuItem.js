@@ -54,7 +54,9 @@ class MenuItem extends React.Component {
     return (
       <span>
         <Glyphicon glyph="flag" style={flagStyle} onClick={this.toggleFlag.bind(this)} />
-        <span>{" " + this.props.check.book + " " + this.props.check.chapter + ":" + this.props.check.verse}</span>
+        <span style={style.menu_item_text}>
+          <a>{" " + this.props.check.book + " " + this.props.check.chapter + ":" + this.props.check.verse}</a>
+        </span>
         <span>
           <Glyphicon glyph={glyphIcon} style={checkedStatusStyle} />
         </span>
