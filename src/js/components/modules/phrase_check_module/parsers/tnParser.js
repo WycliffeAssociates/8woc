@@ -1,10 +1,12 @@
-// @param book A book object retrived from the getBook call from
-// the HTMLParser
-// @param progCallback a function with a single parameter that is
-// called in order to tie the function to a progress bookAbbr
-// its parameter will be a decimal number between 0 and 1 representing
-// the percentage of the way through the function
-// @return The book data
+/**
+ * @param {Object} book - A book object retrived from the getBook call from
+ * the HTMLParser
+ * @param {function} progCallback - a function with a single parameter that is
+ * called in order to tie the function to a progress bookAbbr
+ * its parameter will be a decimal number between 0 and 1 representing
+ * the percentage of the way through the function
+ * @return {Object} The book data
+ */
 var TNParser = function(book, bookAbbr, progCallback = () => {}) {
     book = book.chapters;
     let numChapters = Object.keys(book).length;
