@@ -7,6 +7,7 @@
   const remote = window.electron.remote;
   const {Menu} = remote;
   const menubar = require('./menubar');
+  const ExampleCheckModule = require('./ExampleCheckModule');
 
   var App = {
     init: function() {
@@ -18,7 +19,7 @@
           <UploadModal />
         </div>
       );
-      ReactDOM.render(Application, document.getElementById('content'));
+      ReactDOM.render(<ExampleCheckModule />, document.getElementById('content'));
     }
   };
 
