@@ -1,15 +1,14 @@
-const EventEmitter = require('events').EventEmitter;
-const Dispatcher = require('../dispatchers/Dispatcher');
-const consts = require("../actions/CoreActionConsts.js");
+var EventEmitter = require('events').EventEmitter;
+var Dispatcher = require('../dispatchers/Dispatcher');
+var consts = require("../actions/CheckActionConsts.js");
+var utils = require("../utils.js");
 
-const CHANGE_EVENT = 'change';
+var CHANGE_EVENT = 'change';
 
 class CheckStore extends EventEmitter {
   constructor() {
     super();
-
-    // Initialize CheckStore's fields here...
-    this.exampleComponentText = "init";
+    // For ExampleCheckModule
     this.checkIndex = 0;
     this.checks = [
       {
@@ -17,39 +16,51 @@ class CheckStore extends EventEmitter {
         chapter: 1,
         verse: 11,
         phrase: "God the Father",
-        checkedStatus: "NOT_CHECKED"
+        checkedStatus: "NOT_CHECKED",
+        comments: ""
       },
       {
         book: "Ephesians",
         chapter: 2,
         verse: 12,
         phrase: "Jesus Christ",
-        checkedStatus: "NOT_CHECKED"
+        checkedStatus: "NOT_CHECKED",
+        comments: ""
       },
       {
         book: "Ephesians",
         chapter: 3,
         verse: 13,
         phrase: "Holy Spirit",
-        checkedStatus: "NOT_CHECKED"
+        checkedStatus: "NOT_CHECKED",
+        comments: ""
       }
     ];
   }
 
+  // Public function to return a list of all of the checks.
+  // Should usually be used by the navigation menu, not the check module, because
+  // the check module only displays a single check
   getAllChecks() {
     return this.checks;
   }
 
+  // Public function to return a deep clone of the current check
+  // Why not just return this.checks[this.checkIndex]? Because that returns a reference to
+  // the object, and we don't want any changes made here to be reflected elsewhere,
+  // and vice versa
   getCurrentCheck() {
-    return this.checks[this.checkIndex];
+    var check = this.checks[this.checkIndex];
+    return utils.cloneObject(check);
   }
 
+  // Public function to return the current check's position in the checks array
   getCheckIndex() {
     return this.checkIndex;
   }
 
-  getExampleComponentText() {
-    return this.exampleComponentText;
+  setCurrentCheckProperty(propertyName, propertyValue) {
+    this.checks[checkIndex][propertyName] = propertyValue;
   }
 
   emitChange() {
@@ -69,6 +80,10 @@ class CheckStore extends EventEmitter {
 
   handleActions(action) {
     switch(action.type) {
+      case consts['ChangeCheckProperty']:
+        this.setCurrentCheckProperty(action.propertyName, action.propertyValue);
+        this.emitChange();
+        break;
 
       default:
         // do nothing
