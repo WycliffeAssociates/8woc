@@ -1,4 +1,4 @@
-var Dispatcher = require('./Dispatcher');
+var Dispatcher = require('../dispatchers/Dispatcher');
 var consts = require('./CheckActionConsts');
 /*
 Creates actions related to checks

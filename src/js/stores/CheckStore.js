@@ -1,7 +1,7 @@
 var EventEmitter = require('events').EventEmitter;
-var Dispatcher = require('./Dispatcher');
-var consts = require("./CheckActionConsts.js");
-var utils = require("./utils.js");
+var Dispatcher = require('../dispatchers/Dispatcher');
+var consts = require("../actions/CheckActionConsts.js");
+var utils = require("../utils.js");
 
 var CHANGE_EVENT = 'change';
 
