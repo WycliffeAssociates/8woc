@@ -17,7 +17,6 @@ class CheckStore extends EventEmitter {
   // the object, and we don't want any changes made here to be reflected elsewhere,
   // and vice versa
   getCurrentCheck() {
-    console.log(this);
     var check = this.currentCheck;
     return utils.cloneObject(check);
   }

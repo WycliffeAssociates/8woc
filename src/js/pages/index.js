@@ -4,7 +4,6 @@
 
   const remote = window.electron.remote;
   const {Menu} = remote;
-  const ExampleCheckModule = require('../components/ExampleCheckModule');
   const TPane = require('../components/TPane');
 // var db = require('./db-init');
   const UploadModal = require('../components/UploadModal');
@@ -19,7 +18,6 @@
           <UploadModal />
         </div>
       );
-      ReactDOM.render(<ExampleCheckModule />, document.getElementById('content'));
     }
   };
 
