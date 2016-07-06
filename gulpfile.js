@@ -15,9 +15,7 @@ var paths = {
   js: ['src/js/**/*.js']
 };
 
-var b = watchify(browserify(paths.indexJS));
-b.on('update', bundle);
-b.transform('babelify', {presets: ['react']});
+
 // The default task (called when we run `gulp` from cli)
 gulp.task('default', ['watch', 'js']);
 
@@ -45,15 +43,17 @@ gulp.task('watch', function() {
   .pipe(gulp.dest('./dist/js/'));
 });*/
 
-gulp.task('js', bundle);
+ gulp.task('js', bundle);
+
+var b = watchify(browserify(paths.indexJS));
+b.on('update', bundle);
+b.transform('babelify', {presets: ['react']});
 
 function bundle() {
-  {
     return b.bundle()
     .on('error', swallowError)
     .pipe(source('app.js'))
     .pipe(gulp.dest('./dist/js/'));
-  }
 }
 
 gulp.task('lint', shell.task([

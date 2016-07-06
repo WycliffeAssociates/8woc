@@ -4,12 +4,10 @@
 module. When the user switches to a new check type, this module will receieve the
 event from the CoreStore and automatically swap out the check module for the new one
 */
- React = require('react');
+var React = require('react');
 var Button = require('react-bootstrap/lib/Button.js');
 var CoreStore = require('../stores/CoreStore.js');
 var CoreActions = require('../actions/CoreActions.js');
-var asd = require("./CheckModule");
-var sdf = require('./Hamburger');
 // TODO: Require all components
 
 
@@ -39,8 +37,9 @@ class ModuleWrapper extends React.Component {
   updateCheckType() {
     console.log("Changing Type");
     let newCheckType = CoreStore.getCurrentCheckType();
-    if (newCheckType == this.state.curCheck)
-      {return;}
+    if (newCheckType == this.state.curCheck) {
+      return;
+    }
     let newCheckModule;
     try {
       newCheckModule = require('./' + newCheckType);
