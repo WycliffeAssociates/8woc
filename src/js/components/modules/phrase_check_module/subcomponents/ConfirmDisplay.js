@@ -1,7 +1,7 @@
-var React = require('react');
+const React = require('react');
 
-var ConfirmDisplay = React.createClass({
-  render: function(){
+class ConfirmDisplay extends React.Component{
+  render(){
     return (
       <form>
         <label>{this.props.toCheck}</label>
@@ -9,7 +9,7 @@ var ConfirmDisplay = React.createClass({
       </form>
     );
   }
-});
+}
 
 
 module.exports = ConfirmDisplay;

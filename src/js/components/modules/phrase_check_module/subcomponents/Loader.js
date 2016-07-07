@@ -2,8 +2,8 @@ var React = require('react');
 var RB = require('react-bootstrap');
 var {ProgressBar} = RB;
 
-var Loader = React.createClass({
-  render: function(){
+class Loader extends React.Component{
+  render(){
     return (
       <ProgressBar
         now={this.props.progress}
@@ -11,6 +11,6 @@ var Loader = React.createClass({
       />
     );
   }
-});
+}
 
 module.exports = Loader;

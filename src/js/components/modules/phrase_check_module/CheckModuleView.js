@@ -1,55 +1,67 @@
-var RB = require('react-bootstrap');
-var {Grid, Row, Col} = RB;
-var React = require('react');
-var ScriptureDisplay = require('./subcomponents/ScriptureDisplay');
-var ConfirmDisplay = require('./subcomponents/ConfirmDisplay');
-var FlagDisplay = require('./subcomponents/FlagDisplay');
-var NextButton = require('./subcomponents/NextButton');
-var Menu = require('./subcomponents/Menu');
-var Loader = require('./subcomponents/Loader');
-var Fetcher = require('./FetchData');
+const RB = require('react-bootstrap');
+const {Grid, Row, Col} = RB;
+const React = require('react');
+const ScriptureDisplay = require('./subcomponents/ScriptureDisplay');
+const ConfirmDisplay = require('./subcomponents/ConfirmDisplay');
+const FlagDisplay = require('./subcomponents/FlagDisplay');
+const NextButton = require('./subcomponents/NextButton');
+const Menu = require('./subcomponents/Menu');
+const Loader = require('./subcomponents/Loader');
+const Fetcher = require('./FetchData');
+const AbstractCheckModule = require('../../AbstractCheckModule');
 
 
-var PhraseChecker = React.createClass({
-  getInitialState: function(){
-    return {toCheck: "",
-            ref: "",
-            note: "",
-            chapterData: {},
-            tlVerse: "This is selectable placeholder text. Eventually the target language text will appear here",
-            selectedText: "",
-            flagState: "",
-            returnObject: [],
-            progress:  0,
-            isLoading: true}
-  },
+class PhraseChecker extends AbstractCheckModule{
+  constructor(){
+    super();
 
-  setSelectedText: function(e){
+    this.state = {
+      toCheck: "",
+      ref: "",
+      note: "",
+      chapterData: {},
+      tlVerse: "This is selectable placeholder text. Eventually the target language text will appear here",
+      selectedText: "",
+      flagState: "",
+      returnObject: [],
+      progress:  0,
+      isLoading: true
+    }
+
+    this.setSelectedText = this.setSelectedText.bind(this);
+    this.setFlagState = this.setFlagState.bind(this);
+    this.appendReturnObject = this.appendReturnObject.bind(this);
+    this.setNote = this.setNote.bind(this);
+    this.setRef = this.setRef.bind(this);
+    this.setProgress = this.setProgress.bind(this);
+    this.onParserCompletion = this.onParserCompletion.bind(this);
+  }
+  setSelectedText(e){
     this.setState({selectedText: e});
-  },
-  setFlagState: function(e){
+  }
+  setFlagState(e){
     this.setState({flagState: e});
-  },
-  setNote: function(e){
+  }
+  setNote(e){
     this.setState({note: e});
-  },
-  setRef: function(e){
+  }
+  setRef(e){
     this.setState({ref: e});
-  },
-  setProgress: function(e){
+  }
+  setProgress(e){
     this.setState({progress: e});
     if(this.state.progress >= 100){
       this.setState({isLoading: false});
     }
-  },
-  onParserCompletion: function(object){
+  }
+  onParserCompletion(object){
       console.log(object);
       this.setState({chapterData: object});
-  },
-  componentWillMount: function(){
+  }
+  componentWillMount(){
     var data = Fetcher('eph', this.setProgress, this.onParserCompletion);
-  },
-  appendReturnObject: function(){
+  }
+  appendReturnObject(){
     var object = this.state.returnObject;
     object.push(
       {
@@ -61,8 +73,8 @@ var PhraseChecker = React.createClass({
     );
     this.setState({returnObject: object});
     console.log(this.state.returnObject);
-  },
-  render: function(){
+  }
+  render() {
     return (
       <Grid>
         <Row
@@ -116,6 +128,6 @@ var PhraseChecker = React.createClass({
       </Grid>
     );
   }
-});
+}
 
 module.exports = PhraseChecker;

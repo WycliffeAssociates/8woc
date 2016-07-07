@@ -1,13 +1,13 @@
-var React = require('react');
-var RB = require('react-bootstrap');
-var {Button} = RB;
+const React = require('react');
+const RB = require('react-bootstrap');
+const {Button} = RB;
 
-var NextButton = React.createClass({
-  render: function(){
+class NextButton extends React.Component{
+  render(){
     return (
       <Button onClick={this.props.nextItem}>Next &#8594;</Button>
     );
   }
-});
+};
 
 module.exports = NextButton;

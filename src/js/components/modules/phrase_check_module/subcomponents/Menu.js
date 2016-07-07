@@ -1,15 +1,24 @@
 var React = require('react');
 
-var Menu = React.createClass({
-  getInitialState: function(){
-    return {current: 0}
-  },
-  passInfo: function(k, j, i){
+class Menu extends React.Component{
+
+  constructor(){
+    super();
+
+    this.state = {
+      current: 0
+    }
+
+    this.passInfo = this.passInfo.bind(this);
+  }
+
+  passInfo(k, j, i){
     this.props.setNote(k);
     this.props.setRef(j);
     this.setState({current: i});
-  },
-  render: function(){
+  }
+
+  render(){
     var verseList = [];
     var scripture = this.props.verses;
     var _this = this;
@@ -31,11 +40,7 @@ var Menu = React.createClass({
             className="verseReference"
             onClick={
               function(){
-                _this.passInfo(
-                  scripture[type].verses[verse].phrase,
-                  referenceString,
-                  i
-                )
+                _this.passInfo(scripture[type].verses[verse].phrase, referenceString, i)
               }
             }
             >
@@ -50,6 +55,7 @@ var Menu = React.createClass({
       </div>
     );
   }
-});
+
+}
 
 module.exports = Menu;

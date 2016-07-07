@@ -2,32 +2,61 @@ const React = require('react');
 const Well = require('react-bootstrap/lib/Well.js');
 const Glyph = require('react-bootstrap/lib/Glyphicon.js');
 
-var ScriptureDisplay = React.createClass({
-  getInitialState: function(){
-    return {selectedPos: [],
-            selectedVals: []};
-  },
-  getSelectedText: function(){
+class ScriptureDisplay extends React.Component{
+
+  constructor(){
+    super();
+    this.state = {
+      selectedPos: [],
+      selectedVals: []}
+
+    this.getSelectedText = this.getSelectedText.bind(this);
+    this.clearSelection = this.clearSelection.bind(this);
+    this.returnSelection = this.returnSelection.bind(this);
+  }
+
+  getSelectedText(){
     var selection = window.getSelection();
     var newPos = this.state.selectedPos;
     var newVals = this.state.selectedVals;
-    var startPoint = parseInt(selection.anchorNode.parentElement.attributes["data-pos"].value);
-    var endPoint = parseInt(selection.focusNode.parentElement.attributes["data-pos"].value)+1;
-    for(var i = startPoint; i < endPoint; i++){newPos.push(i);}
+
+    var startPoint = parseInt(
+      selection
+      .anchorNode
+      .parentElement
+      .attributes["data-pos"]
+      .value
+    );
+
+    var endPoint = parseInt(
+      selection
+      .focusNode
+      .parentElement
+      .attributes["data-pos"]
+      .value
+    )+1;
+
+    for(var i = startPoint; i < endPoint; i++){
+      newPos.push(i);
+    }
+
     newVals.push(selection.toString());
     this.setState({selectedPos: newPos,
                    selectedVals: newVals});
     this.returnSelection();
-  },
-  returnSelection: function(){
+  }
+
+  returnSelection(){
     var returnString = this.state.selectedVals.join(" ... ");
     this.props.setSelectedText(returnString);
-  },
-  clearSelection: function(){
+  }
+
+  clearSelection(){
     this.setState({selectedPos: [],
                    selectedVals: []});
-  },
-  render: function(){
+  }
+
+  render(){
     var wordArray = this.props.scripture.split(' ');
     var spannedArray = [];
     var highlightedStyle = {backgroundColor: 'yellow'};
@@ -63,6 +92,6 @@ var ScriptureDisplay = React.createClass({
       </div>
     );
   }
-});
+}
 
 module.exports = ScriptureDisplay;

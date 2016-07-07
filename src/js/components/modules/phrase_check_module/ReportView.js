@@ -9,8 +9,11 @@ var PhraseReport = React.createClass({
     }
   },
   render: function(){
-    for(let check in reportObject){
-      
+    var report = [];
+    for(let group in this.state.info){
+      report.push(<h1>{group}</h1>)
+      //This is very much still under construction and intentionally
+      //left unfinished for the time being
     }
     return (
 
