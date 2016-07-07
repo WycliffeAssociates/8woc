@@ -9,24 +9,12 @@ const Menu = require('./subcomponents/Menu');
 const Loader = require('./subcomponents/Loader');
 const Fetcher = require('./FetchData');
 const AbstractCheckModule = require('../../AbstractCheckModule');
+const CheckActions = require('../../../actions/CheckActions.js');
 
 
 class PhraseChecker extends AbstractCheckModule{
   constructor(){
     super();
-
-    this.state = {
-      toCheck: "",
-      ref: "",
-      note: "",
-      chapterData: {},
-      tlVerse: "This is selectable placeholder text. Eventually the target language text will appear here",
-      selectedText: "",
-      flagState: "",
-      returnObject: [],
-      progress:  0,
-      isLoading: true
-    }
 
     this.setSelectedText = this.setSelectedText.bind(this);
     this.setFlagState = this.setFlagState.bind(this);
@@ -38,6 +26,7 @@ class PhraseChecker extends AbstractCheckModule{
   }
   setSelectedText(e){
     this.setState({selectedText: e});
+    CheckActions.changeCheckProperty("selectedText", e);
   }
   setFlagState(e){
     this.setState({flagState: e});
@@ -59,6 +48,18 @@ class PhraseChecker extends AbstractCheckModule{
       this.setState({chapterData: object});
   }
   componentWillMount(){
+    this.setState({
+      toCheck: "",
+      ref: "",
+      note: "",
+      chapterData: {},
+      tlVerse: "This is selectable placeholder text. Eventually the target language text will appear here",
+      selectedText: "",
+      flagState: "",
+      returnObject: [],
+      progress:  0,
+      isLoading: true
+    });
     var data = Fetcher('eph', this.setProgress, this.onParserCompletion);
   }
   appendReturnObject(){
@@ -101,8 +102,8 @@ class PhraseChecker extends AbstractCheckModule{
           <Row className="show-grid">
             <Col md={5} className="confirm-area">
               <ConfirmDisplay
-                note={this.state.note}
-                toCheck={this.state.toCheck}
+                phraseInfo={super.getCurrentCheck().checkStatus}
+                phrase={super.getCurrentCheck().comments}
                 selectedText={this.state.selectedText}
               />
             </Col>

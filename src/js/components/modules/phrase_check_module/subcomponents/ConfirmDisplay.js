@@ -4,8 +4,8 @@ class ConfirmDisplay extends React.Component{
   render(){
     return (
       <form>
-        <label>{this.props.toCheck}</label>
-        <label>{this.props.note}</label>
+        <label>{this.props.phrase}</label>
+        <label>{this.props.phraseInfo}</label>
       </form>
     );
   }
