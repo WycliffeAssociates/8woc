@@ -9,6 +9,7 @@ const style = require('./Style');
 class MenuItem extends React.Component {
   constructor() {
     super();
+    this.menuItemClicked = this.menuItemClicked.bind(this);
   }
 
   menuItemClicked() {
@@ -51,7 +52,7 @@ class MenuItem extends React.Component {
       <span>
         <Glyphicon glyph="flag" style={flagStyle} />
         <span style={style.menu_item_text}>
-          <a onClick={this.menuItemClicked.bind(this)}>
+          <a onClick={this.menuItemClicked}>
             {" " + this.props.check.book + " " + this.props.check.chapter + ":" + this.props.check.verse + " "}
           </a>
         </span>

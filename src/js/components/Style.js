@@ -32,11 +32,11 @@ var style = {
     cursor: 'pointer'
   },
   menu_item_flag_enabled: {
-    color: 'blue',
-    display: 'initial'
+    color: '#CC0000',
+    visibility: 'visible'
   },
   menu_item_flag_disabled: {
-    color: 'grey'
+    visibility: 'hidden'
   },
   menu_item_status_icon_retained: {
     color: 'green',

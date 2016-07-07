@@ -1,6 +1,7 @@
 var React = require('react');
 var CheckActions = require('../actions/CheckActions.js');
 var AbstractCheckModule = require('./AbstractCheckModule.js');
+var CheckStore = require('../stores/CheckStore');
 
 /*
 An example check module component:
@@ -33,6 +34,10 @@ class ExampleCheckModule extends AbstractCheckModule {
     CheckActions.changeCheckProperty("checkStatus", "WRONG");
   }
 
+  flagButtonClicked() {
+    CheckActions.changeCheckProperty("flagged", !CheckStore.getCurrentCheck().flagged);
+  }
+
   nextButtonClicked() {
     CheckActions.nextCheck();
   }
@@ -44,6 +49,7 @@ class ExampleCheckModule extends AbstractCheckModule {
         <button onClick={this.retainedButtonClicked.bind(this)}>Retained</button>
         <button onClick={this.replacedButtonClicked.bind(this)}>Replaced</button>
         <button onClick={this.wrongButtonClicked.bind(this)}>Wrong</button>
+        <button onClick={this.flagButtonClicked.bind(this)}>Toggle Flagged</button>
         <button onClick={this.nextButtonClicked}>Next</button>
       </div>
     );
