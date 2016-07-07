@@ -28,31 +28,37 @@ var style = {
       fontSize: '25px'
     }
   },
-  menu_item_text: {
-    cursor: 'pointer'
+  menuItem: {
+    text: {
+      cursor: 'pointer'
+    },
+    flag: {
+      enabled: {
+        color: '#CC0000',
+        visibility: 'visible'
+      },
+      disabled: {
+        visibility: 'hidden'
+      }
+    },
+    statusIcon: {
+      retained: {
+        color: 'green',
+        display: 'initial'
+      },
+      replaced: {
+        color: 'gold',
+        display: 'initial'
+      },
+      wrong: {
+        color: 'red',
+        display: 'initial'
+      },
+      unchecked: {
+        display: 'none'
+      }
+    }
   },
-  menu_item_flag_enabled: {
-    color: '#CC0000',
-    visibility: 'visible'
-  },
-  menu_item_flag_disabled: {
-    visibility: 'hidden'
-  },
-  menu_item_status_icon_retained: {
-    color: 'green',
-    display: 'initial'
-  },
-  menu_item_status_icon_replaced: {
-    color: 'gold',
-    display: 'initial'
-  },
-  menu_item_status_icon_wrong: {
-    color: 'red',
-    display: 'initial'
-  },
-  menu_item_status_icon_unchecked: {
-    display: 'none'
-  }
 };
 
 module.exports = style;
