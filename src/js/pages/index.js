@@ -4,11 +4,12 @@
 
   const remote = window.electron.remote;
   const {Menu} = remote;
-  
+
   const TPane = require('../components/TPane');
 // var db = require('./db-init');
   const UploadModal = require('../components/UploadModal');
   const MenuBar = require('../components/MenuBar');
+  const SettingsModal = require('../components/SettingsModal');
 
   var App = {
     init: function() {
@@ -18,6 +19,7 @@
         <div>
           <TPane />
           <UploadModal />
+          <SettingsModal />
         </div>
       );
       ReactDOM.render(Application, document.getElementById('content'));

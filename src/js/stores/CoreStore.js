@@ -63,6 +63,10 @@ class CoreStore extends EventEmitter {
     return this.modalVisibility;
   }
 
+  getSettingsView() {
+    return this.settingsVisibility;
+  }
+
   emitChange() {
     this.emit(CHANGE_EVENT);
   }
@@ -125,6 +129,11 @@ class CoreStore extends EventEmitter {
         break;
       case consts.CHANGE_CHECK_TYPE:
         this.checkType = action.newCheck;
+        this.emitChange();
+        break;
+
+      case consts.SETTINGS_VIEW:
+        this.settingsVisibility = action.settingsView;
         this.emitChange();
         break;
 
