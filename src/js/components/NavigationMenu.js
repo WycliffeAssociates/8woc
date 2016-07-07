@@ -32,7 +32,11 @@ class NavigationMenu extends React.Component {
     var menuItems = this.state.checks.map(function(check, index){
       return (
         <div key={index}>
-          <MenuItem check={check} isCurrentCheck={index == CheckStore.getCheckIndex()} />
+          <MenuItem
+            check={check}
+            checkIndex={index}
+            isCurrentCheck={index == CheckStore.getCheckIndex()}
+          />
         </div>
       );
     });

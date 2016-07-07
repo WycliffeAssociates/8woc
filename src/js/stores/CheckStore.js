@@ -93,6 +93,11 @@ class CheckStore extends EventEmitter {
         this.emitChange();
         break;
 
+      case consts.GO_TO_CHECK:
+        this.checkIndex = action.checkIndex;
+        this.emitChange();
+        break;
+
       default:
         // do nothing
     }
