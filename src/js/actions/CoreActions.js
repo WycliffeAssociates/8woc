@@ -1,5 +1,6 @@
 var Dispatcher = require('../dispatchers/Dispatcher');
 var consts = require('./CoreActionConsts');
+var FileModule = require('../components/FileModule');
 /**
 How to use the actions:
 Just require this file in your component, call
@@ -61,6 +62,19 @@ module.exports = {
     Dispatcher.handleAction({
       type: consts["ChangeCheck"],
       newCheck: newCheck
+    });
+  },
+
+  // Async reads the Json file at the given path, then dispatches an action with
+  // the resulting object
+  openCheckModule: function(filePath) {
+    FileModule.readJsonFile(filePath, this.openCheckModule_);
+  },
+
+  openCheckModule_: function(jsonObject) {
+    Dispatcher.handleAction({
+      type: consts["OpenCheckModule"],
+      jsonObject: jsonObject
     });
   }
 

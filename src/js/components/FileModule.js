@@ -17,6 +17,12 @@ const FileModule = (function() {
     readFile: function(file, callback) {
       var inputFile = fs.readFileSync(file).toString();
       callback(inputFile);
+    },
+
+    readJsonFile: function(file, callback) {
+      var inputFile = fs.readFileSync(file).toString();
+      var jsonObject = JSON.parse(inputFile);
+      callback(jsonObject);
     }
   };
 }

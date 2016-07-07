@@ -1,6 +1,7 @@
 var EventEmitter = require('events').EventEmitter;
 var Dispatcher = require('../dispatchers/Dispatcher');
-var consts = require("../actions/CheckActionConsts.js");
+var CheckConsts = require("../actions/CheckActionConsts.js");
+var CoreConsts = require("../actions/CoreActionConsts.js");
 var utils = require("../utils.js");
 
 var CHANGE_EVENT = 'change';
@@ -10,6 +11,8 @@ class CheckStore extends EventEmitter {
     super();
     // For ExampleCheckModule
     this.currentCheck = {checkStatus: "UNCHECKED", comments: ""};
+    this.checks = {};
+    this.checkCategory = null;
   }
 
   // Public function to return a deep clone of the current check
@@ -23,6 +26,20 @@ class CheckStore extends EventEmitter {
 
   setCurrentCheckProperty(propertyName, propertyValue) {
     this.currentCheck[propertyName] = propertyValue;
+  }
+
+  loadAllChecks(jsonObject) {
+    var checks;
+    for(var el in jsonObject) {
+      // The check category (i.e. Phrase Checks) is the top level key
+      this.checkCategory = el;
+      // The checks array is the top level value
+      this.checks = jsonObject[el];
+      break;
+    }
+    console.log(this.checkCategory);
+    console.log("allchecks:");
+    console.log(this.checks);
   }
 
   emitChange() {
@@ -42,8 +59,12 @@ class CheckStore extends EventEmitter {
 
   handleActions(action) {
     switch(action.type) {
-      case consts['ChangeCheckProperty']:
+      case CheckConsts['ChangeCheckProperty']:
         this.setCurrentCheckProperty(action.propertyName, action.propertyValue);
+        this.emitChange();
+        break;
+      case CoreConsts['OpenCheckModule']:
+        this.loadAllChecks(action.jsonObject);
         this.emitChange();
         break;
 
