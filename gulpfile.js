@@ -56,6 +56,13 @@ function bundle() {
     .pipe(gulp.dest('./dist/js/'));
 }
 
+gulp.task('lint', shell.task([
+  'eslint src/js/*'
+])).on('error', silentError);
+
+gulp.task('fixLint', shell.task([
+  'eslint --fix src/js/*'
+])).on('error', silentError);
 /**
  * @description: Error handling to keep gulp open
  * @param {error} error - The error to be handled
