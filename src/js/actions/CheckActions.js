@@ -15,6 +15,15 @@ module.exports = {
       propertyName: propertyName,
       propertyValue: propertyValue
     });
+  },
+
+  /**
+   * Sends an action which will move the to the next check in CheckStore
+   */
+  nextCheck: function() {
+    Dispatcher.handleAction({
+      type: consts['NextCheck']
+    });
   }
 
 };

@@ -6,7 +6,7 @@ const CheckStore = require('../stores/CheckStore');
 const MenuItem = require('./MenuItem');
 
 class NavigationMenu extends React.Component {
-  constructor(props) {
+  constructor() {
     super();
     this.retrieveChecks = this.retrieveChecks.bind(this);
     this.state = {

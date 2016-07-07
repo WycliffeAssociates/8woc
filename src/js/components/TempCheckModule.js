@@ -1,100 +1,46 @@
-const React = require('react');
-const ReactDOM = require('react-dom');
-const update = require('react-addons-update');
-const Well = require('react-bootstrap/lib/Well.js');
+var React = require('react');
+var CheckActions = require('../actions/CheckActions.js');
+var AbstractCheckModule = require('./AbstractCheckModule.js');
 
-const CheckStore = require('../stores/CheckStore');
+/*
+An example check module component:
+It just has a paragraph that displays the check status (default is UNCHECKED),
+and a button to change it to RETAINED.
 
-const TempCheckModule = React.createClass({
-  getInitialState: function() {
-    return this.getAllChecks();
-  },
+Things to notice:
+- class ExampleCheckModule extends AbstractCheckModule
+- super.getCurrentCheck() -- equivalent to this.state.currentCheck
+  * this is how you get data
+- CheckActions.changeCheckProperty(propertyName, propertyValue)
+  * this is how you change data
+*/
 
-  changeState: function() {
-    setState(getAllChecks);
-  },
+class ExampleCheckModule extends AbstractCheckModule {
 
-  getAllChecks: function() {
-    return {
-      checks: CheckStore.getAllChecks()
-    };
-  },
+  constructor() {
+    super();
+  }
 
-  // changes the status of checked status to the parameter "status"
-  changeCheckedStatus: function(status) {
-    var checkIndex = CheckStore.getCheckIndex();
-    var newState = update(this.state, {
-      checks: {
-        [checkIndex]: {
-          checkedStatus: {$set: status}
-        }
-      }
-    });
-    this.setState(newState);
-  },
-  
-  render: function() {
+  retainedButtonClicked() {
+    // Sends an action which will update the current check in CheckStore
+    // Property name: checkStatus
+    // Property value: 'RETAINED'
+    // You can put objects in for the property value too, not just strings
+    CheckActions.changeCheckProperty("checkStatus", "RETAINED");
+  }
+
+  nextButtonClicked() {
+    CheckActions.nextCheck();
+  }
+
+  render() {
     return (
       <div>
-        <Well>
-          <div>
-            {CheckStore.getCurrentCheck().phrase}
-          </div>
-          <div>
-            {/* rendering the buttons and passing the call backs as props */ }
-            <RetainedButton onCheckedStatusChanged={this.changeCheckedStatus} />
-            <ReplacedButton onCheckedStatusChanged={this.changeCheckedStatus} />
-            <WrongButton onCheckedStatusChanged={this.changeCheckedStatus} />
-            <UncheckButton onCheckedStatusChanged={this.changeCheckedStatus} />
-          </div>
-        </Well>
+        <p>{super.getCurrentCheck().checkStatus}</p>
+        <button onClick={this.retainedButtonClicked.bind(this)}>Retained</button>
+        <button onClick={this.nextButtonClicked}>Next</button>
       </div>
     );
   }
-});
-
-const RetainedButton = React.createClass({
-  handleClick: function() {
-    this.props.onCheckedStatusChanged("RETAINED");
-  },
-  render: function() {
-    return (
-      <button onClick={this.handleClick}>Retained</button>
-    );
-  }
-});
-
-const ReplacedButton = React.createClass({
-  handleClick: function() {
-    this.props.onCheckedStatusChanged("REPLACED");
-  },
-  render: function() {
-    return (
-      <button onClick={this.handleClick}>Replaced</button>
-    );
-  }
-});
-
-const WrongButton = React.createClass({
-  handleClick: function() {
-    this.props.onCheckedStatusChanged("WRONG");
-  },
-  render: function() {
-    return (
-      <button onClick={this.handleClick}>Wrong</button>
-    );
-  }
-});
-
-const UncheckButton = React.createClass({
-  handleClick: function() {
-    this.props.onCheckedStatusChanged("NOT_CHECKED");
-  },
-  render: function() {
-    return (
-      <button onClick={this.handleClick}>Uncheck</button>
-    );
-  }
-});
-
-module.exports = TempCheckModule;
+};
+module.exports = ExampleCheckModule;

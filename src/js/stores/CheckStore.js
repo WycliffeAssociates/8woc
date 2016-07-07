@@ -16,24 +16,27 @@ class CheckStore extends EventEmitter {
         chapter: 1,
         verse: 11,
         phrase: "God the Father",
-        checkedStatus: "NOT_CHECKED",
-        comments: ""
+        checkStatus: "RETAINED",
+        comments: "",
+        flagged: false
       },
       {
         book: "Ephesians",
         chapter: 2,
         verse: 12,
         phrase: "Jesus Christ",
-        checkedStatus: "NOT_CHECKED",
-        comments: ""
+        checkStatus: "NOT_CHECKED",
+        comments: "",
+        flagged: false
       },
       {
         book: "Ephesians",
         chapter: 3,
         verse: 13,
         phrase: "Holy Spirit",
-        checkedStatus: "NOT_CHECKED",
-        comments: ""
+        checkStatus: "NOT_CHECKED",
+        comments: "",
+        flagged: false
       }
     ];
   }
@@ -60,7 +63,7 @@ class CheckStore extends EventEmitter {
   }
 
   setCurrentCheckProperty(propertyName, propertyValue) {
-    this.checks[checkIndex][propertyName] = propertyValue;
+    this.checks[this.checkIndex][propertyName] = propertyValue;
   }
 
   emitChange() {
@@ -82,6 +85,11 @@ class CheckStore extends EventEmitter {
     switch(action.type) {
       case consts['ChangeCheckProperty']:
         this.setCurrentCheckProperty(action.propertyName, action.propertyValue);
+        this.emitChange();
+        break;
+
+      case consts['NextCheck']:
+        this.checkIndex++;
         this.emitChange();
         break;
 

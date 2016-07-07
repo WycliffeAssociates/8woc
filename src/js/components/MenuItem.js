@@ -8,57 +8,48 @@ const style = require('./Style');
 class MenuItem extends React.Component {
   constructor() {
     super();
-    this.state = {
-      flagged: false
-    };
-  }
-
-  toggleFlag(e) {
-    this.setState({
-      flagged: !this.state.flagged
-    });
   }
 
   render() {
-    var checkedStatus = this.props.check.checkedStatus;
+    var checkStatus = this.props.check.checkStatus;
 
     // when the flag is toggled it turns blue
     var flagStyle;
-    if (this.state.flagged) {
+    if (this.props.check.flagged) {
       flagStyle = style.menu_item_flag_enabled;
     }
     else {
       flagStyle = style.menu_item_flag_disabled;
     }
 
-    var checkedStatusStyle;
+    var checkStatusStyle;
     var glyphIcon;
-    switch(checkedStatus) {
+    switch(checkStatus) {
       case "RETAINED":
         glyphIcon = "ok";
-        checkedStatusStyle = style.menu_item_status_icon_retained;
+        checkStatusStyle = style.menu_item_status_icon_retained;
         break;
       case "REPLACED":
         glyphIcon = "random";
-        checkedStatusStyle = style.menu_item_status_icon_replaced;
+        checkStatusStyle = style.menu_item_status_icon_replaced;
         break;
       case "WRONG": 
         glyphIcon = "remove";
-        checkedStatusStyle = style.menu_item_status_icon_wrong;
+        checkStatusStyle = style.menu_item_status_icon_wrong;
         break;
       default:
         glyphIcon = '';
-        checkedStatusStyle = style.menu_item_status_icon_unchecked;
+        checkStatusStyle = style.menu_item_status_icon_unchecked;
     }
 
     return (
       <span>
-        <Glyphicon glyph="flag" style={flagStyle} onClick={this.toggleFlag.bind(this)} />
+        <Glyphicon glyph="flag" style={flagStyle} />
         <span style={style.menu_item_text}>
           <a>{" " + this.props.check.book + " " + this.props.check.chapter + ":" + this.props.check.verse}</a>
         </span>
         <span>
-          <Glyphicon glyph={glyphIcon} style={checkedStatusStyle} />
+          <Glyphicon glyph={glyphIcon} style={checkStatusStyle} />
         </span>
       </span>
     );
