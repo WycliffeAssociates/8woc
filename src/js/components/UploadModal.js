@@ -55,9 +55,7 @@ const UploadModal = React.createClass({
             <Modal.Title>Import Project</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-          <Nav bsStyle="tabs"
-               activeKey={this.state.active}
-               onSelect={this.handleSelect}>
+          <Nav bsStyle="tabs" activeKey={this.state.active} onSelect={this.handleSelect}>
             <NavItem eventKey={1}>Import Project Locally</NavItem>
             <NavItem eventKey={2}>Import From Online</NavItem>
           </Nav>

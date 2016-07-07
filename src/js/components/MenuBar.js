@@ -11,7 +11,7 @@ var template = [
     submenu: [
       {
         label: 'Import Project',
-        click() {
+        click: function() {
           CoreActions.updateModal(true);
         }
       }
@@ -52,14 +52,14 @@ var template = [
       {
         label: 'Reload',
         accelerator: 'CmdOrCtrl+R',
-        click(item, focusedWindow) {
+        click: function(item, focusedWindow) {
           if (focusedWindow) focusedWindow.reload();
         }
       },
       {
         label: 'Toggle Full Screen',
         accelerator: process.platform === 'darwin' ? 'Ctrl+Command+F' : 'F11',
-        click(item, focusedWindow) {
+        click: function(item, focusedWindow) {
           if (focusedWindow)
             focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
         }
@@ -68,14 +68,14 @@ var template = [
         label: 'Toggle Developer Tools',
         accelerator:
         process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-        click(item, focusedWindow) {
+        click: function(item, focusedWindow) {
           if (focusedWindow)
             focusedWindow.webContents.toggleDevTools();
         }
       },
       {
         label: 'Settings',
-        click() {
+        click: function() {
           CoreActions.updateSettings(true);
         }
       }
@@ -103,7 +103,7 @@ var template = [
     submenu: [
       {
         label: 'Learn More',
-        click() {
+        click: function() {
           window.electron.shell.openExternal('https://github.com/WycliffeAssociates/8woc/');
         }
       }
