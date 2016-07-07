@@ -1,0 +1,3 @@
+module.exports = {
+  CHANGE_CHECK_PROPERTY: "CHANGE_CHECK_PROPERTY",
+};
