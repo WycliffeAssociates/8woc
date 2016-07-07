@@ -22,11 +22,15 @@ class ExampleCheckModule extends AbstractCheckModule {
   }
 
   retainedButtonClicked() {
-    // Sends an action which will update the current check in CheckStore
-    // Property name: checkStatus
-    // Property value: 'RETAINED'
-    // You can put objects in for the property value too, not just strings
     CheckActions.changeCheckProperty("checkStatus", "RETAINED");
+  }
+
+  replacedButtonClicked() {
+    CheckActions.changeCheckProperty("checkStatus", "REPLACED");
+  }
+
+  wrongButtonClicked() {
+    CheckActions.changeCheckProperty("checkStatus", "WRONG");
   }
 
   nextButtonClicked() {
@@ -36,8 +40,10 @@ class ExampleCheckModule extends AbstractCheckModule {
   render() {
     return (
       <div>
-        <p>{super.getCurrentCheck().checkStatus}</p>
+        <p>{super.getCurrentCheck().phrase}</p>
         <button onClick={this.retainedButtonClicked.bind(this)}>Retained</button>
+        <button onClick={this.replacedButtonClicked.bind(this)}>Replaced</button>
+        <button onClick={this.wrongButtonClicked.bind(this)}>Wrong</button>
         <button onClick={this.nextButtonClicked}>Next</button>
       </div>
     );
