@@ -17,7 +17,7 @@
       Menu.setApplicationMenu(menu);
       var Application = (
         <div>
-          <TempCheckingScreen />
+          <TPane />
           <UploadModal />
           <SettingsModal />
         </div>
