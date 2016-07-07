@@ -9,7 +9,7 @@
 // var db = require('./db-init');
   const UploadModal = require('../components/UploadModal');
   const MenuBar = require('../components/MenuBar');
-  const TempCheckingScreen = require('../components/TempCheckingScreen');
+  const SettingsModal = require('../components/SettingsModal');
 
   var App = {
     init: function() {
@@ -19,6 +19,7 @@
         <div>
           <TempCheckingScreen />
           <UploadModal />
+          <SettingsModal />
         </div>
       );
       ReactDOM.render(Application, document.getElementById('content'));
