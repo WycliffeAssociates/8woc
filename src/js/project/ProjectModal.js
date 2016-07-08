@@ -22,9 +22,6 @@ const ProjectModal = React.createClass({
   showCreateProject: function() {
     this.setState({showModal: CoreStore.getShowProjectModal()});
   },
-  retrieveRepos: function() {
-    gogs.retrieveRepos('royalsix', 'translation-core_test1')
-  },
   close: function() {
     this.setState({showModal: false});
     project.createProject(manifest, this.state.text);
@@ -62,6 +59,7 @@ const ProjectModal = React.createClass({
       <Button type="submit" onClick={this.close}>Create</Button>
       </Modal.Footer>
       </Modal>
+      <Button type="submit" onClick={this.createaccount}>Create Account Test</Button>
       </div>
     )}
   });

@@ -6,11 +6,11 @@
   const remote = window.electron.remote;
   const {Menu} = remote;
 // var db = require('./db-init');
-  const UploadModal = require('../components/UploadModal');
-  const MenuBar = require('../components/MenuBar');
+  const UploadModal = require('../components/core/UploadModal');
+  const MenuBar = require('../components/core/MenuBar');
   const ProjectModal = require('../project/ProjectModal');
   const Root = require('./root')
-  const SettingsModal = require('../components/SettingsModal');
+  const SettingsModal = require('../components/core/SettingsModal');
 
   var App = {
     init: function() {
@@ -18,17 +18,10 @@
       Menu.setApplicationMenu(menu);
       var Application = (
         <div>
-<<<<<<< HEAD
         <Root />
         <ProjectModal />
         <UploadModal />
         <SettingsModal />
-=======
-          <TPane />
-          <UploadModal />
-          <CheckModuleView />
-          <SettingsModal />
->>>>>>> develop
         </div>
       );
       ReactDOM.render(Application, document.getElementById('content'));

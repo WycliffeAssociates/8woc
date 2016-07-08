@@ -1,6 +1,6 @@
 const fs = require(window.__base + 'node_modules/fs-extra');
 const path = window.__base + 'projects/';
-const FileModule = require('../components/FileModule');
+const FileModule = require('../components/core/FileModule');
 
 var project = {
   createProject: function(manifest, projectName){
