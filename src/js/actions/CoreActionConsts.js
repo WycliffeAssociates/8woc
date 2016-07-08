@@ -10,7 +10,6 @@ module.exports = {
   ADD_TO_TEXT: "ADD_TO_TEXT",
   SETTINGS_VIEW: "SETTINGS_VIEW",
   CREATE_PROJECT: "CREATE_PROJECT"
-
 };
 
 /**

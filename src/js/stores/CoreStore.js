@@ -146,6 +146,11 @@ class CoreStore extends EventEmitter {
         this.emitChange();
         break;
 
+      case consts.SETTINGS_VIEW:
+        this.settingsVisibility = action.settingsView;
+        this.emitChange();
+        break;
+
       default:
         // do nothing
     }
