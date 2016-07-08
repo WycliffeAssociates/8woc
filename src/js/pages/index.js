@@ -11,6 +11,7 @@
   const MenuBar = require('../components/MenuBar');
   const ProjectModal = require('../project/ProjectModal');
   const Root = require('./root')
+  const SettingsModal = require('../components/SettingsModal');
 
   var App = {
     init: function() {
@@ -19,6 +20,9 @@
       var Application = (
         <div>
         <Root />
+          <TPane />
+          <UploadModal />
+          <SettingsModal />
         </div>
       );
       ReactDOM.render(Application, document.getElementById('content'));
