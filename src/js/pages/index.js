@@ -1,6 +1,7 @@
 (function() {
   const ReactDOM = require('react-dom');
   const React = require('react');
+  const CheckModuleView = require('../components/modules/phrase_check_module/CheckModuleView');
 
   const remote = window.electron.remote;
   const {Menu} = remote;
@@ -17,10 +18,17 @@
       Menu.setApplicationMenu(menu);
       var Application = (
         <div>
+<<<<<<< HEAD
         <Root />
         <ProjectModal />
         <UploadModal />
         <SettingsModal />
+=======
+          <TPane />
+          <UploadModal />
+          <CheckModuleView />
+          <SettingsModal />
+>>>>>>> develop
         </div>
       );
       ReactDOM.render(Application, document.getElementById('content'));
