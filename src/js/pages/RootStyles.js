@@ -1,16 +1,17 @@
 var RootStyles = {
   CheckSection: {
     textAlign: 'center',
-    position: 'relative',
+    position: 'fixed',
     height: 'auto',
     minHeight: '90vh',
-    border: '2px solid grey'
+    border: '2px solid grey',
+    padding: 0
   },
   SideMenu: {
     position: 'fixed',
     textAlign: 'center',
     height: 'auto',
-    minHeight:'100%',
+    minHeight:'100vh',
     border: '2px solid grey'
   },
   AfterCheck: {

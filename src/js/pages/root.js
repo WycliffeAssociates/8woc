@@ -2,6 +2,7 @@ const React = require('react');
 const NextButton = require('../components/NextButton');
 //const SideBar = require('../components/SideBar');
 const CommentBox = require('../components/CommentBox');
+const TPane = require('../components/TPane');
 const UploadModal = require('../components/UploadModal');
 const Button = require('react-bootstrap/lib/Button.js');
 const Grid = require('react-bootstrap/lib/Grid.js');
@@ -20,7 +21,9 @@ var Root = React.createClass({
         <Col style={RootStyles.SideMenu} xs={2} md={2}></Col>
         </Row>
         <Row>
-        <Col style={RootStyles.CheckSection} xs={10} md={10} xsOffset={2} mdOffset={2}></Col>
+        <Col style={RootStyles.CheckSection} xs={10} md={10} xsOffset={2} mdOffset={2}>
+        <TPane />
+        </Col>
         </Row>
         <Row >
         <Col style={RootStyles.AfterCheck} xs={10} md={10} xsOffset={2} mdOffset={2} >
