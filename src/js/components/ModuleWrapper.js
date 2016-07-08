@@ -6,8 +6,8 @@ event from the CoreStore and automatically swap out the check module for the new
 */
 var React = require('react');
 var Button = require('react-bootstrap/lib/Button.js');
-var CoreStore = require('../stores/CoreStore.js');
-var CoreActions = require('../actions/CoreActions.js');
+var CoreStore = require('../../stores/CoreStore.js');
+var CoreActions = require('../../actions/CoreActions.js');
 // TODO: Require all components
 
 
