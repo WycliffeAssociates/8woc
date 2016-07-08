@@ -22,10 +22,10 @@ class MenuItem extends React.Component {
     // when the flag is toggled it turns blue
     var flagStyle;
     if (this.props.check.flagged) {
-      flagStyle = style.menu_item_flag_enabled;
+      flagStyle = style.menuItem.flag.enabled;
     }
     else {
-      flagStyle = style.menu_item_flag_disabled;
+      flagStyle = style.menuItem.flag.disabled;
     }
 
     var checkStatusStyle;
@@ -33,19 +33,19 @@ class MenuItem extends React.Component {
     switch(checkStatus) {
       case "RETAINED":
         glyphIcon = "ok";
-        checkStatusStyle = style.menu_item_status_icon_retained;
+        checkStatusStyle = style.menuItem.statusIcon.retained;
         break;
       case "REPLACED":
         glyphIcon = "random";
-        checkStatusStyle = style.menu_item_status_icon_replaced;
+        checkStatusStyle = style.menuItem.statusIcon.replaced;
         break;
       case "WRONG": 
         glyphIcon = "remove";
-        checkStatusStyle = style.menu_item_status_icon_wrong;
+        checkStatusStyle = style.menuItem.statusIcon.wrong;
         break;
       default:
         glyphIcon = '';
-        checkStatusStyle = style.menu_item_status_icon_unchecked;
+        checkStatusStyle = style.menuItem.statusIcon.unchecked;
     }
 
     return (
