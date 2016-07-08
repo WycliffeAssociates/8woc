@@ -1,5 +1,6 @@
 var Dispatcher = require('../dispatchers/Dispatcher');
 var consts = require('./CheckActionConsts');
+var FileModule = require('../components/FileModule');
 /*
 Creates actions related to checks
 */
@@ -11,7 +12,7 @@ module.exports = {
    */
   changeCheckProperty: function(propertyName, propertyValue) {
     Dispatcher.handleAction({
-      type: consts['ChangeCheckProperty'],
+      type: consts.CHANGE_CHECK_PROPERTY,
       propertyName: propertyName,
       propertyValue: propertyValue
     });
@@ -28,7 +29,7 @@ module.exports = {
 
   changeCheckCategory_: function(newCheckCategory, jsonObject) {
     Dispatcher.handleAction({
-      type: consts["ChangeCheckCategory"],
+      type: consts.CHANGE_CHECK_CATEGORY,
       newCheckCategory: newCheckCategory,
       jsonObject, jsonObject
     });

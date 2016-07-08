@@ -62,12 +62,12 @@ class CheckStore extends EventEmitter {
 
   handleActions(action) {
     switch(action.type) {
-      case CheckConsts['ChangeCheckProperty']:
+      case CheckConsts.CHANGE_CHECK_PROPERTY:
         this.setCurrentCheckProperty(action.propertyName, action.propertyValue);
         this.emitChange();
         break;
 
-      case CheckConsts["ChangeCheckCategory"]:
+      case CheckConsts.CHANGE_CHECK_CATEGORY:
         this.loadAllChecks(action.newCheckCategory, action.jsonObject);
         this.emitChange();
         break;
