@@ -44,7 +44,7 @@
      return (
       <Grid >
         <Row >
-        <Col  xsOffset={2} mdOffset={2}>
+        <Col >
           <Pane title="Original Language" content={this.state.ol} />
           <Pane title="Gateway Language" content={this.state.gl} />
           <Pane title="Target Language" content={this.state.tl} />

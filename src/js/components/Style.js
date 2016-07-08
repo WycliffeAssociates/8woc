@@ -1,8 +1,9 @@
 var style = {
   pane: {
     content: {
+      maxWidth: '50vh',
+      paddingTop: '10px',
       overflowY: 'scroll',
-      width: '100%',
       height: '250px'
     },
     header: {
@@ -16,11 +17,9 @@ var style = {
     },
     text: {
       lineHeight: '200px',
-      verticalAlign: 'middle',
-      width: '100%'
+      verticalAlign: 'middle'
     },
     main: {
-      width: '100%',
       color: '#212121',
       height: '200px',
       border: '2px dashed #727272',
@@ -58,7 +57,7 @@ var style = {
         display: 'none'
       }
     }
-  },
+  }
 };
 
 module.exports = style;

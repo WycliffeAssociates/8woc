@@ -52,7 +52,6 @@ module.exports = {
   updateModal: function(boolean) {
     Dispatcher.handleAction({
       type: consts.CHANGE_UPLOAD_MODAL_VISIBILITY,
-<<<<<<< HEAD
       modalOption: boolean
     });
   },
@@ -60,8 +59,6 @@ module.exports = {
   showCreateProject: function(boolean) {
     Dispatcher.handleAction({
       type: consts[CREATE_PROJECT],
-=======
->>>>>>> develop
       modalOption: boolean
     });
   },
