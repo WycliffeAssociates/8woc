@@ -7,8 +7,8 @@
 
  const Grid = require('react-bootstrap/lib/Grid.js');
  const Row = require('react-bootstrap/lib/Row.js');
-
- const CoreStore = require('../../stores/CoreStore.js');
+ const Col = require('react-bootstrap/lib/Col.js');
+ const CoreStore = require('../stores/CoreStore.js');
 
  const Pane = require('./Pane');
 
@@ -42,11 +42,13 @@
    },
    render: function() {
      return (
-      <Grid>
-        <Row>
-          <Pane title="Original Language" content={this.state.ol}/>
-          <Pane title="Gateway Language" content={this.state.gl}/>
-          <Pane title="Target Language" content={this.state.tl}/>
+      <Grid >
+        <Row >
+        <Col >
+          <Pane title="Original Language" content={this.state.ol} />
+          <Pane title="Gateway Language" content={this.state.gl} />
+          <Pane title="Target Language" content={this.state.tl} />
+          </Col>
         </Row>
       </Grid>
   );
