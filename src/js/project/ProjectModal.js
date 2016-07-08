@@ -26,6 +26,9 @@ const ProjectModal = React.createClass({
     this.setState({showModal: false});
     project.createProject(manifest, this.state.text);
   },
+  createaccount: function() {
+
+  },
   handleChange: function(e) {
     this.state.text = e.target.value;
   },
@@ -48,18 +51,15 @@ const ProjectModal = React.createClass({
       <Modal.Title>Project Name</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-      <form>
       <FormGroup>
       <ControlLabel>Title</ControlLabel>
       <FormControl type="text" placeholder="Enter name of Project" onKeyPress={this.handleKeyPress}  onChange={this.handleChange}/>
       </FormGroup>
-      </form>
       </Modal.Body>
       <Modal.Footer>
-      <Button type="submit" onClick={this.close}>Create</Button>
+      <Button type="button" onClick={this.close}>Create</Button>
       </Modal.Footer>
       </Modal>
-      <Button type="submit" onClick={this.createaccount}>Create Account Test</Button>
       </div>
     )}
   });

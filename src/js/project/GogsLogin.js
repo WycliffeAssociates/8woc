@@ -34,6 +34,12 @@ function UserManager(auth) {
         });
       });
     },
+    // var userdata = {
+    //     username:'royalsix',
+    //     password:'4thenations',
+    //     full_name: 'Jay Scott',
+    //     email: 'jayroyal9@gmail.com'
+    //   }
 
     createRepo: function (user, reponame) {
       return api.listRepos(user).then(function (repos) {
