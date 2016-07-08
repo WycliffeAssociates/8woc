@@ -10,6 +10,7 @@
   const UploadModal = require('../components/UploadModal');
   const MenuBar = require('../components/MenuBar');
   const ProjectModal = require('../project/ProjectModal');
+  const Root = require('./root')
 
   var App = {
     init: function() {
@@ -17,9 +18,7 @@
       Menu.setApplicationMenu(menu);
       var Application = (
         <div>
-          <TPane />
-          <UploadModal />
-          <ProjectModal />
+        <Root />
         </div>
       );
       ReactDOM.render(Application, document.getElementById('content'));
