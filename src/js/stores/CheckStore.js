@@ -12,7 +12,7 @@ class CheckStore extends EventEmitter {
     // For ExampleCheckModule
     this.currentCheck = {checkStatus: "UNCHECKED", comments: ""};
     this.checks = {};
-    this.checkCategory = null;
+    this.checkCategory = "NO_SELECTION";
   }
 
   // Public function to return a deep clone of the current check
@@ -28,15 +28,18 @@ class CheckStore extends EventEmitter {
     this.currentCheck[propertyName] = propertyValue;
   }
 
-  loadAllChecks(jsonObject) {
+  getCheckCategory() {
+    return this.checkCategory;
+  }
+
+  loadAllChecks(newCheckCategory, jsonObject) {
     var checks;
     for(var el in jsonObject) {
-      // The check category (i.e. Phrase Checks) is the top level key
-      this.checkCategory = el;
       // The checks array is the top level value
       this.checks = jsonObject[el];
       break;
     }
+    this.checkCategory = newCheckCategory;
     console.log(this.checkCategory);
     console.log("allchecks:");
     console.log(this.checks);
@@ -63,8 +66,9 @@ class CheckStore extends EventEmitter {
         this.setCurrentCheckProperty(action.propertyName, action.propertyValue);
         this.emitChange();
         break;
-      case CoreConsts['OpenCheckModule']:
-        this.loadAllChecks(action.jsonObject);
+
+      case CheckConsts["ChangeCheckCategory"]:
+        this.loadAllChecks(action.newCheckCategory, action.jsonObject);
         this.emitChange();
         break;
 

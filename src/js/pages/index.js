@@ -10,7 +10,7 @@
 // var db = require('./db-init');
   const UploadModal = require('../components/UploadModal');
   const MenuBar = require('../components/MenuBar');
-  const ExampleComponent = require('../components/ExampleComponent');
+  const SwitchCheckModuleDropdown = require('../components/SwitchCheckModuleDropdown');
 
   var App = {
     init: function() {
@@ -23,7 +23,7 @@
         </div>
       );
       // ReactDOM.render(Application, document.getElementById('content'));
-      ReactDOM.render(<ExampleComponent />, document.getElementById('content'));
+      ReactDOM.render(<SwitchCheckModuleDropdown />, document.getElementById('content'));
     }
   };
 
