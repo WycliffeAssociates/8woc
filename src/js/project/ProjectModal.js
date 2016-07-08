@@ -46,7 +46,7 @@ const ProjectModal = React.createClass({
   render: function() {
     return (
       <div>
-      <Modal show={true} onHide={this.close} >
+      <Modal show={this.state.showModal} onHide={this.close} >
       <Modal.Header Create Project>
       <Modal.Title>Project Name</Modal.Title>
       </Modal.Header>
@@ -55,13 +55,11 @@ const ProjectModal = React.createClass({
       <FormGroup>
       <ControlLabel>Title</ControlLabel>
       <FormControl type="text" placeholder="Enter name of Project" onKeyPress={this.handleKeyPress}  onChange={this.handleChange}/>
-      //<FormControl type="text" placeholder="Enter email" onKeyPress={this.handleKeyPress}  onChange={this.handleChange}/>
       </FormGroup>
       </form>
       </Modal.Body>
       <Modal.Footer>
       <Button type="submit" onClick={this.close}>Create</Button>
-      <Button type="submit" onClick={this.retrieveRepos}>retrieveRepos</Button>
       </Modal.Footer>
       </Modal>
       </div>

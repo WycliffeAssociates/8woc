@@ -18,6 +18,7 @@
       var Application = (
         <div>
         <Root />
+        <ProjectModal />
         <UploadModal />
         <SettingsModal />
         </div>

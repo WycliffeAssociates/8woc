@@ -1,12 +1,13 @@
 var style = {
   pane: {
     content: {
-      maxWidth: '50vh',
+      maxWidth: '55vh',
       paddingTop: '10px',
       overflowY: 'scroll',
       height: '250px'
     },
     header: {
+      padding:0,
       textAlign: 'center'
     }
   },

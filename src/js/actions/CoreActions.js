@@ -58,7 +58,7 @@ module.exports = {
 
   showCreateProject: function(boolean) {
     Dispatcher.handleAction({
-      type: consts[CREATE_PROJECT],
+      type: consts.CREATE_PROJECT,
       modalOption: boolean
     });
   },
