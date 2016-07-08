@@ -8,7 +8,8 @@ class ScriptureDisplay extends React.Component{
     super();
     this.state = {
       selectedPos: [],
-      selectedVals: []}
+      selectedVals: []
+    }
 
     this.getSelectedText = this.getSelectedText.bind(this);
     this.clearSelection = this.clearSelection.bind(this);
@@ -41,8 +42,10 @@ class ScriptureDisplay extends React.Component{
     }
 
     newVals.push(selection.toString());
-    this.setState({selectedPos: newPos,
-                   selectedVals: newVals});
+    this.setState({
+      selectedPos: newPos,
+      selectedVals: newVals
+    });
     this.returnSelection();
   }
 
@@ -52,8 +55,10 @@ class ScriptureDisplay extends React.Component{
   }
 
   clearSelection(){
-    this.setState({selectedPos: [],
-                   selectedVals: []});
+    this.setState({
+      selectedPos: [],
+      selectedVals: []
+    });
   }
 
   render(){
@@ -63,9 +68,7 @@ class ScriptureDisplay extends React.Component{
     for(var i = 0; i < wordArray.length; i++){
       if(this.state.selectedPos.includes(i)){
         spannedArray.push(
-          <span style={{backgroundColor: 'yellow'}}
-                data-pos={i}
-                key={i}>
+          <span style={{backgroundColor: 'yellow'}} data-pos={i} key={i}>
             {wordArray[i] + " "}
           </span>
         );
@@ -81,11 +84,7 @@ class ScriptureDisplay extends React.Component{
     return (
       <div className="ScriptureDisplay">
         <h1>{verseDisplay[0].toUpperCase()}<small>{verseDisplay[1]}</small></h1>
-        <Glyph
-          glyph="remove"
-          style={{float: 'right'}}
-          onClick={this.clearSelection}
-        />
+        <Glyph glyph="remove" style={{float: 'right'}} onClick={this.clearSelection}/>
         <Well>
           <p onClick={this.getSelectedText}>{spannedArray}</p>
         </Well>
