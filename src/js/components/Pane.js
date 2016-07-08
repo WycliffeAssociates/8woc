@@ -13,7 +13,7 @@ const Pane = React.createClass({
       <Col lg={4} md={4} sm={4} xs={4} style={{padding:0}}>
         <h3 style={style.pane.header}>{this.props.title}</h3>
           <Well style={style.pane.content}>
-            <Book input={this.props.content} />
+            <Book input={this.props.content}/>
           </Well>
       </Col>
     );

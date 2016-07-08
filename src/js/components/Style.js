@@ -1,14 +1,15 @@
 var style = {
   pane: {
     content: {
-      maxWidth: '55vh',
-      paddingTop: '10px',
+      maxWidth: '45vh',
       overflowY: 'scroll',
-      height: '250px'
+      height: '250px',
+      padding:0
     },
     header: {
-      padding:0,
-      textAlign: 'center'
+      maxWidth: '45vh',
+      textAlign: 'center',
+      padding:0
     }
   },
   dropzone: {
