@@ -56,6 +56,13 @@ module.exports = {
     });
   },
 
+  showCreateProject: function(boolean) {
+    Dispatcher.handleAction({
+      type: consts.CREATE_PROJECT,
+      modalOption: boolean
+    });
+  },
+
   changeCheck: function(newCheck) {
     Dispatcher.handleAction({
       type: consts.CHANGE_CHECK_TYPE,

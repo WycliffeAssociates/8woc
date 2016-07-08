@@ -1,7 +1,7 @@
 const React = require('react');
 const Button = require('react-bootstrap/lib/Button.js');
 
-const CheckActions = require('../actions/CheckActions');
+const CheckActions = require('../../actions/CheckActions');
 
 class NextButton extends React.Component {
   constructor() {
