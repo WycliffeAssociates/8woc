@@ -49,6 +49,10 @@ class PhraseChecker extends AbstractCheckModule{
       selectedText: "",
       flagState: "",
     });
+<<<<<<< HEAD
+=======
+    var data = Fetcher('eph', this.setProgress, this.onParserCompletion);
+>>>>>>> eeedf99c98963e77e6e31cc05869e0b81c82d6f9
   }
   appendReturnObject(){
     var object = this.state.returnObject;
