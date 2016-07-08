@@ -11,15 +11,15 @@ var style = {
     }
   },
 
-logo:{
-  height: "60px",
-  width: "60px",
-  margin: "0px"
-},
+  logo:{
+    height: "60px",
+    width: "60px",
+    margin: "0px"
+  },
 
-NavBarbutton:{
-  marginTop: "10px",
-},
+  NavBarbutton:{
+    marginTop: "10px",
+  },
 
 };
 
