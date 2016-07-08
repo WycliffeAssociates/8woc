@@ -14,6 +14,13 @@ var template = [
         click() {
           CoreActions.updateModal(true);
         }
+      },
+      {
+        label: 'Create Project',
+        click() {
+          CoreActions.showCreateProject(true);
+        }
+
       }
     ]
   },

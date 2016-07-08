@@ -6,6 +6,7 @@ module.exports = {
   "UpdateTl": "UPDATE_TARGET_LANGUAGE",
   "UpdateGl": "UPDATE_GATEWAY_LANGUAGE",
   "UpdateModal": "CHANGE_UPLOAD_MODAL_VISIBILITY",
+  "CreateProject": "CREATE_PROJECT",
   "ChangeCheck": "CHANGE_CHECK_TYPE"
 };
 
