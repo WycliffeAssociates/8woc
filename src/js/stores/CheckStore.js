@@ -2,6 +2,7 @@ var EventEmitter = require('events').EventEmitter;
 var Dispatcher = require('../dispatchers/Dispatcher');
 var CheckConsts = require("../actions/CheckActionConsts.js");
 var CoreConsts = require("../actions/CoreActionConsts.js");
+var FileModule = require("../components/FileModule.js");
 var utils = require("../utils.js");
 
 var CHANGE_EVENT = 'change';
@@ -9,10 +10,21 @@ var CHANGE_EVENT = 'change';
 class CheckStore extends EventEmitter {
   constructor() {
     super();
-    // For ExampleCheckModule
     this.currentCheck = {checkStatus: "UNCHECKED", comments: ""};
     this.checks = {};
-    this.checkCategory = "NO_SELECTION";
+    this.checkCategoryId = -1;
+    this.checkCategoryOptions = [
+      {
+          name: "Lexical Checks",
+          id: 1,
+          filePath: "C:/Users/Logan Lebanoff/Desktop/8woc/8woc/data/projects/eph_mylanguage/check_modules/lexical_check_module/check_data.json"
+      },
+      {
+          name: "Phrase Checks",
+          id: 2,
+          filePath: "C:/Users/Logan Lebanoff/Desktop/8woc/8woc/data/projects/eph_mylanguage/check_modules/phrase_check_module/check_data.json"
+      }
+    ];
   }
 
   // Public function to return a deep clone of the current check
@@ -28,8 +40,35 @@ class CheckStore extends EventEmitter {
     this.currentCheck[propertyName] = propertyValue;
   }
 
-  getCheckCategory() {
-    return this.checkCategory;
+  getCurrentCheckCategory() {
+    return this.getCheckCategory(this.checkCategoryId);
+  }
+
+  findById(source, id) {
+    for (var i = 0; i < source.length; i++) {
+      if (source[i].id == id) {
+        return source[i];
+      }
+    }
+    return undefined;
+    // throw "Couldn't find object with id: " + id;
+  }
+
+  getCheckCategory(id) {
+    // console.log("check options");
+    // console.log(this.checkCategoryOptions);
+    // console.log(this.checkCategoryId);
+    return this.findById(this.checkCategoryOptions, id);
+    // console.log(this.checkCategoryOptions.find(function (cat) {
+    //   return cat.id === id;
+    // }));
+    // return this.checkCategoryOptions.find(function (cat) {
+    //   return cat.id === id;
+    // });
+  }
+
+  getCheckCategoryOptions() {
+    return this.checkCategoryOptions;
   }
 
   loadAllChecks(newCheckCategory, jsonObject) {
@@ -39,8 +78,7 @@ class CheckStore extends EventEmitter {
       this.checks = jsonObject[el];
       break;
     }
-    this.checkCategory = newCheckCategory;
-    console.log(this.checkCategory);
+    this.checkCategoryId = newCheckCategory.id;
     console.log("allchecks:");
     console.log(this.checks);
   }
@@ -81,4 +119,6 @@ class CheckStore extends EventEmitter {
 
 const checkStore = new CheckStore;
 Dispatcher.register(checkStore.handleActions.bind(checkStore));
+
+window.CheckStore = checkStore;
 module.exports = checkStore;

@@ -20,9 +20,9 @@ module.exports = {
 
   // Async reads the Json file at the given path, then dispatches an action with
   // the resulting object
-  changeCheckCategory: function(newCheckCategory, filePath) {
+  changeCheckCategory: function(newCheckCategory) {
     var this_ = this;
-    FileModule.readJsonFile(filePath, function(jsonObject) {
+    FileModule.readJsonFile(newCheckCategory.filePath, function(jsonObject) {
       this_.changeCheckCategory_(newCheckCategory, jsonObject);
     });
   },
@@ -31,7 +31,7 @@ module.exports = {
     Dispatcher.handleAction({
       type: consts.CHANGE_CHECK_CATEGORY,
       newCheckCategory: newCheckCategory,
-      jsonObject, jsonObject
+      jsonObject: jsonObject
     });
   }
 
