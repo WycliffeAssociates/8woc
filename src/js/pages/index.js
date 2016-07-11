@@ -1,16 +1,17 @@
 (function() {
   const ReactDOM = require('react-dom');
   const React = require('react');
+  const CheckModuleView = require('../components/modules/phrase_check_module/CheckModuleView');
 
   const remote = window.electron.remote;
   const {Menu} = remote;
-
-  const TPane = require('../components/TPane');
+  const TPane = require('../components/core/TPane');
+  
 // var db = require('./db-init');
-  const UploadModal = require('../components/UploadModal');
-  const MenuBar = require('../components/MenuBar');
-  const SwitchCheckModuleDropdown = require('../components/SwitchCheckModuleDropdown');
-  const SettingsModal = require('../components/SettingsModal');
+  const UploadModal = require('../components/core/UploadModal');
+  const MenuBar = require('../components/core/MenuBar');
+  const SettingsModal = require('../components/core/SettingsModal');
+  const SwitchCheckModuleDropdown = require('../components/core/SwitchCheckModuleDropdown');
 
   var App = {
     init: function() {
@@ -20,6 +21,7 @@
         <div>
           <TPane />
           <UploadModal />
+          <CheckModuleView />
           <SettingsModal />
         </div>
       );

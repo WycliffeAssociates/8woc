@@ -8,7 +8,7 @@
 var EventEmitter = require('events').EventEmitter;
 var Dispatcher = require('../dispatchers/Dispatcher');
 var CheckConsts = require("../actions/CheckActionConsts.js");
-var FileModule = require("../components/FileModule.js");
+var FileModule = require("../components/core/FileModule.js");
 var utils = require("../utils.js");
 
 var CHANGE_EVENT = 'change';
@@ -33,19 +33,33 @@ class CheckStore extends EventEmitter {
           filePath: "C:/Users/Logan Lebanoff/Desktop/8woc/8woc/data/projects/eph_mylanguage/check_modules/phrase_check_module/check_data.json"
       }
     ];
+    // For ExampleCheckModule
+    this.checkIndex = 0;
+  }
+
+  // Public function to return a list of all of the checks.
+  // Should usually be used by the navigation menu, not the check module, because
+  // the check module only displays a single check
+  getAllChecks() {
+    return this.checks;
   }
 
   // Public function to return a deep clone of the current check
-  // Why not just return this.currentCheck? Because that returns a reference to
+  // Why not just return this.checks[this.checkIndex]? Because that returns a reference to
   // the object, and we don't want any changes made here to be reflected elsewhere,
   // and vice versa
   getCurrentCheck() {
-    var check = this.currentCheck;
+    var check = this.checks[this.checkIndex];
     return utils.cloneObject(check);
   }
 
+  // Public function to return the current check's position in the checks array
+  getCheckIndex() {
+    return this.checkIndex;
+  }
+
   setCurrentCheckProperty(propertyName, propertyValue) {
-    this.currentCheck[propertyName] = propertyValue;
+    this.checks[this.checkIndex][propertyName] = propertyValue;
   }
 
   getCurrentCheckCategory() {
@@ -103,6 +117,14 @@ class CheckStore extends EventEmitter {
         this.fillAllChecks(action.jsonObject, action.id);
         break;
 
+      case CheckConsts.NEXT_CHECK:
+        this.checkIndex++;
+        break;
+
+      case CheckConsts.GO_TO_CHECK:
+        this.checkIndex = action.checkIndex;
+        break;
+
       // do nothing
       default:
         return;
@@ -114,5 +136,4 @@ class CheckStore extends EventEmitter {
 
 const checkStore = new CheckStore;
 Dispatcher.register(checkStore.handleActions.bind(checkStore));
-
 module.exports = checkStore;

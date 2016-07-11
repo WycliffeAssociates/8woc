@@ -9,8 +9,8 @@ var Well = require('react-bootstrap/lib/Well.js');
 var FormGroup = require('react-bootstrap/lib/FormGroup.js');
 var ControlLabel = require('react-bootstrap/lib/ControlLabel.js');
 var FormControl = require('react-bootstrap/lib/FormControl.js');
-var CheckStore = require('../stores/CheckStore.js');
-var CheckActions = require('../actions/CheckActions.js');
+var CheckStore = require('../../stores/CheckStore.js');
+var CheckActions = require('../../actions/CheckActions.js');
 
 const NONE_SELECTED = "NONE_SELECTED";
 

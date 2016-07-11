@@ -1,6 +1,6 @@
 var Dispatcher = require('../dispatchers/Dispatcher');
 var consts = require('./CoreActionConsts');
-var FileModule = require('../components/FileModule');
+var FileModule = require('../components/core/FileModule');
 /**
 How to use the actions:
 Just require this file in your component, call
