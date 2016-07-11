@@ -11,7 +11,6 @@
   const UploadModal = require('../components/core/UploadModal');
   const MenuBar = require('../components/core/MenuBar');
   const SettingsModal = require('../components/core/SettingsModal');
-  const SwitchCheckModuleDropdown = require('../components/core/SwitchCheckModuleDropdown');
 
   var App = {
     init: function() {
@@ -25,8 +24,7 @@
           <SettingsModal />
         </div>
       );
-      // ReactDOM.render(Application, document.getElementById('content'));
-      ReactDOM.render(<SwitchCheckModuleDropdown />, document.getElementById('content'));
+      ReactDOM.render(Application, document.getElementById('content'));
     }
   };
 
