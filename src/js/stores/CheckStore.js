@@ -1,7 +1,13 @@
+/**
+ * @author Logan Lebanoff
+ * @description Stores data relating to Check Modules.
+ *              It has data like: an array of all the checks, the id of the current
+ *              check category, and a list of all the check cateogry options.
+ ******************************************************************************/
+
 var EventEmitter = require('events').EventEmitter;
 var Dispatcher = require('../dispatchers/Dispatcher');
 var CheckConsts = require("../actions/CheckActionConsts.js");
-var CoreConsts = require("../actions/CoreActionConsts.js");
 var FileModule = require("../components/FileModule.js");
 var utils = require("../utils.js");
 
@@ -12,7 +18,9 @@ class CheckStore extends EventEmitter {
     super();
     this.currentCheck = {checkStatus: "UNCHECKED", comments: ""};
     this.checks = {};
+    // -1 means no checkCategory is selected
     this.checkCategoryId = -1;
+    // TODO: this needs to be filled with actual data when the project is loaded
     this.checkCategoryOptions = [
       {
           name: "Lexical Checks",
@@ -50,46 +58,33 @@ class CheckStore extends EventEmitter {
         return source[i];
       }
     }
+    // Element not found
     return undefined;
-    // throw "Couldn't find object with id: " + id;
   }
 
   getCheckCategory(id) {
-    // console.log("check options");
-    // console.log(this.checkCategoryOptions);
-    // console.log(this.checkCategoryId);
     return this.findById(this.checkCategoryOptions, id);
-    // console.log(this.checkCategoryOptions.find(function (cat) {
-    //   return cat.id === id;
-    // }));
-    // return this.checkCategoryOptions.find(function (cat) {
-    //   return cat.id === id;
-    // });
   }
 
   getCheckCategoryOptions() {
     return this.checkCategoryOptions;
   }
 
-  loadAllChecks(newCheckCategory, jsonObject) {
+  // Fills the checks array with the data in jsonObject and the id
+  // from newCheckCategory
+  fillAllChecks(jsonObject, id) {
     var checks;
     for(var el in jsonObject) {
-      // The checks array is the top level value
       this.checks = jsonObject[el];
       break;
     }
-    this.checkCategoryId = newCheckCategory.id;
-    console.log("allchecks:");
-    console.log(this.checks);
+    this.checkCategoryId = id;
   }
 
   emitChange() {
     this.emit(CHANGE_EVENT);
   }
 
-  /**
-   * @param {function} callback
-   */
   addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
   }
@@ -102,17 +97,17 @@ class CheckStore extends EventEmitter {
     switch(action.type) {
       case CheckConsts.CHANGE_CHECK_PROPERTY:
         this.setCurrentCheckProperty(action.propertyName, action.propertyValue);
-        this.emitChange();
         break;
 
       case CheckConsts.CHANGE_CHECK_CATEGORY:
-        this.loadAllChecks(action.newCheckCategory, action.jsonObject);
-        this.emitChange();
+        this.fillAllChecks(action.jsonObject, action.id);
         break;
 
+      // do nothing
       default:
-        // do nothing
+        return;
     }
+    this.emitChange();
   }
 
 }
@@ -120,5 +115,4 @@ class CheckStore extends EventEmitter {
 const checkStore = new CheckStore;
 Dispatcher.register(checkStore.handleActions.bind(checkStore));
 
-window.CheckStore = checkStore;
 module.exports = checkStore;

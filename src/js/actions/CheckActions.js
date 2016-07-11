@@ -23,15 +23,15 @@ module.exports = {
   changeCheckCategory: function(newCheckCategory) {
     var this_ = this;
     FileModule.readJsonFile(newCheckCategory.filePath, function(jsonObject) {
-      this_.changeCheckCategory_(newCheckCategory, jsonObject);
+      this_.changeCheckCategory_(jsonObject, newCheckCategory.id);
     });
   },
 
-  changeCheckCategory_: function(newCheckCategory, jsonObject) {
+  changeCheckCategory_: function(jsonObject, id) {
     Dispatcher.handleAction({
       type: consts.CHANGE_CHECK_CATEGORY,
-      newCheckCategory: newCheckCategory,
-      jsonObject: jsonObject
+      jsonObject: jsonObject,
+      id: id
     });
   }
 

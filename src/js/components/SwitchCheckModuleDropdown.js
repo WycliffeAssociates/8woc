@@ -12,6 +12,8 @@ var FormControl = require('react-bootstrap/lib/FormControl.js');
 var CheckStore = require('../stores/CheckStore.js');
 var CheckActions = require('../actions/CheckActions.js');
 
+const NONE_SELECTED = "NONE_SELECTED";
+
 class SwitchCheckModuleDropdown extends React.Component {
 
   constructor() {
@@ -29,10 +31,15 @@ class SwitchCheckModuleDropdown extends React.Component {
     });
   }
 
+  // When the dropdown is changed, this sends out an action to change the check category
   openCheckModule(e) {
     var checkCategoryId = e.target.value;
     var newCheckCategory = CheckStore.getCheckCategory(checkCategoryId);
     CheckActions.changeCheckCategory(newCheckCategory);
+  }
+
+  getSelectedCheckCategoryId() {
+    return (this.state.checkCategory == undefined ? NONE_SELECTED : this.state.checkCategory.id);
   }
 
   componentWillMount() {
@@ -54,8 +61,8 @@ class SwitchCheckModuleDropdown extends React.Component {
       <Well>
         <FormGroup>
           <ControlLabel>Select a Check Category</ControlLabel>
-          <FormControl componentClass="select" value={this.state.checkCategory == undefined ? 'NONE_SELECTED' : this.state.checkCategory.id} onChange={this.openCheckModule}>
-            <option value={'NONE_SELECTED'} style={{display: "none"}}></option>
+          <FormControl componentClass="select" value={this.getSelectedCheckCategoryId()} onChange={this.openCheckModule}>
+            <option value={NONE_SELECTED} style={{display: "none"}}></option>
             {optionNodes}
           </FormControl>
         </FormGroup>
