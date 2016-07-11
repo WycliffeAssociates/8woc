@@ -16,8 +16,35 @@ var CHANGE_EVENT = 'change';
 class CheckStore extends EventEmitter {
   constructor() {
     super();
-    this.currentCheck = {checkStatus: "UNCHECKED", comments: ""};
-    this.checks = {};
+    this.checks = [
+      {
+        book: "Ephesians",
+        chapter: 1,
+        verse: 11,
+        phrase: "God the Father",
+        checkStatus: "RETAINED",
+        comments: "",
+        flagged: false
+      },
+      {
+        book: "Ephesians",
+        chapter: 2,
+        verse: 12,
+        phrase: "Jesus Christ",
+        checkStatus: "NOT_CHECKED",
+        comments: "",
+        flagged: false
+      },
+      {
+        book: "Ephesians",
+        chapter: 3,
+        verse: 13,
+        phrase: "Holy Spirit",
+        checkStatus: "NOT_CHECKED",
+        comments: "",
+        flagged: false
+      }
+    ];
     // -1 means no checkCategory is selected
     this.checkCategoryId = -1;
     // TODO: this needs to be filled with actual data when the project is loaded

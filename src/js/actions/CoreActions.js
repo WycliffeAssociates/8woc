@@ -57,6 +57,13 @@ module.exports = {
     });
   },
 
+  updateLoginModal: function(boolean) {
+    Dispatcher.handleAction({
+      type: consts.CHANGE_LOGIN_MODAL_VISIBILITY,
+      loginModalOption: boolean
+    });
+  },
+
   updateSettings: function(boolean) {
     Dispatcher.handleAction({
       type: consts.SETTINGS_VIEW,
