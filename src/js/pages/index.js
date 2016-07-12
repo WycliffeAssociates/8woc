@@ -25,8 +25,9 @@
           <LoginModal />
           <TPane />
           <UploadModal />
-          <SettingsModal />
+          <CheckModuleView />
           <SwitchCheckModuleDropdown />
+          <SettingsModal />
         </div>
       );
       ReactDOM.render(Application, document.getElementById('content'));
