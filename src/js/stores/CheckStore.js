@@ -94,13 +94,9 @@ class CheckStore extends EventEmitter {
   }
 
   findById(source, id) {
-    for (var i = 0; i < source.length; i++) {
-      if (source[i].id == id) {
-        return source[i];
-      }
-    }
-    // Element not found
-    return undefined;
+   return source.find(function(item) {
+      return item.id == id;
+   });
   }
 
   getCheckCategory(id) {
@@ -114,7 +110,6 @@ class CheckStore extends EventEmitter {
   // Fills the checks array with the data in jsonObject and the id
   // from newCheckCategory
   fillAllChecks(jsonObject, id) {
-    var checks;
     for(var el in jsonObject) {
       this.checks = jsonObject[el];
       break;

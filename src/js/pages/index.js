@@ -13,6 +13,7 @@
   const UploadModal = require('../components/core/UploadModal');
   const MenuBar = require('../components/core/MenuBar');
   const SettingsModal = require('../components/core/SettingsModal');
+  const SwitchCheckModuleDropdown = require('../components/core/SwitchCheckModuleDropdown');
 
   var App = {
     init: function() {
@@ -24,8 +25,8 @@
           <LoginModal />
           <TPane />
           <UploadModal />
-          <CheckModuleView />
           <SettingsModal />
+          <SwitchCheckModuleDropdown />
         </div>
       );
       ReactDOM.render(Application, document.getElementById('content'));
