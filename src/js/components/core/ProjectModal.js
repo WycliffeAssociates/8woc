@@ -27,6 +27,7 @@ const ProjectModal = React.createClass({
       placeHolderText:"Enter name of project",
       doneText:"Create",
       modalValue:"Create",
+      loadedChecks:[],
       FetchDataArray:[]      //FetchDataArray of checkmodules
     };
   },
@@ -65,6 +66,17 @@ const ProjectModal = React.createClass({
     if (e.charCode == ENTER) {
       project.createProject(manifest, this.state.projectname);
     }
+  },
+  beautifyString: function(check) {
+    const stringRegex = new RegExp("[^a-zA-Z0-9\s]", "g");
+    let regRes;
+    try {
+      check = check.replace(stringRegex, " ");
+      console.log(check);
+    }
+    catch (e) {
+    }
+    return check;
   },
   selectedModule: function(element) {
     var elementIndex = this.state.FetchDataArray.indexOf(element);
@@ -108,41 +120,48 @@ const ProjectModal = React.createClass({
     }
   },
   getModule: function() {
-  dialog.showOpenDialog({
-    properties: ['openDirectory']
-  }, function(filename) {
-    if (filename !== undefined) {
-      this.addMoreModules(filename);
-    }
-  });
-},
-addMoreModules: function(filename) {
-  try {
-    FileModule.readFile(file, readFile);
-    console.log(readFile);
-  } catch (error) {
-    dialog.showErrorBox('Import Error', 'Check Selected Module.');
-    console.log(error);
-  }
-  var filename = this.getModule();
-  var newModule = filename[0].split('/').pop();
-  this.changeModalBody("Check", newModule);
-},
-  changeModalBody: function(modalBody, currentChecks = []) {
+    dialog.showOpenDialog({
+      properties: ['openDirectory']
+    }, function(filename) {
+      if (filename != undefined) {
+        this.addMoreModules(filename);
+      }
+
+    }.bind(this));
+  },
+  addMoreModules: function(filepath) {
+    var tempArray = this.state.loadedChecks;
+    var newModule = filepath[0].split('/').pop();
+    var elementIndex = tempArray.indexOf(newModule);
+    if (elementIndex == -1){
+      if (this.isModule(filepath[0], newModule)) {
+        tempArray.push(newModule);
+        this.setState({
+          loadedChecks:tempArray
+        });
+      } else {
+        alert("Module Not Valid");
+      }
+    };
+  },
+  changeModalBody: function(modalBody) {
+    var fileModules = [];
+    var allModules = [];
     if (modalBody == "Check") {
       try {
         var file = fs.readdirSync(window.__base + 'src/js/components/modules');
         for (var element of file) {
           if (this.isModule((window.__base + 'src/js/components/modules/' + element), element)) {
-            currentChecks.push(element);
+            fileModules.push(element);
           }
         }
+        allModules = this.state.loadedChecks.concat(fileModules);
       } catch (e) {
         console.log(e);
       }
-      return (<SelectCheckType ref={this.state.modalValue} checks={currentChecks} modalTitle={this.state.modalTitle}
+      return (<SelectCheckType ref={this.state.modalValue} checks={allModules} modalTitle={this.state.modalTitle}
         controlLabelTitle={this.state.controlLabelTitle} placeHolderText={this.state.placeHolderText} FetchDataArray={this.state.FetchDataArray}
-        onClick={this.selectedModule} addMoreModules={this.getModule}/>)
+        onClick={this.selectedModule} addMoreModules={this.getModule} beautifyString={this.beautifyString}/>)
       }
       else if (modalBody == "Create") {
         return (<CreateProjectForm modalTitle={this.state.modalTitle} ref={this.state.modalValue} controlLabelTitle={this.state.controlLabelTitle}
@@ -196,11 +215,11 @@ addMoreModules: function(filename) {
             //checks which modules user selects, removes if selects twice
           },
           render: function() {
-            var checkButtonComponents = this.props.checks.map(function(checks) {
+            var checkButtonComponents = this.props.checks.map((checks) => {
               return (
                 <div>
                 <Checkbox id={checks} key={checks}>
-                {checks}
+                {this.props.beautifyString(checks)}
                 </Checkbox>
                 </div>
               )
@@ -216,7 +235,7 @@ addMoreModules: function(filename) {
               <FormGroup onClick={this.handleClick_}>
               {checkButtonComponents}
               <ButtonToolbar>
-              <Button bsSize="xsmall" onClick={this.addMoreModules}>Add More...</Button>
+              <Button bsSize="xsmall" onClick={this.addMoreModules}>Add Modules</Button>
               </ButtonToolbar>
               </FormGroup>
               </Modal.Body>
