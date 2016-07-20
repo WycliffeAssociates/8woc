@@ -1,12 +1,13 @@
   const React = require('react');
   const bootstrap = require('react-bootstrap');
-// const NavBarComponent = require('../components/core/NavBarComponent');
+
 
 const NavMenu = require('../components/core/NavigationMenu');
-
-// const LoginModal = require('../components/core/LoginModal');
-
-// const SettingsModal = require('../components/core/SettingsModal');
+const NextButton = require('../components/core/NextButton');
+const NavBarComponent = require('../components/core/NavBarComponent');
+const LoginModal = require('../components/core/LoginModal');
+const UploadModal = require('../components/core/UploadModal.js');
+const SettingsModal = require('../components/core/SettingsModal.js');
 // const RootStyles = require('./RootStyle');
 const ProjectModal = require('../components/core/ProjectModal');
 const RootStyles = require('./RootStyle');
@@ -38,7 +39,7 @@ const phraseFetcher = require(window.__base + "/modules/phrase_check_module/Fetc
 phraseFetcher(params, function() {}, function() {api.emitEvent('updateGatewayLanguage');} );
 const Phrase = require(window.__base + "modules/phrase_check_module/View.js");
 
-const tAFetcher = require(window.__base + "modules/translation_academy/FetchData.js")
+const tAFetcher = require(window.__base + "modules/translation_academy/FetchData.js");
 tAFetcher(params, function() {}, function(err) {
   if (err) {
     console.error(err);
@@ -48,15 +49,25 @@ tAFetcher(params, function() {}, function(err) {
 });
 
 const tADisplay = require(window.__base + "modules/translation_academy/View.js")
-
 api.saveModule('TADisplay', tADisplay);
+
+const pFetcher = require(window.__base + "modules/proposed_changes_module/FetchData.js");
+pFetcher(params, function() {}, function() {});
+
+const ProposedChanges = require(window.__base + "modules/proposed_changes_module/View.js")
+api.saveModule('ProposedChanges', ProposedChanges);
 
 // const lexicalFetcher = require("/home/samuel_faulkner/Documents/modules/lexical_check_module/FetchData.js");
 // lexicalFetcher(params, function() {}, function() {api.emitEvent('updateGatewayLanguage');} );
 // const Lexical = require("/home/samuel_faulkner/Documents/modules/lexical_check_module/View.js");
 
+
 module.exports = (
   <div>
+  <NavBarComponent />
+  <UploadModal />
+  <SettingsModal />
+  <LoginModal />
     <Grid fluid>
       <Row>
         <Col style={RootStyles.SideMenu} md={2} sm={2}>
@@ -67,6 +78,7 @@ module.exports = (
       <Row>
         <Col style={RootStyles.CheckSection} xs={10} md={10} lg={10} xsOffset={2} mdOffset={2}>
           <Phrase />
+          <NextButton />
         </Col>
       </Row>
     </Grid>
