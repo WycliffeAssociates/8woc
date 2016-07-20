@@ -48,8 +48,8 @@ const ProjectModal = React.createClass({
       this.setState({
         showModal: true,
         modalValue: modal,
-        modalTitle:"Select Modules To Load",
-        doneText:"Finished"
+        modalTitle:"Select Modules To Load In Project",
+        doneText:"Finish"
       });
     }
   },
@@ -72,11 +72,16 @@ const ProjectModal = React.createClass({
     let regRes;
     try {
       check = check.replace(stringRegex, " ");
-      console.log(check);
     }
     catch (e) {
     }
-    return check;
+    completeWord = [];
+    check = check.split(" ");
+    for (var word of check) {
+      word = word.charAt(0).toUpperCase() + word.slice(1) + " ";
+      completeWord.push(word);
+    }
+    return completeWord;
   },
   selectedModule: function(element) {
     var elementIndex = this.state.FetchDataArray.indexOf(element);
@@ -101,17 +106,24 @@ const ProjectModal = React.createClass({
     else if (this.state.modalValue == "Create") {
       CoreActions.showCreateProject("Check");
     }
+    else if (this.state.modalValue == "Content") {
+      CoreActions.showCreateProject("Content");
+
+    }
   },
   isModule: function(filepath, file){
     try {
       var stats = fs.lstatSync(filepath);
       if (stats.isDirectory()) {
-        if (file.indexOf("module") > -1) {
-          return true;
-        }
       }
       else {
         return false;
+      }
+      try {
+        fs.accessSync(filepath + '/FetchData.js');
+        return true;
+      } catch (e) {
+        console.log(e);
       }
     }
     catch (e) {
@@ -196,7 +208,7 @@ const ProjectModal = React.createClass({
             <Modal.Body>
             <FormGroup>
             <ControlLabel>{this.props.controlLabelTitle}</ControlLabel>
-            <FormControl type="text" placeholder={this.props.placeHolderText} onKeyPress={this.setProjectName}  setProjectName={this.props.setProjectName}/>
+            <FormControl type="text" placeholder={this.props.placeHolderText} onKeyPress={this.setProjectName} setProjectName={this.props.setProjectName}/>
             </FormGroup>
             </Modal.Body>
             </div>
