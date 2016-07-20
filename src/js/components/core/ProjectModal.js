@@ -108,7 +108,7 @@ const ProjectModal = React.createClass({
     }
     else if (this.state.modalValue == "Content") {
       CoreActions.showCreateProject("Content");
-
+      
     }
   },
   isModule: function(filepath, file){
