@@ -4,6 +4,7 @@ const Button = require('react-bootstrap/lib/Button.js');
 const Modal = require('react-bootstrap/lib/Modal.js');
 const CoreStore = require('../../stores/CoreStore.js');
 const CoreActions = require('../../actions/CoreActions.js');
+const SwitchCheckModuleDropdown = require('./SwitchCheckModuleDropdown');
 
 class SwitchCheckModal extends React.Component{
   constructor(){
@@ -37,8 +38,7 @@ class SwitchCheckModal extends React.Component{
             <Modal.Title>Change Check category</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-
-
+            <SwitchCheckModuleDropdown />
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={this.close}>Close</Button>

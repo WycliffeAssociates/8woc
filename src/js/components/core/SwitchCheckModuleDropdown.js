@@ -33,12 +33,10 @@ class SwitchCheckModuleDropdown extends React.Component {
   }
 
   componentWillMount() {
-    // CoreStore.addChangeListener(this.getCheckCategoryOptions);
     this.getCheckCategoryOptions();
   }
 
   componentWillUnmount() {
-    // CoreStore.removeChangeListener(this.getCheckCategoryOptions);
   }
 
   getCheckCategoryOptions() {
@@ -54,26 +52,21 @@ class SwitchCheckModuleDropdown extends React.Component {
   }
 
   render() {
-    if (this.state.checkCategoryOptions) {
-      var optionNodes = this.state.checkCategoryOptions.map((checkCategory) => {
-        return (
-          <option key={checkCategory.name} value={checkCategory.name}>{checkCategory.name}</option>
-        )
-      });
-
-      return (
-        <Well>
-          <FormGroup>
-            <ControlLabel>Select a Check Category</ControlLabel>
-            <FormControl componentClass="select" onChange={this.checkModuleChange}>
-              {optionNodes}
-            </FormControl>
-          </FormGroup>
-        </Well>
-      );
+    if (!this.state.checkCategoryOptions) {
+      return <div></div>;
     }
+    var optionNodes = this.state.checkCategoryOptions.map((checkCategory) => {
+      return (
+        <option key={checkCategory.name} value={checkCategory.name}>{checkCategory.name}</option>
+      )
+    });
+
     return (
-      <Well style={{minHeight: "25px"}}>{' '}</Well>
+      <FormGroup>
+        <FormControl componentClass="select" onChange={this.checkModuleChange}>
+          {optionNodes}
+        </FormControl>
+      </FormGroup>
     );
   }
 }

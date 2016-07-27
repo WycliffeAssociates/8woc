@@ -105,9 +105,13 @@ class CoreStore extends EventEmitter {
       return false;
     }
   }
-
+  
   getCheckModal(){
     return this.checkModalVisibility;
+  }
+
+  getCurrentCheckCategory() {
+    return this.currentCheckCategory;
   }
 
   // Returns an array of objects of the Check Modules (the ones with a ReportView.js)
@@ -189,6 +193,9 @@ class CoreStore extends EventEmitter {
       case consts.DONE_LOADING:
         this.doneLoading = true;
         this.checkCategoryOptions = action.reportViews;
+        if(action.reportViews && action.reportViews.length != 0) {
+          this.currentCheckCategory = action.reportViews[0];
+        }
         this.emitChange();
       break;
 

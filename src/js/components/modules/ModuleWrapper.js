@@ -35,19 +35,18 @@ class ModuleWrapper extends React.Component {
   }
 
   componentWillMount() {
-    api.registerEventListener('changeCheckType', this.updateCheckType);
+    CoreStore.addChangeListener(this.updateCheckType);
   }
 
   componentWillUnmount() {
-    api.removeEventListener('changeCheckType', this.updateCheckType);
+    CoreStore.removeChangeListener(this.updateCheckType);
   }
 
   updateCheckType(params) {
-    if (params.currentCheckNamespace) {
-      var newCheckCategory = CoreStore.findCheckCategoryOptionByNamespace(params.currentCheckNamespace);
-      var newView = newCheckCategory.view;
+    var newCheckCategory = CoreStore.getCurrentCheckCategory();
+    if(newCheckCategory) {
       this.setState({
-        view: newView
+        view: newCheckCategory.view
       }); 
     }
   }
