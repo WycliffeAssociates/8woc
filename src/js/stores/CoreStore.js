@@ -105,7 +105,7 @@ class CoreStore extends EventEmitter {
       return false;
     }
   }
-
+  
   getCheckModal(){
     return this.checkModalVisibility;
   }
@@ -113,7 +113,7 @@ class CoreStore extends EventEmitter {
   getCurrentCheckCategory() {
     return this.currentCheckCategory;
   }
-
+  
   // Returns an array of objects of the Check Modules (the ones with a ReportView.js)
   // Mostly just for SwitchCheckModuleDropdown
   getCheckCategoryOptions(){
@@ -214,11 +214,6 @@ class CoreStore extends EventEmitter {
         this.profileVisibility = action.profileOption;
         this.emitChange();
         break;
-
-        case consts.CHANGE_CHECK_MODAL_VISIBILITY:
-          this.checkModalVisibility = action.checkModalOption;
-          this.emitChange();
-          break;
 
       default:
       // do nothing
