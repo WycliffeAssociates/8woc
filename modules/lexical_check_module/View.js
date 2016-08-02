@@ -299,7 +299,7 @@ class View extends React.Component {
                 ><span style={{color: "red"}}><Glyphicon glyph="remove" /> {WRONG}</span></Button>
               </ButtonGroup>
               <br /><br />
-              <ProposedChanges selectedWord={"spongegar"} />
+              <ProposedChanges selectedWord={"Spongegar"} />
             </Col>
           </Row>
         </div>
