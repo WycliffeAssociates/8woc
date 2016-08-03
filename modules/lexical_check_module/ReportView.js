@@ -94,11 +94,11 @@ class ReportItem extends React.Component {
       <div>Proposed Changes: {this.props.check.proposedChanges}</div>
     );
   }
-  commentsDiv() {
-    if(!this.props.check.comments) 
+  commentDiv() {
+    if(!this.props.check.comment) 
       return undefined;
     return (
-      <div>Comments: {this.props.check.comments}</div>
+      <div>Comments: {this.props.check.comment}</div>
     );
   }
   footerDiv() {
@@ -120,7 +120,7 @@ class ReportItem extends React.Component {
         {this.checkStatusDiv()}
         {this.selectedWordsDiv()}
         {this.proposedChangesDiv()}
-        {this.commentsDiv()}
+        {this.commentDiv()}
         {this.footerDiv()}
       </Well>
     );
