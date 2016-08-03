@@ -187,7 +187,7 @@ const UploadModal = React.createClass({
       mainContent = (
         <div>
           <br />
-          <OnlineInput sendFilePath={this.sendFilePath}/>
+          <OnlineInput submitLink={this.props.submitLink} sendFilePath={this.sendFilePath}/>
         </div>  
       );
     }

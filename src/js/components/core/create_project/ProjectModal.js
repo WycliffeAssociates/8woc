@@ -8,6 +8,7 @@ const {dialog} = window.electron.remote;
 const api = window.ModuleApi;
 const booksOfBible = require('../BooksOfBible');
 const Upload = require('../Upload');
+const loadOnline = require('../LoadOnline');
 
 const INVALID_PROJECT = 'This does not seem to be a translation studio project';
 const DEFAULT_ERROR = 'Error';
@@ -68,11 +69,16 @@ const ProjectModal = React.createClass({
     this.close();
   },
 
+    submitLink: function(callback) {
+    var link = this.state.value;
+    loadOnline(link, this.props.sendFilePath, callback);
+  },
+
   render: function() {
     return (
       <div>
         <Modal show={this.state.showModal} onHide={this.close}>
-          <Upload ref={"TargetLanguage"} />
+          <Upload ref={"TargetLanguage"} submitLink={this.submitLink} />
           <Modal.Footer>
             <ButtonToolbar>
               <Button bsSize="xsmall" style={{visibility: this.state.backButton}}>{'Back'}</Button>
