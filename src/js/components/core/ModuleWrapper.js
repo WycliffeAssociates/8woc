@@ -9,6 +9,7 @@ var Button = require('react-bootstrap/lib/Button.js');
 var CoreStore = require('../../stores/CoreStore');
 var NextButton = require('../core/NextButton');
 var PreviousButton = require('../core/PreviousButton');
+var CoreActions = require('../../actions/CoreActions.js');
 
 const api = window.ModuleApi;
 
@@ -24,10 +25,9 @@ class ModuleWrapper extends React.Component {
     // TODO: should probably return an empty div if this.state.view doesn't exist
     // but for now it has LexicalCheck as default
     if(!this.state.view) {
+      CoreActions.updateCheckModal(true);
       return(
-        <div>
-          <p>Click the apps button to start checking</p>
-        </div>
+        <div></div>
       );
     }
     var CheckModule = this.state.view;
