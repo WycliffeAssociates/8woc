@@ -21,7 +21,9 @@ const Col = ReactBootstrap.Col;
 const fs = require('fs');
 const {BrowserWindow} = require('electron').remote;
 const {ipcRenderer} = require('electron');
+const reportTemplate = require('./ReportTemplate')
 const path = require('path');
+const BooksOfBible = require('../BooksOfBible.js')
 // listener event from the main process listening for the report window closing
 ipcRenderer.on("report-closed", (event, path) => {
   reportOpened = false;
@@ -56,8 +58,11 @@ class Report extends React.Component {
     let bookName = "-bookName-";
     let authors = "-authors-";
     let manifest = ModuleApi.getDataFromCommon("tcManifest");
-    if (manifest && manifest.ts_project) {
-      bookName = manifest.ts_project.name || "-bookName-";
+    let params = ModuleApi.getDataFromCommon('params');
+    let bookAbbr;
+    if (params) bookAbbr = params.bookAbbr;
+    if (manifest && (manifest.ts_project || bookAbbr)) {
+      bookName = manifest.ts_project.name || BooksOfBible[bookAbbr] || "-bookName-";
     }
     // This isn't working yet I think, so it pretty much always returns "various checkers"
     if (manifest && manifest.checkers) {
@@ -151,16 +156,12 @@ module.exports = function(callback = (err) => {}) {
     ipcRenderer.send('open-report', "");
     return;
   }
-  fs.readFile("./src/js/components/core/reports/report-template.html", 'utf-8', (err, data) => {
-    if (err) {
-      // These errors should not happen
-      console.log(err, "Report template seems to be missing");
-      callback(err);
-      return;
-    }
     // create a new html fragment in memory based on report-template.html
     let reportHTML = document.createElement("html");
-    reportHTML.innerHTML = data;
+    reportHTML.innerHTML = reportTemplate;
+    let reportPrintScript = document.createElement("script");
+    reportPrintScript.setAttribute('src', './SaveReport.js');
+    reportHTML.appendChild(reportPrintScript);
     // render the ReportView output to new file report.html
     ReactDOM.render(<Report />, reportHTML.getElementsByTagName('div')[0]);
     let reportPath = path.join(__dirname, 'report.html');
@@ -171,7 +172,7 @@ module.exports = function(callback = (err) => {}) {
           content: err.message,
           leftButtonText: 'Ok'
         }
-        api.createAlert(alert);
+        ModuleApi.createAlert(alert);
         callback(err);
         return;
       }
@@ -180,6 +181,5 @@ module.exports = function(callback = (err) => {}) {
       reportOpened = true;
       callback();
     });
-  });
 
 }
