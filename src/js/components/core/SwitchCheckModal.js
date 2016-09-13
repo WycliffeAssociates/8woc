@@ -36,6 +36,7 @@ class SwitchCheckModal extends React.Component{
     CoreStore.addChangeListener(this.updateCheckModal);
     this.getDefaultModules((moduleFolderPathList) => {
       _this.fillDefaultModules(moduleFolderPathList, (metadatas) => {
+        _this.sortMetadatas(metadatas);
         _this.setState({moduleMetadatas: metadatas});
       });
     });
@@ -104,11 +105,19 @@ class SwitchCheckModal extends React.Component{
     }
   }
 
+  // Sorts check apps by their 'title' properties from their manifest files
+  sortMetadatas(metadatas) {
+    metadatas.sort((a, b) => {
+      return a.title < b.title ? -1 : 1;
+    });
+  }
+
   moduleClick(folderName) {
     this.close();
     if (api.getDataFromCommon('saveLocation') && api.getDataFromCommon('tcManifest')) {
       CoreActions.startLoading();
       CheckDataGrabber.loadModuleAndDependencies(folderName);
+      localStorage.setItem('lastCheckModule', folderName);
     } else {
       api.Toast.error('No save location selected', '', 3);
       return;

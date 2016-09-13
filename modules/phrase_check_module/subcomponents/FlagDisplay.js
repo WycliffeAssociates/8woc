@@ -2,7 +2,7 @@
 const api = window.ModuleApi;
 const React = api.React;
 const RB = api.ReactBootstrap;
-const {Button, ButtonGroup, Glyphicon} = RB;
+const {Glyphicon, Button, ButtonGroup} = RB;
 
 const NAMESPACE = 'PhraseChecker';
 
@@ -16,14 +16,6 @@ class FlagDisplay extends React.Component{
     this.setFlagStateFunction = this.setFlagStateFunction.bind(this);
   }
 
-  componentWillMount(){
-    
-  }
-
-  componentWillUnmount() {
-    
-  }
-
   setFlagStateFunction(newCheckStatus) {
     var groups = api.getDataFromCheckStore(NAMESPACE, 'groups');
     var currentGroupIndex = api.getDataFromCheckStore(NAMESPACE, 'currentGroupIndex');
@@ -32,33 +24,25 @@ class FlagDisplay extends React.Component{
     if (currentCheck) {
       currentCheck.checkStatus = newCheckStatus;
       api.emitEvent('changedCheckStatus', {
-        checkStatus: newCheckStatus, 
+        checkStatus: newCheckStatus,
         groupIndex: currentGroupIndex,
         checkIndex: currentCheckIndex
       });
     }
+    api.Toast.info('Current check was marked as:', newCheckStatus, 2)
   }
 
   render(){
     var _this = this;
     return (
-      <ButtonGroup vertical={true} block>
-        <Button bsStyle="success" onClick={
-            function() {
-              _this.setFlagStateFunction('RETAINED');
-            }
-          }><Glyphicon glyph="ok" /> Retain</Button>
-        <Button bsStyle="warning" onClick={
-            function() {
-              _this.setFlagStateFunction('REPLACED');
-            }
-          }><Glyphicon glyph="random" /> Changed</Button>
-        <Button bsStyle="danger" onClick={
-            function() {
-              _this.setFlagStateFunction('WRONG');
-            }
-        }><Glyphicon glyph="remove" /> Wrong</Button>
-      </ButtonGroup>
+        <ButtonGroup style={{width:'100%', paddingBottom: "2.5px"}}>
+          <Button style={{width:'33.33%'}} bsStyle="success" onClick={function() {_this.setFlagStateFunction('RETAINED');}}>
+            <Glyphicon glyph="ok" /> Retain</Button>
+          <Button style={{width:'33.33%'}} bsStyle="warning" onClick={function() {_this.setFlagStateFunction('REPLACED');}}>
+            <Glyphicon glyph="random" /> Changed</Button>
+          <Button style={{width:'33.33%'}} bsStyle="danger" onClick={function() {_this.setFlagStateFunction('WRONG');}}>
+            <Glyphicon glyph="remove" /> Wrong</Button>
+        </ButtonGroup>
     );
   }
 }

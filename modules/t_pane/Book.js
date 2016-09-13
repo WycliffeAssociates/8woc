@@ -28,15 +28,19 @@ class Book extends React.Component {
   }
 
   goToVerseListener(params) {
+    var newVerseReference = params.chapterNumber.toString() + ":" + params.verseNumber.toString();
+    // If the new verse is the same as the old verse, don't do anything
+    if (this.currentVerse === newVerseReference) {
+      return;
+    }
     // Unhighlight the old verse
     var oldVerse = this.refs[this.currentVerse];
     if (oldVerse) {
       oldVerse.setHighlighted(false);
     }
     // Highlight the new verse
-    var newVerseReference = params.chapterNumber.toString() + ":" + params.verseNumber.toString();
     var newVerse = this.refs[newVerseReference];
-    newVerse.setHighlighted(true);
+    if (newVerse) newVerse.setHighlighted(true);
     // Save the new verse's reference so that it can be unhighlighted later
     this.currentVerse = newVerseReference;
     // Scroll to new verse
@@ -58,7 +62,7 @@ class Book extends React.Component {
 
     if (this.props.input !== undefined) {
       if (this.props.input.hasOwnProperty('title')) {
-        title = this.props.input.title;   
+        title = this.props.input.title;
       }
     }
     for (var key in keysSorted) {
@@ -71,11 +75,11 @@ class Book extends React.Component {
             var verseId = objectKey + ':' + verse;
             var verseText = this.props.input[objectKey][verse];
             arrayOfVerses.push(
-              <Verse 
-                key={verseId} 
-                greek={this.props.greek} 
-                chapterNumber={chapterNum} 
-                verseNumber={verse} 
+              <Verse
+                key={verseId}
+                greek={this.props.greek}
+                chapterNumber={chapterNum}
+                verseNumber={verse}
                 verseText={verseText}
                 ref={chapterNum + ":" + verse}
               />

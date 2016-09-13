@@ -6,10 +6,11 @@
  * @return {Object} An internal api
  **/
 function GitApi(directory) {
-  var remote = window.electron.remote;
+  var remote = require('electron').remote;
   var {dialog} = remote;
   var git = require('simple-git')(directory);
   const CheckStore = require('../../stores/CheckStore.js');
+  const CoreStore = require('../../stores/CoreStore.js');
 
   return {
     /**
@@ -43,6 +44,15 @@ function GitApi(directory) {
      * @param {function} callback - A callback to be run on complete.
      */
     commit: function(message, callback) {
+      var name, username, email;
+      var user = CoreStore.getLoggedInUser();
+      if (user) {
+        name = user.full_name;
+        username = user.username;
+        email = user.email;
+      }
+      git.addConfig('user.name', name || username || 'translationCore User');
+      git.addConfig('user.email', email || 'Unknown');
       git.commit(message, callback);
     },
     /**

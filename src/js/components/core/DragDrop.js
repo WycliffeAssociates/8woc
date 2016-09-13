@@ -2,7 +2,7 @@ const React = require('react');
 
 const Dropzone = require('react-dropzone');
 
-const remote = window.electron.remote;
+const remote = require('electron').remote;
 const {dialog} = remote;
 
 const style = {
@@ -71,11 +71,11 @@ const DragDrop = React.createClass({
     if (!this.opened) {
       this.opened = true;
       dialog.showOpenDialog({
-        properties: ['openDirectory']
+        properties: this.props.properties
       }, function(filename) {
         if (filename !== undefined) {
           _this.setState({filePath: filename[0]});
-          _this.props.sendFilePath(filename[0], null, true);
+          _this.props.sendFilePath(filename[0], null);
         }
         _this.opened = false;
       });
