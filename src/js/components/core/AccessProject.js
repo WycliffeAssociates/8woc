@@ -1,11 +1,12 @@
 var React = require('react');
-var remote = window.electron.remote;
+var remote = require('electron').remote;
 var fs = require(window.__base + 'node_modules/fs-extra');
 var {dialog} = remote;
 var Path = require('path');
 var CheckStore = require('../../stores/CheckStore');
 var CoreActions = require('../../actions/CoreActions');
 var api = window.ModuleApi;
+var Recent = require('./RecentProjects.js');
 
 const extensionRegex = new RegExp('(\\.\\w+)', 'i');
 
@@ -18,14 +19,20 @@ var Access = {
    * @param {string} folderpath - Path that points to the folder where the translationStudio
    * project lives
    */
-  loadFromFilePath: function (folderpath) {
+  loadFromFilePath: function (folderpath, callback) {
     var _this = this;
     var fileObj = {};
     var manifestLocation = Path.join(folderpath, 'tc-manifest.json');
     fs.readJson(manifestLocation, function(err, jsonObject) {
-      api.putDataInCommon('tcManifest', jsonObject);
+      if (jsonObject) {
+        api.putDataInCommon('tcManifest', jsonObject);
+      }
+      if (callback) {
+        callback();
+      }
     });
     try {
+      Recent.add(folderpath);
       fs.readdir(folderpath, function(err, files){
         try {
         for (var file of files) {
@@ -162,6 +169,7 @@ var Access = {
         _this.reportViewPush(path);
       }
       CoreActions.doneLoadingFetchData(reportViews);
+
     }
   },
 

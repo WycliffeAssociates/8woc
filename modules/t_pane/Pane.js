@@ -16,15 +16,24 @@ const Book = require('./Book');
 class Pane extends React.Component {
     constructor() {
         super();
+        this.contentStyle = style.pane.content;
+        this.headerStyle = style.pane.title;
     }
+
     render() {
-        return (
-            <Col md={4} sm={4} xs={4} lg={4} style={this.props.last ? {} : {borderRight: '1px solid #1f273b'}}>
-                <div style={style.pane.content}>
-                    <Book input={this.props.content} greek={this.props.greek} />
-                </div>
-            </Col>
-        );
+      if(this.props.dir == 'ltr'){
+        this.contentStyle.direction = 'ltr';
+      }else{
+        this.contentStyle.direction = 'rtl';
+      }
+      return (
+          <Col md={4} sm={4} xs={4} lg={4} style={this.props.last ? {} : {borderRight: '1px solid #1f273b'}}>
+              <span style={this.headerStyle}>{this.props.heading || ''}</span>
+              <div style={this.contentStyle}>
+                  <Book input={this.props.content} greek={this.props.greek} />
+              </div>
+          </Col>
+      );
     }
 }
 

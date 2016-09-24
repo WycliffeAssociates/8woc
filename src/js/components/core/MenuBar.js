@@ -8,6 +8,9 @@ const CoreStore = require('../../stores/CoreStore.js');
 const git = require('./GitApi.js');
 const api = window.ModuleApi;
 const sync = require('./SideBar/GitSync.js');
+const exportUsfm = require('./Usfm/ExportUSFM');
+const Path = require('path');
+const fs = require(window.__base + 'node_modules/fs-extra');
 
 var template = [
   {
@@ -38,6 +41,12 @@ var template = [
         accelerator: 'CmdOrCtrl+S'
       },
       {
+       label: "Export as USFM",
+       click: function() {
+         exportUsfm.exportAll();
+        }
+     },
+       {
         label: "Update with Door43",
         click: function() {
           sync();
@@ -48,7 +57,28 @@ var template = [
         click() {
           CoreActions.showCreateProject("Languages");
         }
-      }
+       },
+       {
+         label: 'Toggle Example Check',
+         click: function () {
+           var exampleCheckPath = Path.join(window.__base, "modules", "example_check_module");
+           if (localStorage.getItem('exampleCheck') == 'true') {
+              try {
+               fs.rename(Path.join(exampleCheckPath, "manifest-hidden.json"), Path.join(exampleCheckPath, "manifest.json"), function (err) {});
+             } catch (e) {;
+             }
+             localStorage.setItem('exampleCheck', false);
+           } 
+           else {
+             try {
+               fs.rename(Path.join(exampleCheckPath, "manifest.json"), Path.join(exampleCheckPath, "manifest-hidden.json"), function (err) {});
+             } catch (e) {
+             }
+             localStorage.setItem('exampleCheck', true);
+           }
+         },
+         accelerator: 'CmdOrCtrl+H'
+       }
     ]
   },
   {
@@ -129,11 +159,22 @@ var template = [
       {
         label: 'Learn More',
         click: function() {
-          window.electron.shell.openExternal('https://github.com/WycliffeAssociates/8woc/');
+          require('electron').shell.openExternal('https://github.com/WycliffeAssociates/8woc/');
         }
       }
     ]
   }
 ];
 
-module.exports = {template: template};
+if (process.platform === 'darwin') {
+  template.unshift({
+    label: 'translationCore',
+    submenu: [
+      {
+        accelerator: 'CmdOrCtrl+Q',
+        role: 'quit'
+      }
+    ]
+  });
+}
+module.exports = {template};

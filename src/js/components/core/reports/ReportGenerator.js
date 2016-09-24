@@ -21,7 +21,9 @@ const Col = ReactBootstrap.Col;
 const fs = require('fs');
 const {BrowserWindow} = require('electron').remote;
 const {ipcRenderer} = require('electron');
+const reportTemplate = require('./ReportTemplate')
 const path = require('path');
+const BooksOfBible = require('../BooksOfBible.js')
 // listener event from the main process listening for the report window closing
 ipcRenderer.on("report-closed", (event, path) => {
   reportOpened = false;
@@ -45,8 +47,7 @@ class Report extends React.Component {
       return (<div>{"No target language found"}</div>);
     }
     // array of the functions in the ReportView.js's for the project
-    let reportViews = getReportViews();
-    if (reportViews.length == 0) {
+    if (this.props.reportViews.length == 0) {
       return (<div>{"No report views found"}</div>);
     }
     // array of JSX to be rendered
@@ -56,8 +57,11 @@ class Report extends React.Component {
     let bookName = "-bookName-";
     let authors = "-authors-";
     let manifest = ModuleApi.getDataFromCommon("tcManifest");
-    if (manifest && manifest.ts_project) {
-      bookName = manifest.ts_project.name || "-bookName-";
+    let params = ModuleApi.getDataFromCommon('params');
+    let bookAbbr;
+    if (params) bookAbbr = params.bookAbbr;
+    if (manifest && (manifest.ts_project || bookAbbr)) {
+      bookName = manifest.ts_project.name || BooksOfBible[bookAbbr] || "-bookName-";
     }
     // This isn't working yet I think, so it pretty much always returns "various checkers"
     if (manifest && manifest.checkers) {
@@ -73,12 +77,12 @@ class Report extends React.Component {
         authors = "various checkers";
       }
     }
-    // render report header data from reportViews
+    // render report header data from this.props.reportViews
     let reportHeaders = [];
-    for (let view in reportViews) {
+    for (let view in this.props.reportViews) {
       let viewResult;
       try { // in case their report view has errors
-         viewResult = reportViews[view](0,0);
+         viewResult = this.props.reportViews[view](0,0);
       }
       catch (e) {
         continue;
@@ -97,8 +101,8 @@ class Report extends React.Component {
       }
       // create chapter header
       output.push(<h3 key={`${ch}-header`}>{`${bookName} ${ch}`}</h3>);
-      for (let view in reportViews) {
-        let viewResult = reportViews[view](ch, 0);
+      for (let view in this.props.reportViews) {
+        let viewResult = this.props.reportViews[view](ch, 0);
         if (viewResult) {
           output.push(<span key={`${ch}-header-${view}`}>{viewResult}</span>);
         }
@@ -106,8 +110,8 @@ class Report extends React.Component {
       // now start getting data for each verse in the chapter
       for (let v in targetLang[ch]) {
         let reports = [];
-        for (let view in reportViews) {
-          let viewResult = reportViews[view](ch, v);
+        for (let view in this.props.reportViews) {
+          let viewResult = this.props.reportViews[view](ch, v);
           if (viewResult) {
             reports.push(<span key={`${ch}-${v}-${view}`}>{viewResult}</span>);
           }
@@ -128,41 +132,21 @@ class Report extends React.Component {
   }
 }
 
-function getReportViews() {
-  // get folders in the modules directory
-  // TODO: probably should make this asynchronous
-  let modulesFolder = path.join(__base, "modules");
-  // get only the folders and make them absolute paths
-  let modules = fs.readdirSync(modulesFolder);
-  modules = modules.map((dir) => path.join(modulesFolder, dir));
-  modules = modules.filter((dir) => fs.statSync(dir).isDirectory());
-  let reports = [];
-  modules.forEach((dir) => {
-    if(fs.readdirSync(dir).includes('ReportView.js')) {
-      reports.push(require(path.join(dir, "ReportView")));
-    }
-  });
-  return reports;
-}
 
-module.exports = function(callback = (err) => {}) {
+module.exports = function(reportViews, callback = (err) => {}) {
   // don't run if a report is already open
   if (reportOpened) {
     ipcRenderer.send('open-report', "");
     return;
   }
-  fs.readFile("./src/js/components/core/reports/report-template.html", 'utf-8', (err, data) => {
-    if (err) {
-      // These errors should not happen
-      console.log(err, "Report template seems to be missing");
-      callback(err);
-      return;
-    }
     // create a new html fragment in memory based on report-template.html
     let reportHTML = document.createElement("html");
-    reportHTML.innerHTML = data;
+    reportHTML.innerHTML = reportTemplate;
+    let reportPrintScript = document.createElement("script");
+    reportPrintScript.setAttribute('src', './SaveReport.js');
+    reportHTML.appendChild(reportPrintScript);
     // render the ReportView output to new file report.html
-    ReactDOM.render(<Report />, reportHTML.getElementsByTagName('div')[0]);
+    ReactDOM.render(<Report reportViews={reportViews}/>, reportHTML.getElementsByTagName('div')[0]);
     let reportPath = path.join(__dirname, 'report.html');
     fs.writeFile(reportPath, reportHTML.innerHTML, 'utf-8', (err) => {
       if (err) {
@@ -171,7 +155,7 @@ module.exports = function(callback = (err) => {}) {
           content: err.message,
           leftButtonText: 'Ok'
         }
-        api.createAlert(alert);
+        ModuleApi.createAlert(alert);
         callback(err);
         return;
       }
@@ -180,6 +164,5 @@ module.exports = function(callback = (err) => {}) {
       reportOpened = true;
       callback();
     });
-  });
 
 }
