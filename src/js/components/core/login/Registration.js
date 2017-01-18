@@ -5,13 +5,16 @@
 
 const React = require('react');
 
-const remote = window.electron.remote;
+const remote = require('electron').remote;
 const {dialog} = remote;
+const { connect  } = require('react-redux');
+
+const updateLoginModal = require('../../../actions/CoreActionsRedux.js').updateLoginModal;
 
 const FormGroup = require('react-bootstrap/lib/FormGroup.js');
 const FormControl = require('react-bootstrap/lib/FormControl.js');
 const Button = require('react-bootstrap/lib/Button.js');
-const Token = require('../AuthToken');
+var Token = window.ModuleApi.getAuthToken('gogs');
 const CoreActions = require('../../../actions/CoreActions.js');
 const GogsApi = require('./GogsApi');
 const ACCOUNT_CREATION_ERROR = 'Account Creation Error';
@@ -73,23 +76,27 @@ const Registration = React.createClass({
     var emailValid = this.validateEmail();
     var passwordMatch = this.checkPass();
     var unLen = user.username.length;
+
     if (emailValid === 'success' && passwordMatch === 'success' && unLen > 0) {
       GogsApi(Token)
       .createAccount(user)
       .then(function(data) {
         CoreActions.login(data);
-        CoreActions.updateLoginModal(false);
+        this.props.dispatch(updateLoginModal(false));
         CoreActions.updateOnlineStatus(true);
-        CoreActions.updateProfileVisibility(true);
       })
       .catch(function(reason) {
         console.log(reason);
         if (reason.hasOwnProperty('message')) {
           dialog.showErrorBox('', reason.message);
         } else if (reason.hasOwnProperty('data')) {
-          let errorMessage = JSON.parse(reason.data);
-          console.log(errorMessage.message);
-          dialog.showErrorBox(ACCOUNT_CREATION_ERROR, errorMessage.message);
+          if (reason.data === "") {
+            console.error("Invalid Token");
+          } else {
+            let errorMessage = JSON.parse(reason.data);
+            console.error(errorMessage.message);
+            dialog.showErrorBox(ACCOUNT_CREATION_ERROR, errorMessage.message);
+          }
         } else {
           dialog.showErrorBox(ACCOUNT_CREATION_ERROR, UNKNOWN_ERROR);
           console.log(reason);
@@ -142,4 +149,9 @@ const Registration = React.createClass({
   }
 });
 
-module.exports = Registration;
+function mapStateToProps(state) {
+  //This will come in handy when we separate corestore and checkstore in two different reducers
+  return Object.assign({}, state, state.modalReducers.login_profile);
+}
+
+module.exports = connect(mapStateToProps)(Registration);

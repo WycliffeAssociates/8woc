@@ -1,7 +1,21 @@
 var style = {
+  sideBarcontainer:{
+      backgroundColor: "#333333",
+      width: "120px",
+      height: "100vh",
+      marginLeft: "0px",
+      position: "fixed",
+      zIndex: "98",
+      left: "0px",
+      fontSize: "12px",
+      overflowY: "auto",
+      overflowX: "hidden",
+      boxSizing: "border-box",
+  },
+
   container:{
-      backgroundColor: "#1a2133",
-      width: "85px",
+      backgroundColor: "#333333",
+      width: "120px",
       height: "100vh",
       marginLeft: "0px",
       display: "inline-block",
@@ -13,17 +27,17 @@ var style = {
   },
 
   ul: {
-      margin: "0px",
-      padding: "0px",
+    margin: "0px",
+    padding: "0px",
   },
 
   li: {
     display: "block",
     textAlign: "center",
-    borderBottom: "2px solid #1f273b",
-    paddingTop: "20px",
-    paddingBottom: "20px",
+    paddingTop: "15px",
+    paddingBottom: "15px",
     color: "white",
+    cursor: "pointer",
     userSelect: "none",
   },
 
@@ -34,24 +48,24 @@ var style = {
 
   glyphiconHover: {
     fontSize: "29px",
-    color: "#39add2",
+    color: "#44C6FF",
   },
 
   hover: {
-    backgroundColor: "#1a2133",
-    color: "#39add2",
+    backgroundColor: "#444444",
+    color: "#44C6FF",
     cursor: "pointer",
     display: "block",
     textAlign: "center",
-    borderBottom: "2px solid #1f273b",
     userSelect: "none",
-    paddingTop: "18px",
-    paddingBottom: "18px"
+    paddingTop: "13px",
+    paddingBottom: "13px"
+
   },
 
   logo:{
-    height: "60px",
-    width: "55px",
+    height: "85px",
+    width: "80px",
     display: "block",
     padding: "5px",
     marginLeft: "auto",
@@ -59,14 +73,37 @@ var style = {
     marginTop: "5px",
   },
 
-  glyphiconOffline:{
+  textOffline:{
+    float: "right",
     color: "#FF0000",
-    fontSize: "25px",
+    padding: "3px",
+    marginRight: "15px",
+    display: "inline",
   },
 
-  glyphiconOnline:{
-    color: "#00B233",
-    fontSize: "25px",
+  textOnline:{
+    float: "right",
+    color: "#4eba6f",
+    padding: "3px",
+    marginRight: "15px",
+    display: "inline",
+  },
+
+  img:{
+    width: "25px",
+    height: "30px",
+  },
+
+  StatusBar:{
+    position: "fixed",
+    top: "0px",
+    backgroundColor: "#333333",
+    height: "30px",
+    width: "100%",
+    fontSize: "16px",
+    zIndex: "97",
+    boxSizing: "border-box",
+    display: "inline",
   },
 
 };

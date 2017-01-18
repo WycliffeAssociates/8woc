@@ -1,40 +1,42 @@
-const React = require('react');
-const Well = require('react-bootstrap/lib/Well.js');
 
 // const MenuItem = require('./MenuItem');
 const api = window.ModuleApi;
+const React = api.React;
+const RB = api.ReactBootstrap;
+const {Well} = RB;
+const CoreStore = require('../../../stores/CoreStore.js');
+const SubMenu = require('./SubMenu.js');
+
 
 class NavigationMenu extends React.Component {
   constructor() {
     super();
     this.state = {
-      checkMenu: null
+      subMenuItemsArray: null,
+      checkMenu: null,
+      currentCheckIndex: null,
+      currentGroupIndex: null,
     };
-    this.updateCheckObject = this.updateCheckObject.bind(this);
-    // this.updateMenuItem = this.updateMenuItem.bind(this);
-  }
+    this.getSubMenuItemsFromCheckStore = this.getSubMenuItemsFromCheckStore.bind(this);
+}
 
-  componentWillMount() {
-    api.registerEventListener('changeCheckType', this.updateCheckObject);
-  }
 
-  componentWillUnmount() {
-    api.removeEventListener('changeCheckType', this.updateCheckObject);
-  }
-
-  updateCheckObject(params) {
-    var checkData = (params === undefined ? undefined : api.getMenu(params.currentCheckNamespace));
-    this.setState({
-      checkMenu: checkData
-    });
+  getSubMenuItemsFromCheckStore(){
+    let currentNamespace = CoreStore.getCurrentCheckNamespace();
+    let currentCheckIndex = api.getDataFromCheckStore(currentNamespace, 'currentCheckIndex');
+    let currentGroupIndex = api.getDataFromCheckStore(currentNamespace, 'currentGroupIndex');
+    this.setState({currentCheckIndex: currentCheckIndex});
+    this.setState({currentGroupIndex: currentGroupIndex});
   }
 
   render() {
-    if (!this.state.checkMenu) {
-      return <Well style={{minHeight:"100%"}}>{' '}</Well>;
-    }
     return (
-      <this.state.checkMenu />
+      <div>
+        <SubMenu ref='submenu' checkClicked={this.props.subMenuProps.checkClicked} currentBookName={this.props.currentBookName}
+                 isCurrentSubMenu={this.props.isCurrentSubMenu} currentSubGroupObjects={this.props.currentSubGroupObjects}
+                 currentCheckIndex={this.props.currentCheckIndex}
+                 currentGroupIndex={this.props.currentGroupIndex}/>
+      </div>
     );
   }
 }

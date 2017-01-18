@@ -1,5 +1,4 @@
 /**
- * @author Evan "Vegan and Proud" Wiederspan
  * This function will generate and display a report when called. It first opens
  * a local report template HTML file, reads that text into a Node object, then renders
  * the gathered JSX from the Report class into that page and saves it to another file in the root
@@ -14,50 +13,139 @@
 
 const React = require("react");
 const ReactDOM = require("react-dom");
-const ReactBootstrap = ModuleApi.ReactBootstrap;
-const Grid = ReactBootstrap.Grid;
-const Row = ReactBootstrap.Row;
-const Col = ReactBootstrap.Col;
+const api = window.ModuleApi;
+const ReactBootstrap = api.ReactBootstrap;
+const RB = api.ReactBootstrap;
+const {Glyphicon, Grid, Row, Col, Button} = RB;
 const fs = require('fs');
 const {BrowserWindow} = require('electron').remote;
-const {ipcRenderer} = require('electron');
+const ReportSideBar = require('./ReportSideBar.js')
 const path = require('path');
-// listener event from the main process listening for the report window closing
-ipcRenderer.on("report-closed", (event, path) => {
-  reportOpened = false;
-});
-// boolean to keep track of if a report window is currently open
-let reportOpened = false;
+const BooksOfBible = require('../BooksOfBible.js');
+const ReportFilters = api.ReportFilters;
+const style = require("./Style");
 
 class Report extends React.Component {
   constructor() {
     super();
+    this.state ={
+      query: null,
+      visibleReport: true,
+    };
+      this.handleReportVisibility = this.handleReportVisibility.bind(this);
+  }
+
+  componentWillMount(){
+    api.registerEventListener('ReportVisibility', this.handleReportVisibility);
+  }
+
+  componentWillUnmount() {
+    api.removeEventListener('ReportVisibility', this.handleReportVisibility);
+  }
+
+  handleReportVisibility(param){
+    this.setState(param);
+  }
+
+  getQuery(query){
+    this.setState({query: query});
+  }
+
+  hideReport(){
+    this.setState({visibleReport: false})
+  }
+
+  getCompletedAndUnfinishedCheks(){
+    let numChecked = 0;
+    let total = 0;
+    let groups = api.getDataFromCheckStore('TranslationWordsChecker', 'groups');
+    if(groups != null){
+      for (let group of groups) {
+        for (let check of group.checks) {
+          if (check.checkStatus != "UNCHECKED") {
+            numChecked++;
+          }
+          total++;
+        }
+      }
+    }
+    groups = api.getDataFromCheckStore('TranslationNotesChecker', 'groups');
+    if(groups != null){
+      for (let group of groups) {
+        for (let check of group.checks) {
+          if (check.checkStatus != "UNCHECKED") {
+            numChecked++;
+          }
+          total++;
+        }
+      }
+    }
+    let unfinished = total - numChecked;
+    return [numChecked, unfinished];
+  }
+
+  getFlaggedChecks(){
+    let flaggedChecks = 0;
+    let groups = api.getDataFromCheckStore('TranslationWordsChecker', 'groups');
+    if(groups != null){
+      for (let group of groups) {
+        for (let check of group.checks) {
+          if (check.checkStatus == "FLAGGED") {
+            flaggedChecks++;
+          }
+        }
+      }
+    }
+    groups = api.getDataFromCheckStore('TranslationNotesChecker', 'groups');
+      if(groups != null){
+        for (let group of groups) {
+          for (let check of group.checks) {
+            if (check.checkStatus == "FLAGGED") {
+              flaggedChecks++;
+            }
+          }
+        }
+      }
+    return flaggedChecks;
   }
 
   render() {
+    if(!this.state.visibleReport){
+      return (<div></div>);
+    }else{
+    //get the total of completed checks and Unfinished number of checks
+    let [done, unfinished] =  this.getCompletedAndUnfinishedCheks();
+    //get the total of Flagged checks
+    let flaggedChecks = this.getFlaggedChecks();
     // get all of the checks associated with this project
     const listOfChecks = ModuleApi.getDataFromCommon("arrayOfChecks");
     const targetLang = ModuleApi.getDataFromCommon("targetLanguage");
     if (!listOfChecks) {
-      return (<div>{"No project data for checks found"}</div>);
+      api.Toast.error("Report Open Error", "No project data for checks found", 3);
+      return (<div></div>);
     }
     if (!targetLang) {
-      return (<div>{"No target language found"}</div>);
+      api.Toast.error("Report Open Error", "No target language found", 3);
+      return (<div></div>);
     }
     // array of the functions in the ReportView.js's for the project
-    let reportViews = getReportViews();
-    if (reportViews.length == 0) {
-      return (<div>{"No report views found"}</div>);
+    if (this.props.reportViews.length == 0) {
+      api.Toast.error("Report Open Error", "No report views found", 3);
+      return (<div></div>);
     }
     // array of JSX to be rendered
     // loop through all verses and chapters in the target language
     // and pass them into the ReportView functions
     let output = [];
+    let reportHeadersOutput = [];
     let bookName = "-bookName-";
     let authors = "-authors-";
     let manifest = ModuleApi.getDataFromCommon("tcManifest");
-    if (manifest && manifest.ts_project) {
-      bookName = manifest.ts_project.name || "-bookName-";
+    let params = ModuleApi.getDataFromCommon('params');
+    let bookAbbr;
+    if (params) bookAbbr = params.bookAbbr;
+    if (manifest && (manifest.ts_project || bookAbbr)) {
+      bookName = manifest.ts_project.name || BooksOfBible[bookAbbr] || "-bookName-";
     }
     // This isn't working yet I think, so it pretty much always returns "various checkers"
     if (manifest && manifest.checkers) {
@@ -73,22 +161,22 @@ class Report extends React.Component {
         authors = "various checkers";
       }
     }
-    // render report header data from reportViews
+    // render report header data from this.props.reportViews
     let reportHeaders = [];
-    for (let view in reportViews) {
+    for (let view in this.props.reportViews) {
       let viewResult;
       try { // in case their report view has errors
-         viewResult = reportViews[view](0,0);
+         viewResult = this.props.reportViews[view].view(0,0);
       }
       catch (e) {
         continue;
       }
       if (viewResult) {
-        reportHeaders.push(<Col className="pull-right" key={`0-0-${view}`} xs={6}><span>{viewResult}</span></Col>);
+        reportHeaders.push(<h5 key={`0-0-${view}`}><span>{viewResult}</span></h5>);
       }
     }
     if (reportHeaders.length > 0) {
-      output.push(<Row key="header">{reportHeaders}</Row>);
+      reportHeadersOutput.push(<span key="header">{reportHeaders}</span>);
     }
     for (let ch in targetLang) {
       // skip if its not a chapter (key should be a number)
@@ -96,90 +184,68 @@ class Report extends React.Component {
         continue;
       }
       // create chapter header
-      output.push(<h3 key={`${ch}-header`}>{`${bookName} ${ch}`}</h3>);
-      for (let view in reportViews) {
-        let viewResult = reportViews[view](ch, 0);
+      var chHeader = <h3 key={`${ch}-header`}>{`${bookName} ${ch}`}</h3>
+      var isEmpty = true;
+      for (let view in this.props.reportViews) {
+        let viewResult = this.props.reportViews[view].view(ch, 0);
         if (viewResult) {
-          output.push(<span key={`${ch}-header-${view}`}>{viewResult}</span>);
+          reportHeadersOutput.push(<span key={`${ch}-header-${view}`}>{viewResult}</span>);
         }
       }
       // now start getting data for each verse in the chapter
       for (let v in targetLang[ch]) {
         let reports = [];
-        for (let view in reportViews) {
-          let viewResult = reportViews[view](ch, v);
+        for (let view in this.props.reportViews) {
+          var query = this.state.query;
+          var reportNameSpace = this.props.reportViews[view].namespace;
+          var moduleStore = api.getDataFromCheckStore(reportNameSpace, 'groups');
+          if (query && moduleStore) {
+            moduleStore = ReportFilters.byCustom(query, moduleStore);
+          }
+          let viewResult = this.props.reportViews[view].view(ch, v, moduleStore);
           if (viewResult) {
             reports.push(<span key={`${ch}-${v}-${view}`}>{viewResult}</span>);
+            isEmpty = false;
           }
         }
         // only display a row for this verse if it has report view data
         if (reports.length > 0) {
-          output.push(<Row key={`${ch}-${v}`}><Col xs={3}><h4>{`${ch}:${v}`}</h4></Col><Col xs={9}>{reports}</Col></Row>);
+          output.push(
+                <Row key={`${ch}-${v}`}>
+                  <Col xs={10} style={{paddingRight: "0px"}}>{reports}</Col>
+                </Row>
+          );
+        }
+      }
+      if (isEmpty) {
+        var index = output.indexOf(chHeader);
+        if (~index) {
+          output.splice(index, 1);
         }
       }
     }
     // TODO: Get name of book and authors
     return (
-      <Grid className="page-header">
-        <h1>{`Report for ${bookName} `}<small>{"By " + authors + ", created on " + new Date().toDateString()}</small></h1>
-        {output}
-      </Grid>
-    );
+      <div style={{overflow: "auto", zIndex: "99"}}>
+        <ReportSideBar getQuery={this.getQuery.bind(this)} bookName={bookName}
+                      authors={authors} reportHeadersOutput={reportHeadersOutput}
+                      hideReport={this.hideReport.bind(this)} completed={done}
+                      unfinished={unfinished} flagged={flaggedChecks}/>
+        <div style={style.reportContainer}>
+          <div style={style.reportHeader}>
+            <Glyphicon glyph="remove" title="Close Report Page"
+                        style={style.hidePageGlyph}
+                        onClick={this.hideReport.bind(this)}/>
+          </div>
+          <div style={{marginBottom: "20px"}}></div>
+          <div id="cardsContent">
+            {output}
+          </div>
+        </div>
+      </div>
+    );}
   }
 }
 
-function getReportViews() {
-  // get folders in the modules directory
-  // TODO: probably should make this asynchronous
-  let modulesFolder = path.join(__base, "modules");
-  // get only the folders and make them absolute paths
-  let modules = fs.readdirSync(modulesFolder);
-  modules = modules.map((dir) => path.join(modulesFolder, dir));
-  modules = modules.filter((dir) => fs.statSync(dir).isDirectory());
-  let reports = [];
-  modules.forEach((dir) => {
-    if(fs.readdirSync(dir).includes('ReportView.js')) {
-      reports.push(require(path.join(dir, "ReportView")));
-    }
-  });
-  return reports;
-}
 
-module.exports = function(callback = (err) => {}) {
-  // don't run if a report is already open
-  if (reportOpened) {
-    ipcRenderer.send('open-report', "");
-    return;
-  }
-  fs.readFile("./src/js/components/core/reports/report-template.html", 'utf-8', (err, data) => {
-    if (err) {
-      // These errors should not happen
-      console.log(err, "Report template seems to be missing");
-      callback(err);
-      return;
-    }
-    // create a new html fragment in memory based on report-template.html
-    let reportHTML = document.createElement("html");
-    reportHTML.innerHTML = data;
-    // render the ReportView output to new file report.html
-    ReactDOM.render(<Report />, reportHTML.getElementsByTagName('div')[0]);
-    let reportPath = path.join(__dirname, 'report.html');
-    fs.writeFile(reportPath, reportHTML.innerHTML, 'utf-8', (err) => {
-      if (err) {
-        const alert = {
-          title: 'Error writing rendered report to disk',
-          content: err.message,
-          leftButtonText: 'Ok'
-        }
-        api.createAlert(alert);
-        callback(err);
-        return;
-      }
-      // send the file path to the main process to be opened in a new window
-      ipcRenderer.send('open-report', reportPath);
-      reportOpened = true;
-      callback();
-    });
-  });
-
-}
+module.exports = ReactDOM.render(<Report reportViews={api.getDataFromCommon("reportViews")} />, document.getElementById('reports'));
