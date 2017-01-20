@@ -5,116 +5,61 @@
 const React = require('react');
 const Button = require('react-bootstrap/lib/Button.js');
 const ButtonToolbar = require('react-bootstrap/lib/ButtonToolbar.js');
+const Panel = require('react-bootstrap/lib/Panel.js');
 const Alert = require('react-bootstrap/lib/Alert.js');
 const CoreStore = require('../../stores/CoreStore.js');
-const CoreActions = require('../../actions/CoreActions.js');
 const Modal = require('react-bootstrap/lib/Modal.js');
-var alertMessage = {};
-var alertStyle;
-var alertDiv;
-var alertContent;
 
-const AlertModal = React.createClass({
-  getInitialState() {
-    return {
-      title: "",
-      content: "",
-      leftButtonText: "",
-      rightButtonText: "",
-      visibility:false
-    };
-  },
-
+class AlertModal extends React.Component {
   componentWillMount() {
-    CoreStore.addChangeListener(this.alertMessage);
-  },
-
-  alertMessage() {
-    var data = CoreStore.getAlertMessage();
-    if (data) {
-    try {
-      alertMessage = data['alertObj'];
-    }
-    catch(e){
-    }
-
-
-      try {
-        this.setState({
-          title: alertMessage['title'],
-          content: alertMessage['content'],
-          leftButtonText: alertMessage['leftButtonText'],
-          rightButtonText: alertMessage['rightButtonText'],
-          visibility: true
-        });
-      } catch (e) {
-      }
-    }
-  },
-
-  handleAlertDismiss() {
-    var response = this.state.leftButtonText;
-    this.setState({visibility: false}, CoreActions.sendAlertResponse(response));
-    alertMessage = {};
-  },
-
-  handleAlertOK() {
-    var response = this.state.rightButtonText;
-    this.setState({visibility: false}, CoreActions.sendAlertResponse(response));
-    alertMessage = {};
-  },
-
-  getStyleFromState(value) {
-    if (value){
-      return {
-        height:'30px',
-        width:'60px',
-        textAlign:'center',
-        verticalAlign:'middle',
-        padding:0,
-        left:'50%'
-      }
-    } else {
-      return {
-        display: 'none'
-      }
-    }
-  },
+    CoreStore.addChangeListener(this.props.alertMessage);
+  }
+  componentWillUnmount() {
+    CoreStore.removeChangeListener(this.props.alertMessage);
+  }
 
   render() {
-    alertStyle = {
+    var alertStyle = {
       display:'tableCell',
       verticalAlign:'middle',
       width:'450px',
-      height:'200px'
+      height:'250px'
     }
 
-    alertDiv = {
-      position: 'relative'
+    var alertDiv = {
+      position: 'relative',
+      maxHeight: '60px'
     }
 
     return (
-      <div >
-      <Modal show={this.state.visibility}>
-      <Modal.Footer style={{position:'fixed', top:-100, marginTop:200, right:60, borderTop:'none'}}>
-      <Alert bsStyle="danger" onDismiss={this.handleAlertDismiss} style={alertStyle}>
-      <center> 
-      <div style={alertDiv}>
-      <h3>{this.state.title}</h3>
-      <p style={alertContent}>{this.state.content}</p>
-      </div>
-      <div  style={{paddingTop:'50px'}}>
-      <Button bsStyle="danger" style={this.getStyleFromState(this.state.leftButtonText)} onClick={this.handleAlertDismiss}>{this.state.leftButtonText}</Button>
-      <Button style={this.getStyleFromState(this.state.rightButtonText)} onClick={this.handleAlertOK}>{this.state.rightButtonText}</Button>
-      </div>
-      </center>
-      </Alert>
-      </Modal.Footer>
-      </Modal>
+      <div>
+        <Modal show={this.props.visibility}>
+          <Modal.Footer style={{position:'fixed', top:-100, marginTop:200, right:60, borderTop:'none'}}>
+              <Alert bsStyle="danger" onDismiss={this.props.handleAlertDismiss} style={alertStyle}>
+                <center>
+                  <div style={alertDiv}>
+                    <h3>{this.props.title}</h3>
+                    <p>{this.props.content}</p>
+                    <Button bsStyle="danger" style={this.props.getStyleFromState(this.props.leftButtonText)} onClick={this.props.handleAlertDismiss}>
+                      {this.props.leftButtonText}
+                    </Button>
+                    <Button style={this.props.getStyleFromState(this.props.rightButtonText)} onClick={this.props.handleAlertOK}>
+                      {this.props.rightButtonText}
+                    </Button>
+                    <Button onClick={this.props.handleOpen}>
+                      More Info
+                    </Button>
+                    <Panel collapsible expanded={this.props.open}>
+                      {this.props.moreInfo}
+                    </Panel>
+                  </div>
+              </center>
+            </Alert>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
-
-});
+};
 
 module.exports = AlertModal;

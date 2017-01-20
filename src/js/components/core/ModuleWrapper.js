@@ -6,66 +6,42 @@ event from the CheckStore and automatically swap out the check module for the ne
 */
 var React = require('react');
 var Button = require('react-bootstrap/lib/Button.js');
-var CoreStore = require('../../stores/CoreStore');
-var NextButton = require('../core/NextButton');
-var PreviousButton = require('../core/PreviousButton');
+var CoreStore = require('../../stores/CoreStore.js');
+var RecentProjects = require('./RecentProjects');
+var SwitchCheck = require('./SwitchCheck');
+var Upload = require('./UploadMethods');
+const path = require('path-extra');
+const fs = require(window.__base + 'node_modules/fs-extra');
+const defaultSave = path.join(path.homedir(), 'translationCore');
+const {shell} = require('electron');
 
 const api = window.ModuleApi;
 
 class ModuleWrapper extends React.Component {
-  constructor() {
-    super();
-    this.state = {};
-
-    this.updateCheckType = this.updateCheckType.bind(this);
-  }
-
   render() {
-    // TODO: should probably return an empty div if this.state.view doesn't exist
-    // but for now it has LexicalCheck as default
-    if(!this.state.view) {
-      return(
-        <div>
-          <p>Click the apps button to start checking</p>
-        </div>
-      );
+    var mainContent;
+    if (this.props.mainViewVisible) {
+      switch (this.props.type) {
+        case 'tools':
+          mainContent = <SwitchCheck {...this.props.switchCheckProps} />;
+          break;
+        case 'recent':
+          mainContent = <RecentProjects.Component {...this.props.recentProjectsProps} />;
+          break;
+        case 'main':
+          var Tool = this.props.mainTool;
+          mainContent = <Tool />;
+          break;
+        default:
+          mainContent = (<div> </div>)
+          break;
+      }
     }
-    var CheckModule = this.state.view;
     return (
       <div>
-        <CheckModule />
-        <div style={{float: 'left'}}>
-          <PreviousButton />
-        </div>
-        <div style={{float: 'right'}}>
-          <NextButton />
-        </div>
+        {mainContent}
       </div>
     );
-  }
-
-  componentWillMount() {
-    api.registerEventListener('changeCheckType', this.updateCheckType);
-  }
-
-  componentWillUnmount() {
-    api.removeEventListener('changeCheckType', this.updateCheckType);
-  }
-
-  updateCheckType(params) {
-    if (params.currentCheckNamespace) {
-      // var newCheckCategory = CoreStore.findCheckCategoryOptionByNamespace(params.currentCheckNamespace);
-      var newCheckCategory = api.getModule(params.currentCheckNamespace);
-      var newView = newCheckCategory;
-      this.setState({
-        view: newView
-      });
-    }
-    else {
-      this.setState({
-        view: null
-      });
-    }
   }
 }
 

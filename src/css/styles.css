@@ -10,7 +10,7 @@ body, html, #content, .fill-height {
 }
 
 body {
-  background-color: #f4f4f4;
+  background-color: white;
 }
 
 .main-view h1,
@@ -25,6 +25,75 @@ body {
   color: #1f273b;
 }
 
-.Tab.Container {
-  /*background-color: black;*/
+.text-primary-highlighted{
+  background-color: #FDD910;
+  font-weight: bold;
+}
+
+@font-face {
+    font-family: Noto Sans;
+    src: url(../fonts/NotoSans-Regular.ttf);
+    font-weight: normal;
+}
+@font-face {
+    font-family: Noto Sans;
+    font-weight: bold;
+    src: url(../fonts/NotoSans-Italic.ttf);
+}
+@font-face {
+    font-family: Noto Sans;
+    font-style: italic;
+    src: url(../fonts/NotoSans-Bold.ttf);
+}
+
+@font-face {
+    font-family: Noto Sans;
+    font-style: italic;
+    font-weight: bold;
+    src: url(../fonts/NotoSans-BoldItalic.ttf);
+}
+/*
+  TODO:
+  This selector is going to give is problems when we have a setting to switch between
+  drag to select and click to select. It will need to be moved to a JSX style that we
+  can changed based on an api property.
+
+  BUT we cant use psuedo classes within the JSX styling syntax. If anyone finds a way
+  to do this that would be great but my research shows that is not possible so we may
+  have to go another route.
+*/
+* {
+  font-family: Noto Sans;
+}
+.TargetVerseSelectionArea::selection{
+  background: yellow;
+}
+
+/*
+The following .nav, .nav-tabs classes hanlde the styling for the tabs in the
+tools. they basically override bootstrap styling for this components
+*/
+.nav-tabs>li>a {
+  color: white;
+  background-color: #747474;
+  margin-right: 2px;
+  border: 1px solid #FFFFFF;
+  border-radius: 10px 10px 0 0;
+  min-width: 75px;
+  padding: 5px 5px 0px 25px;
+  height: 35px;
+  margin-top: 4px
+}
+.nav>li>a:hover {
+  background-color: rgb(51, 51, 51);
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+  color: #FFFFFF;
+  cursor: default;
+  background-color: rgb(51, 51, 51);
+  border: 1px solid #FFFFFF;
+  border-bottom-color: rgb(51, 51, 51);
+  height: 35px;
+  outline: none;
+  margin-top: 4px
 }
