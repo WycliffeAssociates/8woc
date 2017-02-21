@@ -23,24 +23,10 @@ module.exports = {
     });
   },
 
-  updateModal: function(boolean) {
+  updateModProg: function(boolean) {
     Dispatcher.handleAction({
-      type: consts.CHANGE_UPLOAD_MODAL_VISIBILITY,
-      modalOption: boolean
-    });
-  },
-
-  updateLoginModal: function(boolean) {
-    Dispatcher.handleAction({
-      type: consts.CHANGE_LOGIN_MODAL_VISIBILITY,
-      loginModalOption: boolean
-    });
-  },
-
-  updateSettings: function(boolean) {
-    Dispatcher.handleAction({
-      type: consts.SETTINGS_VIEW,
-      settingsView: boolean
+      type: consts.MOD_PROGRESS_VIEW,
+      view: boolean
     });
   },
 
@@ -56,13 +42,6 @@ module.exports = {
       type: consts.CHANGE_ONLINE_STATUS,
       onlineStatus: boolean
     });
-  },
-
-  showCreateProject: function(boolean) {
-      Dispatcher.handleAction({
-        type: consts.CREATE_PROJECT,
-        createProjectModal: boolean
-      });
   },
 
   changeCreateProjectText: function(string) {
@@ -92,24 +71,16 @@ module.exports = {
     });
   },
 
+  killLoading: function() {
+    Dispatcher.handleAction({
+      type: consts.KILL_LOADING
+    });
+  },
+
   newProject: function(){
     Dispatcher.handleAction({
       type: consts.NEW_PROJECT,
       reportViews:[]
-    });
-  },
-
-  updateProfileVisibility: function(boolean) {
-    Dispatcher.handleAction({
-      type: consts.CHANGE_PROFILE_VISIBILITY,
-      profileOption: boolean
-    });
-  },
-
-  updateCheckModal: function(boolean) {
-    Dispatcher.handleAction({
-      type: consts.CHANGE_CHECK_MODAL_VISIBILITY,
-      checkModalOption: boolean
     });
   },
 

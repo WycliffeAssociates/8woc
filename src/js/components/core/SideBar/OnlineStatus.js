@@ -2,43 +2,82 @@
 const api = window.ModuleApi;
 const React = api.React;
 const RB = api.ReactBootstrap;
-const {Button, ButtonGroup, Glyphicon} = RB;
-const style = require("./Style");
+const {Glyphicon} = RB;
+const style = {
+  textOffline: {
+    color: "#FF0000",
+    display: "inline",
+    backgroundColor: '#333333',
+    outline: 'none',
+    border: 0,
+  },
+  textOnline: {
+    color: "#4eba6f",
+    display: "inline",
+    backgroundColor: '#333333',
+    outline: 'none',
+    border: 0,
+  }
+}
 
-class OnlineStatus extends React.Component{
-  constructor(){
+class OnlineStatus extends React.Component {
+  constructor() {
     super();
-    this.state ={
-      online: window.navigator.onLine
+    this.state = {
+      online: window.navigator.onLine,
+      showToggle: false
     };
 
     this.setOnline = this.setOnline.bind(this);
     this.setOffline = this.setOffline.bind(this);
+    this.toggleVisibility = this.toggleVisibility.bind(this);
   }
-  componentWillMount(){
+  componentWillMount() {
     window.addEventListener("offline", this.setOffline);
     window.addEventListener("online", this.setOnline);
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
     window.removeEventListener("offline", this.setOffline);
     window.removeEventListener("online", this.setOnline);
   }
 
   setOnline() {
+    this.props.changeOnlineStatus(true);
     this.setState({online: true});
   }
 
   setOffline() {
+    this.props.changeOnlineStatus(false);
     this.setState({online: false});
   }
 
-  render(){
-    const statusColor = this.state.online ? style.glyphiconOnline : style.glyphiconOffline;
+  toggleVisibility(){
+    this.setState({showToggle: !this.state.showToggle});
+  }
 
+  render(){
+    const textStatusColor = this.state.online ? style.textOnline : style.textOffline;
+    const status = this.state.online ? "Online " : "Offline ";
     return(
-      <div>
-        <li style={style.li}>
-          <Glyphicon glyph="signal" style={statusColor}/></li>
+      <div style={textStatusColor} onClick={this.toggleVisibility}>
+          Status: {status}
+          <Glyphicon glyph={"triangle-bottom"}
+                     style={{fontSize:10}}
+                     />
+          <div onClick={()=>{
+                  this.state.online ? this.setOffline() : this.setOnline();
+                }}
+               style={{
+                 display: this.state.showToggle ? "block" : "none",
+                  position: "absolute",
+                  zIndex: "9999",
+                  background: "#333",
+                  padding: "3px",
+                  borderRadius: "5px",
+                  color: status == "Online " ? "#FF0000" : "#4eba6f"
+               }}>
+            Switch to {this.state.online ? "Offline" : "Online"}
+          </div>
       </div>
       );
   }

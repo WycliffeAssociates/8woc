@@ -4,22 +4,38 @@
  *              be added from here.
  ******************************************************************************/
 const CoreActions = require('../../actions/CoreActions.js');
+const CoreActionsRedux = require('../../actions/CoreActionsRedux.js');
 const CoreStore = require('../../stores/CoreStore.js');
 const git = require('./GitApi.js');
 const api = window.ModuleApi;
 const sync = require('./SideBar/GitSync.js');
+const exportUsfm = require('./Usfm/ExportUSFM');
+const Upload = require('./UploadMethods');
+const Path = require('path');
+const fs = require(window.__base + 'node_modules/fs-extra');
+
 
 var template = [
   {
     label: 'File',
     submenu: [
       {
+        label: 'Close Project',
+        click: function() {
+          Upload.clearPreviousData();
+          CoreStore.currentCheckNamespace = ' ';
+          CoreActions.killLoading();
+          api.emitEvent('changeCheckType', {currentCheckNamespace: ' '});
+        },
+        accelerator: 'CmdOrCtrl+W'
+      },
+      {
         label: 'Toggle Tutorial',
         click: function() {
-          if (localStorage.getItem('showTutorial') == 'true') {
-            localStorage.setItem('showTutorial', false);
+          if (api.getSettings('showTutorial') === true) {
+            api.setSettings('showTutorial', false);
           } else {
-            localStorage.setItem('showTutorial', true);
+            api.setSettings('showTutorial', true);
           }
         },
         accelerator: 'CmdOrCtrl+T'
@@ -38,6 +54,12 @@ var template = [
         accelerator: 'CmdOrCtrl+S'
       },
       {
+       label: "Export as USFM",
+       click: function() {
+         exportUsfm.exportAll();
+        }
+     },
+       {
         label: "Update with Door43",
         click: function() {
           sync();
@@ -46,9 +68,30 @@ var template = [
       {
         label: 'Load',
         click() {
-          CoreActions.showCreateProject("Languages");
+
         }
-      }
+       },
+       {
+         label: 'Toggle Example Check',
+         click: function () {
+           var exampleCheckPath = Path.join(window.__base, "modules", "example_check_module");
+           if (localStorage.getItem('exampleCheck') == 'true') {
+              try {
+                //TODO: Do this a different way
+             } catch (e) {;
+             }
+             localStorage.setItem('exampleCheck', false);
+           }
+           else {
+             try {
+               //TODO: Do this a different way
+             } catch (e) {
+             }
+             localStorage.setItem('exampleCheck', true);
+           }
+         },
+         accelerator: 'CmdOrCtrl+H'
+       },
     ]
   },
   {
@@ -114,11 +157,6 @@ var template = [
         label: 'Minimize',
         accelerator: 'CmdOrCtrl+M',
         role: 'minimize'
-      },
-      {
-        label: 'Close',
-        accelerator: 'CmdOrCtrl+W',
-        role: 'close'
       }
     ]
   },
@@ -129,11 +167,22 @@ var template = [
       {
         label: 'Learn More',
         click: function() {
-          window.electron.shell.openExternal('https://github.com/WycliffeAssociates/8woc/');
+          require('electron').shell.openExternal('https://github.com/unfoldingWord-dev/translationCore');
         }
       }
     ]
   }
 ];
 
-module.exports = {template: template};
+if (process.platform === 'darwin') {
+  template.unshift({
+    label: 'translationCore',
+    submenu: [
+      {
+        accelerator: 'CmdOrCtrl+Q',
+        role: 'quit'
+      }
+    ]
+  });
+}
+module.exports = {template};

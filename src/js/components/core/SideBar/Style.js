@@ -1,29 +1,43 @@
+
 var style = {
-  container:{
-      backgroundColor: "#1a2133",
-      width: "85px",
-      height: "100vh",
-      marginLeft: "0px",
-      display: "inline-block",
-      position: "fixed",
-      zIndex: "99",
-      left: "0px",
-      fontSize: "12px",
-      overflowY: "auto",
+  sideBarcontainer: {
+    backgroundColor: "#333333",
+    zIndex: "98",
+    fontSize: "12px",
+    overflowX: "hidden",
+    height: "100%",
+    padding: 0,
+    position:"fixed",
+    width:"300px"
+  },
+
+  container: {
+    backgroundColor: "#333333",
+    height: "100vh",
+    display: "inline-block",
+    zIndex: "99",
+    fontSize: "12px",
+    overflowY: "auto",
+    width:"100%"
+  },
+
+  fixedChevrons: {
+    zIndex: 1000,
+    backgroundColor: '#333333',
   },
 
   ul: {
-      margin: "0px",
-      padding: "0px",
+    margin: "0px",
+    padding: "0px",
   },
 
   li: {
     display: "block",
     textAlign: "center",
-    borderBottom: "2px solid #1f273b",
-    paddingTop: "20px",
-    paddingBottom: "20px",
+    paddingTop: "15px",
+    paddingBottom: "15px",
     color: "white",
+    cursor: "pointer",
     userSelect: "none",
   },
 
@@ -34,39 +48,42 @@ var style = {
 
   glyphiconHover: {
     fontSize: "29px",
-    color: "#39add2",
+    color: "#44C6FF",
   },
 
   hover: {
-    backgroundColor: "#1a2133",
-    color: "#39add2",
+    backgroundColor: "#444444",
+    color: "#0277BD",
     cursor: "pointer",
     display: "block",
     textAlign: "center",
-    borderBottom: "2px solid #1f273b",
     userSelect: "none",
-    paddingTop: "18px",
-    paddingBottom: "18px"
+    paddingTop: "13px",
+    paddingBottom: "13px"
+
   },
 
   logo:{
-    height: "60px",
-    width: "55px",
+    height: "90px",
+    width: "90px",
     display: "block",
-    padding: "5px",
+    padding: "10px",
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: "5px",
+    cursor: "pointer",
   },
 
-  glyphiconOffline:{
-    color: "#FF0000",
-    fontSize: "25px",
+  img: {
+    width: "25px",
+    height: "30px",
   },
 
-  glyphiconOnline:{
-    color: "#00B233",
-    fontSize: "25px",
+  StatusBar: {
+    backgroundColor: "#333333",
+    height: "30px",
+    width: "100%",
+    fontSize: "16px",
+    zIndex: "97",
   },
 
 };
