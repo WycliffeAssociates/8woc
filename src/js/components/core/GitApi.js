@@ -6,10 +6,10 @@
  * @return {Object} An internal api
  **/
 function GitApi(directory) {
-  var remote = window.electron.remote;
+  var remote = require('electron').remote;
   var {dialog} = remote;
   var git = require('simple-git')(directory);
-  const CheckStore = require('../../stores/CheckStore.js');
+
 
   return {
     /**
@@ -42,7 +42,15 @@ function GitApi(directory) {
      * @param {string} message - The commit message to be used.
      * @param {function} callback - A callback to be run on complete.
      */
-    commit: function(message, callback) {
+    commit: function(user, message, callback) {
+      var name, username, email;
+      if (user) {
+        name = user.full_name;
+        username = user.username;
+        email = user.email;
+      }
+      git.addConfig('user.name', name || username || 'translationCore User');
+      git.addConfig('user.email', email || 'Unknown');
       git.commit(message, callback);
     },
     /**
@@ -59,16 +67,20 @@ function GitApi(directory) {
      * @param {function} callback - A callback to be run on complete.
      */
     mirror: function(url, path, callback) {
-      git.clone(url, path, function(err) {
+      if (!url || !path) {
+        callback('Missing URL or save path');
+        return;
+      }
+      git.clone(url, path, ['--recursive'], function(err) {
         if (err) {
-          dialog.showErrorBox('Clone Error', err);
+          console.error(err);
           if (callback) {
             callback(err);
             return;
           }
         }
         if (callback) {
-          callback();
+          callback(err);
         }
       });
     },
@@ -110,23 +122,28 @@ function GitApi(directory) {
      * @param {string} path - The local path of the repo
      * @param {function} callback - A callback to be run on complete.
      */
-    save: function(message, path, callback) {
+    save: function(user, message, path, callback) {
       var _this = this;
-      CheckStore.saveAllToDisk(path, function() {
         _this.add(function(err, data) {
           if (err) {
-            dialog.showErrorBox('Error', err);
+            callback(err);
           }
-          _this.commit(message, function(err) {
+          _this.commit(user, message, function(err) {
             if (err) {
-              dialog.showErrorBox('Error', err);
+              callback(err);
             }
             if (callback) {
-              callback();
+              callback(null);
             }
           });
         });
-      });
+    },
+    checkout: function(branch, callback) {
+      if (!branch) {
+        callback("No branch");
+        return;
+      }
+      git.checkout(branch, callback);
     }
   };
 }

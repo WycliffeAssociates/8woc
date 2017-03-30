@@ -15,23 +15,52 @@
       }
     },
     statusIcon: {
-      retained: {
-        color: 'green',
+      correct: {
+        color: '#4EBA67',
         display: 'initial'
       },
-      replaced: {
-        color: 'gold',
-        display: 'initial'
-      },
-      wrong: {
-        color: 'red',
+      flagged: {
+        color: '#FDD910',
         display: 'initial'
       },
       unchecked: {
         display: 'none'
       }
     }
-  }
+  },
+
+  menuHeader: {
+    display: "block",
+    padding: "10px",
+    cursor: "pointer",
+    borderBottom: "1px solid #747474"
+  },
+
+  activeMenuHeader: {
+    display: "block",
+    padding: "10px",
+    cursor: "pointer",
+    borderBottom: "1px solid #747474",
+    backgroundColor: "#0277BD",
+  },
+
+  subMenuItem: {
+    display: "block",
+    padding: "10px 10px 10px 15px",
+    cursor: "pointer",
+    borderBottom: "1px solid #333333",
+    color: "#FFF",
+  },
+
+  activeSubMenuItem:  {
+    display: "block",
+    padding: "10px 10px 10px 15px",
+    cursor: "pointer",
+    borderBottom: "1px solid #333333",
+    color: "#FFF",
+    backgroundColor: "#0277BD",
+  },
+
 };
 
 module.exports = style;
