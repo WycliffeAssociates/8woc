@@ -46,6 +46,7 @@ export const loadState = () => {
       //     reference: {
       //       bookId: '2th',
       //       chapter: 1,
+<<<<<<< HEAD
       //       verse: 3
       //     },
       //     tool: 'ImportantWords',
@@ -54,6 +55,89 @@ export const loadState = () => {
       //     occurrence: 1
       //   }
       // }
+=======
+      //       verse: 6
+      //     },
+      //     tool: 'ImportantWords',
+      //     groupId: 'afflict',
+      //     quote: 'affliction',
+      //     occurrence: 1
+      //   }
+      // },
+      groupsIndexReducer: {
+        groupsIndex: [
+          {id: 'afflict', name: 'afflict, affliction'},
+          {id: 'authority', name: 'authority, authorities'},
+          {id: 'avenge', name: 'avenge, revenge, vengeance'}
+        ]
+      },
+      groupsDataReducer: {
+        groupsData: {
+          afflict: [
+            {
+              "priority": 1,
+              "contextId": {
+                "reference": {
+                  "bookId": "2th",
+                  "chapter": 1,
+                  "verse": 6
+                },
+                "tool": "ImportantWords",
+                "groupId": "afflict",
+                "quote": "affliction",
+                "occurrence": 1
+              }
+            },
+            {
+              "priority": 1,
+              "contextId": {
+                "reference": {
+                  "bookId": "2th",
+                  "chapter": 1,
+                  "verse": 6
+                },
+                "tool": "ImportantWords",
+                "groupId": "afflict",
+                "quote": "afflict",
+                "occurrence": 1
+              }
+            }
+          ],
+          authority: [
+            {
+              "priority": 1,
+              "contextId": {
+                "reference": {
+                  "bookId": "2th",
+                  "chapter": 3,
+                  "verse": 9
+                },
+                "tool": "ImportantWords",
+                "groupId": "authority",
+                "quote": "authority",
+                "occurrence": 1
+              }
+            }
+          ],
+          avenge: [
+            {
+              "priority": 1,
+              "contextId": {
+                "reference": {
+                  "bookId": "2th",
+                  "chapter": 1,
+                  "verse": 8
+                },
+                "tool": "ImportantWords",
+                "groupId": "avenge",
+                "quote": "vengeance",
+                "occurrence": 1
+              }
+            }
+          ]
+        }
+      }
+>>>>>>> develop
     };
     if (serializedState === null) {
       //  returning undefined to allow the reducers to initialize the app state

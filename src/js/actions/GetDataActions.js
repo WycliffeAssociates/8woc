@@ -69,22 +69,37 @@ export function setProjectParams(params) {
     }
 }
 
-
-
+/**
+ * @description This method will set the corestore reducer store state back to the inital state.
+ * 
+ */
+export function clearPreviousData() {
+    return {
+        type: consts.CLEAR_PREVIOUS_DATA
+    }
+}
 
 /**
+<<<<<<< HEAD
  * @description Formats and saves manifest according to tC standards,
  * if not already done so
  *
  * @param {string} projectPath - Path in which the project is being loaded from
  * @param {string} projectLink - Link given to load project if taken from online
  * @param {object} manifest - Default manifest given in order to load a non-usfm project
+=======
+ * @description This method will set the corestore view for the corresponding module
+ * 
+>>>>>>> develop
  */
-export function setUpManifest(projectPath, projectLink, manifest, currentUser) {
-    const verifiedManifest = verifyChunks(projectPath, manifest);
-    let newManifest = LoadHelpers.saveManifest(projectPath, projectLink, verifiedManifest, currentUser);
-    return newManifest;
+export function setModuleView(identifier, view){
+    return {
+        type: consts.SAVE_MODULE_VIEW,
+        identifier: identifier,
+        module:view
+    }
 }
+
 
 /**
  * @description Returns the current user logged in from the current app state,
@@ -100,6 +115,7 @@ export function getCurrentUser(state) {
 }
 
 /**
+<<<<<<< HEAD
  * @description Stores the project path loaded into the default tC folder
  * location. If the project is exists in the default save location and it is
  * loaded from some place else, user will be prompted to overwrite it. Which results
@@ -127,6 +143,8 @@ export function correctSaveLocation(projectPath) {
 }
 
 /**
+=======
+>>>>>>> develop
  * @description Starter function to load a project from a folder path or link.
  *
  * @param {string} projectPath - Path in which the project is being loaded from
@@ -136,7 +154,7 @@ export function openProject(projectPath, projectLink) {
     return ((dispatch, getState) => {
         if (!projectPath && !projectLink) return;
         const currentUser = getCurrentUser(getState());
-        const usfmFilePath = checkIfUSFMFileOrProject(projectPath);
+        const usfmFilePath = LoadHelpers.checkIfUSFMFileOrProject(projectPath);
         let manifest;
 
         if (usfmFilePath) {
@@ -144,14 +162,14 @@ export function openProject(projectPath, projectLink) {
             dispatch(openUSFMProject(usfmFilePath, projectPath, 'ltr', projectLink, currentUser));
         } else {
             //No USFM detected, initiating 'standard' loading process
-            projectPath = correctSaveLocation(projectPath);
+            projectPath = LoadHelpers.correctSaveLocation(projectPath);
             manifest = LoadHelpers.loadFile(projectPath, 'manifest.json');
             if (!manifest && !manifest.tcInitialized) {
-                manifest = setUpManifest(projectPath, projectLink, manifest, currentUser);
+                manifest = LoadHelpers.setUpManifest(projectPath, projectLink, manifest, currentUser);
             } else {
                 let oldManifest = LoadHelpers.loadFile(projectPath, 'tc-manifest.json');
                 if (oldManifest) {
-                    manifest = setUpManifest(projectPath, oldManifest);
+                    manifest = LoadHelpers.setUpManifest(projectPath, oldManifest);
                 }
             }
             dispatch(addLoadedProjectToStore(projectPath, manifest));
@@ -161,6 +179,7 @@ export function openProject(projectPath, projectLink) {
 }
 
 /**
+<<<<<<< HEAD
  * @description Sets up the folder in the tC save location for a USFM project
  *
  * @param {string} usfmFilePath - Path of the usfm file that has been loaded
@@ -208,6 +227,8 @@ export function setUpDefaultUSFMManifest(parsedUSFM, direction, user) {
 }
 
 /**
+=======
+>>>>>>> develop
  * @description Initiates the loading of a usfm file into current project, puts the target language, params,
  * save location, and manifest into the store.
  *
@@ -217,22 +238,23 @@ export function setUpDefaultUSFMManifest(parsedUSFM, direction, user) {
  */
 export function openUSFMProject(usfmFilePath, projectPath, direction, projectLink, currentUser) {
     return ((dispatch) => {
-        const projectSaveLocation = correctSaveLocation(projectPath);
+        const projectSaveLocation = LoadHelpers.correctSaveLocation(projectPath);
         dispatch(setProjectPath(projectSaveLocation));
-        const usfmData = setUpUSFMProject(usfmFilePath, projectSaveLocation);
-        const parsedUSFM = getParsedUSFM(usfmData);
-        const targetLanguage = formatTargetLanguage(parsedUSFM);
+        const usfmData = LoadHelpers.setUpUSFMProject(usfmFilePath, projectSaveLocation);
+        const parsedUSFM = LoadHelpers.getParsedUSFM(usfmData);
+        const targetLanguage = LoadHelpers.formatTargetLanguage(parsedUSFM);
         dispatch(ResourcesActions.addNewBible('targetLanguage', targetLanguage));
-        setUSFMParams(parsedUSFM.book, projectSaveLocation, direction);
+        dispatch(setUSFMParams(parsedUSFM.book, projectSaveLocation, direction));
         let manifest = LoadHelpers.loadFile(projectSaveLocation, 'manifest.json');
         if (!manifest) {
-            let defaultManifest = setUpDefaultUSFMManifest(parsedUSFM, direction, currentUser);
+            const defaultManifest = LoadHelpers.setUpDefaultUSFMManifest(parsedUSFM, direction, currentUser);
             manifest = LoadHelpers.saveManifest(projectSaveLocation, projectLink, defaultManifest);
         }
         dispatch(addLoadedProjectToStore(projectSaveLocation, manifest));
     });
 }
 
+<<<<<<< HEAD
 /**
  * @description Parses the usfm file using usfm-parse library.
  *
@@ -247,6 +269,8 @@ export function getParsedUSFM(usfmData) {
         console.error(e);
     }
 }
+=======
+>>>>>>> develop
 
 /**
  * @description Starts loading a project that has a standard manifest created.
@@ -260,7 +284,7 @@ export function addLoadedProjectToStore(projectPath, manifest) {
     return ((dispatch) => {
         dispatch(setProjectPath(projectPath));
         dispatch(setProjectManifest(manifest));
-        const params = getParams(projectPath, manifest);
+        const params = LoadHelpers.getParams(projectPath, manifest);
         if (params) {
             dispatch(setProjectParams(params));
             const book = LoadHelpers.convertToFullBookName(params.bookAbbr);
@@ -308,6 +332,7 @@ export function loadProjectDataFromFileSystem(projectPath) {
 }
 
 
+<<<<<<< HEAD
 /**
  * @description Check if project is ephesians or titus, or if user is in developer mode.
  *
@@ -456,6 +481,8 @@ export function verifyChunks(projectPath, manifest) {
     manifest.tcInitialized = true;
     return manifest;
 }
+=======
+>>>>>>> develop
 
 /**
  *
@@ -474,6 +501,7 @@ export function manifestError(content) {
     });
 }
 
+<<<<<<< HEAD
 /**
  *
  * @param {string} projectBook - book abbreviation of book to be converted
@@ -489,6 +517,8 @@ export function isOldTestament(projectBook) {
     return false;
 }
 
+=======
+>>>>>>> develop
 
 /**
  * @description Loads the tool into the main app view, and initates the tool Container component
@@ -501,7 +531,7 @@ export function loadModuleAndDependencies(moduleFolderName) {
             dispatch({ type: consts.START_LOADING });
             const modulePath = Path.join(moduleFolderName, 'package.json');
             const dataObject = fs.readJsonSync(modulePath);
-            const checkArray = createCheckArray(dataObject, moduleFolderName);
+            const checkArray = LoadHelpers.createCheckArray(dataObject, moduleFolderName);
             dispatch(saveModules(checkArray));
             dispatch(CheckStoreActions.setCheckNameSpace(dataObject.name))
             dispatch(CoreActionsRedux.changeModuleView('main'));
@@ -522,7 +552,7 @@ export function saveModules(checkArray) {
         for (let module of checkArray) {
             try {
                 const viewObj = require(Path.join(module.location, 'Container'));
-                dispatch({ type: consts.SAVE_MODULE_VIEW, identifier: module.name, module: viewObj.view || viewObj.container });
+                dispatch(setModuleView(module.name, viewObj.view || viewObj.container));
             } catch (e) {
                 console.log(e);
             }
@@ -531,6 +561,7 @@ export function saveModules(checkArray) {
 }
 
 /**
+<<<<<<< HEAD
  * @description creates an array that has the data of each included tool and 'subtool'
  *
  * @param {object} dataObject - Package json of the tool being loaded,
@@ -567,6 +598,9 @@ export function createCheckArray(dataObject, moduleFolderName) {
 
 /**
  *
+=======
+ * 
+>>>>>>> develop
  * @param {object} err - Message object of the alert to be shown
  */
 export function errorLoadingProject(err) {
