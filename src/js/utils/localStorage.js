@@ -46,16 +46,6 @@ export const loadState = () => {
       //     reference: {
       //       bookId: '2th',
       //       chapter: 1,
-<<<<<<< HEAD
-      //       verse: 3
-      //     },
-      //     tool: 'ImportantWords',
-      //     group: 'Aaron',
-      //     quote: 'Aaron',
-      //     occurrence: 1
-      //   }
-      // }
-=======
       //       verse: 6
       //     },
       //     tool: 'ImportantWords',
@@ -137,7 +127,6 @@ export const loadState = () => {
           ]
         }
       }
->>>>>>> develop
     };
     if (serializedState === null) {
       //  returning undefined to allow the reducers to initialize the app state
