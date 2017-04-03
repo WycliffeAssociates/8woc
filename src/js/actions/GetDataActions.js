@@ -192,6 +192,7 @@ export function setUpDefaultUSFMManifest(parsedUSFM, direction, user) {
                 "version": ""
             }
         ],
+        tcInitialized: true,
         target_language: {
             direction: direction,
             id: "",
