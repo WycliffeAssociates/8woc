@@ -1,9 +1,9 @@
 # translationCore API Guide
 ## Overview
-This guide will help you create your own plugin for translationCore. Although translationCore is tailored for plugins made for checking Bible translations, it can support other types of plugins as well. The API is general enough for almost any kind of app to be plugged in to the tC system.
+This guide will help you create your own tool/module for translationCore. Although translationCore is tailored for tools/modules made for checking Bible translations, it can support other types of tools/modules as well. The API is general enough for almost any kind of app to be plugged in to the tC system.
 
 ### Necessary Files
-A plugin must be contained in a folder consisting of at least the following three files:
+A tool/module must be contained in a folder consisting of at least the following three files:
 * View.js
 * FetchData.js
 * ReportView.js
@@ -71,7 +71,7 @@ When you call `emitEvent()`, every callback that has been registered with the sa
 Calling `emitEvent()` for an eventType with no listeners is completely safe.
 
 ```javascript
-api.emitEvent('buttonClicked', {'status': 'RETAINED'});
+api.emitEvent('buttonClicked', {'status': 'CORRECT'});
 ```
 
 #### `removeEventListener(eventType, callback)`
@@ -101,14 +101,14 @@ The API has the following functions for working with data in the Checkstore:
 As apparent by the name, this function will place *value* (any data type) into your namespace *field* tagged with the *key*. This data can be retrieved later with `getDataFromCheckStore()`.
 
 ```javascript
-api.putDataInCheckStore('LexicalChecker', 'checkStatus', 'RETAINED');
+api.putDataInCheckStore('TranslationWordsChecker', 'checkStatus', 'CORRECT');
 ```
 
 #### `getDataFromCheckStore(field, key)`
 After you have put data into the store with `putDataInCheckStore()`, you can retrieve it with this function. If you pass in a value for *key*, it will retrieve the value tied to that key. If you do not, it will return all of the data you have stored in your *field* as an object. This function will return **null** if the field or key has no data associated with it.
 
 ```javascript
-var myCheckStatus = api.getDataFromCheckStore('LexicalChecker', 'checkStatus');
+var myCheckStatus = api.getDataFromCheckStore('TranslationWordsChecker', 'checkStatus');
 ```
 
 #### `putDataInCommon(key, value)`
@@ -141,4 +141,18 @@ This function logs *all* of the data held in the CheckStore to the console. Shou
 
 ```javascript
 api.logCheckStore();
+```
+
+#### `setSettings(key, value)`
+This function sets a value to a key in the settings object, which is then saved in `localStorage`.
+
+```javascript
+api.setSettings('language', 'English');
+```
+
+#### `getSettings(key)`
+This function returns a key from the settings object, which is saved in `localStorage`.
+
+```javascript
+api.getSettings('language');
 ```
