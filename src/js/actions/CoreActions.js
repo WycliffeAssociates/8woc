@@ -23,24 +23,10 @@ module.exports = {
     });
   },
 
-  updateModal: function(boolean) {
+  updateModProg: function(boolean) {
     Dispatcher.handleAction({
-      type: consts.CHANGE_UPLOAD_MODAL_VISIBILITY,
-      modalOption: boolean
-    });
-  },
-
-  updateLoginModal: function(boolean) {
-    Dispatcher.handleAction({
-      type: consts.CHANGE_LOGIN_MODAL_VISIBILITY,
-      loginModalOption: boolean
-    });
-  },
-
-  updateSettings: function(boolean) {
-    Dispatcher.handleAction({
-      type: consts.SETTINGS_VIEW,
-      settingsView: boolean
+      type: consts.MOD_PROGRESS_VIEW,
+      view: boolean
     });
   },
 
@@ -58,13 +44,6 @@ module.exports = {
     });
   },
 
-  showCreateProject: function(boolean) {
-      Dispatcher.handleAction({
-        type: consts.CREATE_PROJECT,
-        createProjectModal: boolean
-      });
-  },
-
   changeCreateProjectText: function(string) {
     Dispatcher.handleAction({
       type:  consts.CHANGE_CREATE_PROJECT_TEXT,
@@ -79,19 +58,6 @@ module.exports = {
     });
   },
 
-  sendProgressForKey: function(progressKeyObj) {
-    Dispatcher.handleAction({
-      type: consts.SEND_PROGRESS_FOR_KEY,
-      progressRecieved: progressKeyObj
-    });
-  },
-
-  doneLoadingFetchData: function() {
-    Dispatcher.handleAction({
-      type: consts.DONE_LOADING
-    });
-  },
-
   newProject: function(){
     Dispatcher.handleAction({
       type: consts.NEW_PROJECT,
@@ -99,45 +65,18 @@ module.exports = {
     });
   },
 
-  updateProfileVisibility: function(boolean) {
+  sendNotificationToast: function(visible, toastParamsObj) {
     Dispatcher.handleAction({
-      type: consts.CHANGE_PROFILE_VISIBILITY,
-      profileOption: boolean
+      type: consts.SHOW_TOAST_PARAMS,
+      toastOption: visible,
+      toastParams: toastParamsObj
     });
   },
-
-  updateCheckModal: function(boolean) {
-    Dispatcher.handleAction({
-      type: consts.CHANGE_CHECK_MODAL_VISIBILITY,
-      checkModalOption: boolean
-    });
-  },
-
-  sendAlert: function(alertObj) {
-    Dispatcher.handleAction({
-      type: consts.ALERT_MODAL,
-      alert: alertObj
-    });
-  },
-
-    sendNotificationToast: function(visible, toastParamsObj) {
-      Dispatcher.handleAction({
-        type: consts.SHOW_TOAST_PARAMS,
-        toastOption: visible,
-        toastParams: toastParamsObj
-      });
-    },
 
   sendAlertResponse: function(alertResponseObj) {
     Dispatcher.handleAction({
       type: consts.ALERT_MODAL_RESPONSE,
       alertResponse: alertResponseObj
-    });
-  },
-
-  startLoading: function() {
-    Dispatcher.handleAction({
-      type: consts.START_LOADING
     });
   },
 
