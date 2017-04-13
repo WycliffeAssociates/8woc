@@ -3,7 +3,7 @@
  * @description: The file downloads a git repo and passes back the location it is
  *               downloaded to.
  ******************************************************************************/
-const remote = window.electron.remote;
+const remote = require('electron').remote;
 const {dialog} = remote;
 
 const path = require('path');
@@ -11,7 +11,6 @@ const pathex = require('path-extra');
 const fs = require(window.__base + 'node_modules/fs-extra');
 const api = window.ModuleApi;
 const git = require('./GitApi.js');
-const Access = require('./AccessProject');
 
 const CoreActions = require('../../actions/CoreActions.js');
 
@@ -22,19 +21,21 @@ module.exports = (function() {
   * @param {function} callback - The function to be run on complete
   ******************************************************************************/
   function openManifest(url, callback) {
-    var splitUrl = url.split('.');
-    if (splitUrl.pop() !== 'git') {
-      const alert = {
-            title: 'Import Error',
-            content: 'Please Make Sure That This Is a Valid Project.',
-            leftButtonText: 'Ok'
-          }
-          api.createAlert(alert);
+    if (!url) {
+      if (callback) {
+        callback('No link specified', null, null)
+      }
       return;
     }
+    var splitUrl = url.split('.');
+    if (splitUrl[splitUrl.length-1] !== 'git') {
+      splitUrl.push('git');
+      url+='.git';
+    }
+    splitUrl.pop();
     var projectPath = splitUrl.pop().split('/');
     var projectName = projectPath.pop();
-    const savePath = path.join(pathex.homedir(), 'Translation Core', projectName);
+    const savePath = path.join(pathex.homedir(), 'translationCore', projectName);
 
     fs.readdir(savePath, function(err, contents) {
       if (err) {
@@ -42,10 +43,8 @@ module.exports = (function() {
           runGitCommand(savePath, url, callback);
         });
       } else {
-        callback(savePath, url);
-        // Access.loadFromFilePath(savePath);
-        // CoreActions.showCreateProject("");
-
+        if (callback)
+          callback(null, savePath, url);
       }
     });
   }
@@ -59,12 +58,15 @@ module.exports = (function() {
   function runGitCommand(savePath, url, callback) {
     git(savePath).mirror(url, savePath, function(err) {
       if (err) {
+        fs.removeSync(savePath);
+        if (callback)
+          callback(err, null, null);
         return;
       }
       try {
-
         fs.readFileSync(path.join(savePath, 'manifest.json'));
-        callback(savePath, url);
+        if (callback)
+          callback(null, savePath, url);
       } catch (error) {
           const alert = {
             title: 'Error Getting Transaltion Studio Manifest',
@@ -73,6 +75,8 @@ module.exports = (function() {
           }
           api.createAlert(alert);
           console.error(error);
+        if (callback)
+          callback(error, null, null);
         return;
       }
     });
