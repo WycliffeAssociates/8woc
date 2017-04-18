@@ -1,100 +1,103 @@
-const React = require('react');
-
-const remote = window.electron.remote;
-const {dialog} = remote;
-const CoreActions = require('../../../actions/CoreActions.js');
-const FormGroup = require('react-bootstrap/lib/FormGroup.js');
-const ControlLabel = require('react-bootstrap/lib/ControlLabel.js');
-const FormControl = require('react-bootstrap/lib/FormControl.js');
-const Button = require('react-bootstrap/lib/Button.js');
-const Grid = require('react-bootstrap/lib/Grid.js');
-const Row = require('react-bootstrap/lib/Row.js');
-const Col = require('react-bootstrap/lib/Col.js');
-const style = require('./loginStyle');
-const gogs = require('./GogsApi.js');
-const Token = require('../AuthToken');
-const Registration = require('./Registration');
+import React from 'react';
+const Registration = require('./Registration.js');
+const { Button, Row, Col, FormGroup, FormControl, utils } = require('react-bootstrap/lib');
+const bootstrapUtils = utils.bootstrapUtils;
+bootstrapUtils.addStyle(Button, 'blue');
+const styles = {
+    button: {
+      backgroundColor: '#0277BD',
+      color: 'white',
+      width: '40%',
+      fontWeight: 'bold',
+      borderRadius: 4,
+      borderWidth: 0,
+      height: 34,
+      outline: 'none',
+    },
+    buttonActive: {
+      backgroundColor: '#C6C4C4',
+      color: 'white',
+      width: '40%',
+      fontWeight: 'bold',
+      borderRadius: 4,
+      borderWidth: 0,
+      height: 34,
+      outline: 'none',
+    }
+  }
 
 class Login extends React.Component {
   constructor() {
     super();
-    this.state = {userName: "", password: "", register: false};
+    this.state = {
+      hovered: null,
+      pressed: null
+    }
   }
-  handleSubmit(event) {
-    var _this = this;
-    var userdata = {
-      username: this.state.userName,
-      password: this.state.password
-    };
-    var newuser = gogs(Token).login(userdata).then(function(userdata) {
-      CoreActions.login(userdata);
-      CoreActions.updateLoginModal(false);
-      CoreActions.updateOnlineStatus(true);
-      CoreActions.updateProfileVisibility(true);
-      if (_this.props.success) {
-        _this.props.success();
-      }
-    }).catch(function(reason) {
-      //console.log(reason);
-      if (reason.status === 401) {
-        dialog.showErrorBox('Login Failed', 'Incorrect username or password');
-      } else if (reason.hasOwnProperty('message')) {
-        dialog.showErrorBox('Login Failed', reason.message);
-      } else if (reason.hasOwnProperty('data')) {
-        let errorMessage = reason.data;
-        dialog.showErrorBox('Login Failed', errorMessage);
-      } else {
-        dialog.showErrorBox('Login Failed', 'Unknown Error');
-      }
-    });
+  onHover(id) {
+    this.setState({ hovered: id })
   }
-  handleUserName(e) {
-    this.setState({userName: e.target.value});
+  onPress(tab, displayLogin) {
+    switch (tab) {
+      case 1:
+        this.setState({ pressed: tab });
+        this.props.handleSubmit(this.props.userdata);
+        break;
+      case 2:
+        this.setState({ pressed: tab });
+        this.props.onSwitchToLoginPage(!displayLogin);
+        this.onPress(0);
+        break;
+      default:
+        this.setState({ pressed: 0 });
+        this.onHover(0);
+        break;
+    }
   }
-  handlePassword(e) {
-    this.setState({password: e.target.value});
-  }
-
-  showRegistration() {
-    this.setState({register: true});
-  }
-
   render() {
-    if (this.state.register === true) {
+    let { displayLogin } = this.props;
+    if (!displayLogin) {
       return (
-        <Registration />
+        <Col md={12} sm={12} xs={12} style={{ marginTop: "50px" }}>
+          <center>
+            <Registration back={() => this.props.onSwitchToLoginPage(!displayLogin)} />
+          </center>
+        </Col>
       );
-    }else{
+    } else {
       return (
         <div>
           <Row className="show-grid">
-            <Col md={12} sm={12} xs={12}>
-
+            <Col md={12} sm={12} xs={12} style={{ marginTop: "50px" }}>
+              <center>
+                <h4>Welcome!</h4>
                 <FormGroup controlId="login-form">
-                    <ControlLabel>Door43 Account</ControlLabel><br/><br/>
-                    <FormControl type="text" placeholder="Username"
-                                 style={{width: '100%', marginBottom: '10px'}}
-                                 onChange={this.handleUserName.bind(this)}/>
-                    <FormControl type="password"
-                                 placeholder="Password"
-                                 style={{width: '100%'}}
-                                 onChange={this.handlePassword.bind(this)}/>
+                  <FormControl type="text" placeholder="Username"
+                    style={{ width: '40%', margin: '15px' }}
+                    onChange={this.props.onHandleUserName} />
+                  <FormControl type="password"
+                    placeholder="Password"
+                    style={{ width: '40%' }}
+                    onChange={this.props.onHandlePassword} />
                 </FormGroup>
-                <Button bsStyle="primary"
-                        type="submit"
-                        onClick={this.handleSubmit.bind(this)}
-                        style={{width: '100%', margin: 'auto'}}>
-                        Sign In
-                </Button>
-
-                <span>{"Don't have an account?"}</span>
-                <Button onClick={this.showRegistration.bind(this)}
-                        bsStyle="link"
-                        style={{color: 'blue', display: 'inline'}}>
-                        Register
-                </Button><br/><br/>
+                <button onMouseOver={() => this.onHover(1)} onMouseDown={() => this.onPress(1)}
+                  onMouseOut={() => this.onPress(0)} onMouseUp={() => this.onPress(0)}
+                  style={this.state.pressed != 1  && this.state.hovered != 1 ? Object.assign(styles.button, { marginBottom: '50px' }) :
+                  Object.assign(styles.buttonActive, { marginBottom: '50px' })}>
+                  Sign In
+                </button>
+                <div>
+                  <h4>{"Don't have an account?"}</h4>
+                  <button onMouseOver={() => this.onHover(2)} onMouseDown={() => this.onPress(2, displayLogin)}
+                    onMouseOut={() => this.onPress(0)} onMouseUp={() => this.onPress(0)}
+                    style={this.state.pressed != 2  && this.state.hovered != 2 ? styles.button : styles.buttonActive}
+                    >
+                    Create an Account
+                </button><br /><br />
+                </div>
+              </center>
             </Col>
-           </Row>
+          </Row>
         </div>
       );
     }

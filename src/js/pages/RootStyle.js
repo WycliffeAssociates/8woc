@@ -5,9 +5,11 @@ var RootStyles = {
   ScrollableSection: {
     height: '100%',
     position: 'relative',
-    top: '0px',
-    bottom: 0,
-    overflowY: 'scroll'
+    overflowY: 'scroll',
+    bottom:0,
+    padding:"0px",
+    overflowX:'hidden',
+    width: "calc(100vw - 250px)",
   },
   AfterCheck: {
     minWidth:'100vh',

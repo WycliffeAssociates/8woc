@@ -11,6 +11,10 @@ check_data.json
 .vscode/
 report.html
 jsconfig.json
+
+# Needed for Webstorm
+.idea
+
 #################
 ## Eclipse
 #################
@@ -59,7 +63,7 @@ local.properties
 [Dd]ebug/
 [Rr]elease/
 x64/
-build/
+temp/
 [Bb]in/
 [Oo]bj/
 xampp/
@@ -193,17 +197,18 @@ Desktop.ini
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
-# Mac crap
+# Mac Stuff
 .DS_Store
 #############
-## Eslint and node files
+## Auth tokens and node modules
 #############
-/node*
-.es*
-*.sqlite*
-userdata.sqlite
+/node_modules/
+npm-debug.log.*
+.auth
+Auth.json
 .config
 Authentication.js
+tests/testIO/*
 #############
 ## Python
 #############
@@ -214,7 +219,7 @@ Authentication.js
 *.egg
 *.egg-info
 dist/
-build/
+out/
 eggs/
 parts/
 var/
@@ -231,6 +236,7 @@ pip-log.txt
 
 #Translations
 *.mo
+
 
 #Mr Developer
 .mr.developer.cfg
