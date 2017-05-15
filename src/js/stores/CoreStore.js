@@ -4,6 +4,12 @@ var Dispatcher = require('../dispatchers/Dispatcher');
 var consts = require('../actions/CoreActionConsts');
 var CheckStore = require('./CheckStore');
 var CHANGE_EVENT = 'change';
+var path = require('path');
+var fs = require(window.__base + 'node_modules/fs-extra');
+const pathex = require('path-extra');
+const PARENT = pathex.datadir('translationCore')
+const PACKAGE_COMPILE_LOCATION = pathex.join(PARENT, 'packages-compiled')
+const PACKAGE_SUBMODULE_LOCATION = pathex.join(window.__base, 'tC_apps');
 
 /**
 Keep pretty much all business logic and data in
@@ -36,11 +42,6 @@ class CoreStore extends EventEmitter {
     this.doneLoading = true;
   }
 
-  updateNumberOfFetchDatas(number) {
-    //console.log('Number: ' + number);
-    this.numberOfFetchDatas = number;
-  }
-
   getNumberOfFetchDatas() {
     return this.numberOfFetchDatas;
   }
@@ -57,16 +58,16 @@ class CoreStore extends EventEmitter {
     return this.getView;
   }
 
-  getSettingsView() {
-    return this.settingsVisibility;
-  }
-
   emitChange() {
     this.emit(CHANGE_EVENT);
   }
 
   getShowProjectModal() {
     return this.projectModalVisibility;
+  }
+
+  getModProg() {
+    return this.modProgressView;
   }
 
   getCreateProjectText() {
@@ -94,6 +95,10 @@ class CoreStore extends EventEmitter {
   }
 
   calculateProgress(progressKey) {
+    // console.log(progressKey);
+    if (!this.progressObject) {
+      this.progressObject = [];
+    }
     this.progressObject[progressKey.key] = progressKey.progress;
     var currentProgress = 0;
     for (var key in this.progressObject){
@@ -153,14 +158,8 @@ class CoreStore extends EventEmitter {
     this.currentCheckNamespace = value;
   }
 
-  getPopoverVisibility() {
-    return {
-      visibility: this.popoverVisibility,
-      title: this.popoverTitle,
-      body: this.popoverBody,
-      left: this.popoverLeft,
-      top: this.popoverTop
-    }
+  getcurrentCheckNamespace() {
+    return this.currentCheckNamespace;
   }
 
 /**
@@ -177,18 +176,8 @@ class CoreStore extends EventEmitter {
 
   handleActions(action) {
     switch (action.type) {
-      case consts.CHANGE_UPLOAD_MODAL_VISIBILITY:
-        this.modalVisibility = action.modalOption;
-        this.emitChange();
-        break;
-
       case consts.CHANGE_LOGIN_MODAL_VISIBILITY:
         this.loginModalVisibility = action.loginModalOption;
-        this.emitChange();
-        break;
-
-      case consts.SETTINGS_VIEW:
-        this.settingsVisibility = action.settingsView;
         this.emitChange();
         break;
 
@@ -212,11 +201,6 @@ class CoreStore extends EventEmitter {
         this.emitChange();
       break;
 
-      case consts.CREATE_PROJECT:
-        this.projectModalVisibility = action.createProjectModal;
-        this.emitChange();
-      break;
-
       case consts.CHANGE_CREATE_PROJECT_TEXT:
         this.projectText = action.modalValue;
         this.emitChange();
@@ -227,23 +211,14 @@ class CoreStore extends EventEmitter {
         this.emitChange();
       break;
 
-      case consts.START_LOADING:
-        this.doneLoading = false;
-        this.progressObject = [];
-        this.emitChange();
-      break;
-
       case consts.SEND_PROGRESS_FOR_KEY:
         var progressKey = action.progressRecieved;
         this.calculateProgress(progressKey);
         this.emitChange();
       break;
 
-      case consts.DONE_LOADING:
-        this.doneLoading = true;
-        this.progressKeyObj = null;
-        this.loaderModalVisibility = false;
-        CheckStore.emitEvent('changeCheckType', {currentCheckNamespace: this.currentCheckNamespace});
+      case consts.MOD_PROGRESS_VIEW:
+        this.modProgressView = action.view;
         this.emitChange();
       break;
 
@@ -253,13 +228,14 @@ class CoreStore extends EventEmitter {
         this.emitChange();
       break;
 
+      case consts.KILL_LOADING:
+        this.doneLoading = true;
+        this.checkCategoryOptions = null;
+        this.emitChange();
+      break;
+
       case consts.ACCOUNT_LOGIN:
         this.userLoggedIn = action.user;
-        this.emitChange();
-        break;
-
-      case consts.CHANGE_PROFILE_VISIBILITY:
-        this.profileVisibility = action.profileOption;
         this.emitChange();
         break;
 
