@@ -3,7 +3,7 @@
  * @description: The file downloads a git repo and passes back the location it is
  *               downloaded to.
  ******************************************************************************/
-const remote = window.electron.remote;
+const remote = require('electron').remote;
 const {dialog} = remote;
 
 const path = require('path');
@@ -11,7 +11,6 @@ const pathex = require('path-extra');
 const fs = require(window.__base + 'node_modules/fs-extra');
 const api = window.ModuleApi;
 const git = require('./GitApi.js');
-const Access = require('./AccessProject');
 
 const CoreActions = require('../../actions/CoreActions.js');
 
@@ -22,19 +21,28 @@ module.exports = (function() {
   * @param {function} callback - The function to be run on complete
   ******************************************************************************/
   function openManifest(url, callback) {
-    var splitUrl = url.split('.');
-    if (splitUrl.pop() !== 'git') {
-      const alert = {
-            title: 'Import Error',
-            content: 'Please Make Sure That This Is a Valid Project.',
-            leftButtonText: 'Ok'
-          }
-          api.createAlert(alert);
+    if (!url) {
+      if (callback) {
+        callback({type: "custom", text: 'No link specified'}, null, null)
+      }
       return;
     }
-    var projectPath = splitUrl.pop().split('/');
-    var projectName = projectPath.pop();
-    const savePath = path.join(pathex.homedir(), 'Translation Core', projectName);
+    var splitUrl = url.split('.');
+    if (splitUrl[splitUrl.length-1] !== 'git') {
+      url+='.git';
+    }
+
+    var expression = new RegExp(/^https?:\/\/git.door43.org\/[^\/]+\/([^\/.]+).git$/);
+
+    if (expression.test(url)) {
+      var projectName = expression.exec(url)[1];
+      var savePath = path.join(pathex.homedir(), 'translationCore', projectName);
+    } else {
+      if (callback) {
+        callback({type: "custom", text: 'The URL does not reference a valid project'}, null, url)
+      }
+      return;
+    }
 
     fs.readdir(savePath, function(err, contents) {
       if (err) {
@@ -42,10 +50,8 @@ module.exports = (function() {
           runGitCommand(savePath, url, callback);
         });
       } else {
-        callback(savePath, url);
-        // Access.loadFromFilePath(savePath);
-        // CoreActions.showCreateProject("");
-
+        if (callback)
+          callback({type: "custom", text: 'That project already exists. The reimporting of existing projects is not currently supported.'}, savePath, url);
       }
     });
   }
@@ -59,21 +65,18 @@ module.exports = (function() {
   function runGitCommand(savePath, url, callback) {
     git(savePath).mirror(url, savePath, function(err) {
       if (err) {
+        fs.removeSync(savePath);
+        if (callback)
+          callback(err, null, null);
         return;
       }
       try {
-
         fs.readFileSync(path.join(savePath, 'manifest.json'));
-        callback(savePath, url);
+        if (callback)
+          callback(null, savePath, url);
       } catch (error) {
-          const alert = {
-            title: 'Error Getting Transaltion Studio Manifest',
-            content: error.message,
-            leftButtonText: 'Ok'
-          }
-          api.createAlert(alert);
-          console.error(error);
-        return;
+        if (callback)
+          callback({type: "custom", text: "Cannot read project manifest file"}, savePath, null);
       }
     });
   }
