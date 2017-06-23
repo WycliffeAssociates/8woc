@@ -1,26 +1,62 @@
 const electron = require('electron')
+const ipcMain = electron.ipcMain;
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
+const dialog = electron.dialog;
+const fs = require('fs-extra');
+const path = require('path-extra');
+const exec = require('child_process').exec;
 
-const ipc = require('electron').ipcMain;
-const fs = require('fs');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
-let reportWindow;
 
-function createWindow () {
+let mainWindow;
+let helperWindow;
+let splashScreen;
+
+function createMainWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({icon: 'images/TC_Icon.png', useContentSize: true, show: false});
+  mainWindow = new BrowserWindow({icon: 'src/images/TC_Icon.png', autoHideMenuBar: true, minWidth: 1200, minHeight: 650, center: true, useContentSize: true, show: false});
 
+  //mainWindow.webContents.openDevTools();
+  var gitFile = 'GitInstaller-32.exe';
+  if (process.env.PROCESSOR_ARCHITECTURE === "AMD64") {
+    gitFile = 'GitInstaller-64.exe';
+  }
+  let installerLocation = path.join(path.datadir('translationCore'), gitFile);
+  exec('git', (err, data) => {
+    if (!data) {
+      if (process.platform == 'win32') {
+        dialog.showErrorBox('Startup Failed', 'You must have Git installed and on your path in order to use translationCore. \nClick OK to install Git now.');
+        fs.copySync(__dirname + '/installers/' + gitFile, installerLocation);
+        exec(gitFile + ' /SILENT /COMPONENTS="assoc"', {cwd: path.datadir('translationCore')}, function(err, data) {
+          if (err) {
+            console.log(err);
+            dialog.showErrorBox('Git Installation Failed', 'The git installation failed.');
+            app.quit();
+          } else {
+            mainWindow.loadURL(`file://${__dirname}/index.html`);
+          }
+        });
+      } else {
+        dialog.showErrorBox('Startup Failed', 'You must have git installed and on your path in order to use translationCore.');
+        exec('open https://git-scm.com/downloads');
+        app.quit();
+      }
+    } else {
+      mainWindow.loadURL(`file://${__dirname}/index.html`);
+    }
+  })
+  // dialog.showErrorBox('Login Failed', 'Incorrect username or password. This could be caused by using an email address instead of a username.');
   // and load the index.html of the app.
-  mainWindow.loadURL(`file://${__dirname}/index.html`)
-	
+
   //Doesn't display until ready
   mainWindow.once('ready-to-show', () => {
-    mainWindow.show()
+    mainWindow.show();
+    mainWindow.maximize();
+    splashScreen.close();
   });
 
   // Emitted when the window is closed.
@@ -31,47 +67,66 @@ function createWindow () {
     mainWindow = null
   })
 }
-// currently sent from ReportGenerator.js
-ipc.on('open-report', (event, path) => {
-  if (reportWindow) {
-    reportWindow.focus();
-    return;
-  }
-  reportWindow = new BrowserWindow({autoHideMenuBar: true, show: false, width: 600, height: 600, title: "Check Report", icon: 'images/TC_Icon.png'});
-  reportWindow.loadURL("file:///" + path);
-    //Doesn't display until ready
-  reportWindow.once('ready-to-show', () => {
-    reportWindow.show()
-  });
-  reportWindow.on('closed', () => {
-    reportWindow = undefined;
-    // send event to the mainWindow if its open still
-    if (mainWindow) {
-      mainWindow.webContents.send("report-closed", path);
-    }
-    // delete the rendered report.html if it exists
-    // I would prefer that this be done in the renderer thread,
-    // but unless this was in the main thread, the main window could
-    // be closed before the report window, and the report file would not
-    // get deleted
-    fs.stat(path, (err, stats) => {
-      if (!err) {
-        fs.unlink(path, err => {
-          if (err) console.log(err);
-        });
-      }
-      else {
-        console.log(err);
-      }
-    });
 
+function createMainSplash() {
+  splashScreen = new BrowserWindow({
+    width: 600,
+    height: 600,
+    resizable: false,
+    autoHideMenuBar: true,
+    icon: 'src/images/TC_Icon.png',
+    frame: false,
+    center: true,
+    show: false
   });
-});
+
+  //splashScreen.webContents.openDevTools();
+
+  splashScreen.loadURL(`file://${__dirname}/src/html/splash.html`);
+
+  splashScreen.on('closed', function() {
+    splashScreen = null;
+  });
+}
+
+function createHelperWindow(url) {
+  helperWindow = new BrowserWindow({
+    width: 950,
+    height: 660,
+    minWidth: 950,
+    minHeight: 580,
+    useContentSize: true,
+    center: true,
+    autoHideMenuBar: true,
+    show: true,
+    frame: true
+  });
+
+  helperWindow.loadURL(url);
+
+  helperWindow.on('closed', () => {
+    helperWindow = null;
+  });
+
+  helperWindow.on('maximize', () => {
+    helperWindow.webContents.send('maximize');
+  });
+
+  helperWindow.on('unmaximize', () => {
+    helperWindow.webContents.send('unmaximize');
+  });
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', function () {
+  createMainSplash();
+  setTimeout(function () {
+    splashScreen.show();
+    createMainWindow();
+  }, 500);
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -80,15 +135,26 @@ app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     app.quit()
   }
-})
+});
 
 app.on('activate', function () {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
-    createWindow()
+    createMainWindow()
   }
-})
+});
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+ipcMain.on('save-as', function (event, arg) {
+  var input = dialog.showSaveDialog(mainWindow, arg.options);
+  event.returnValue = input || false;
+});
+
+ipcMain.on('open-helper', (event, url = "http://git.door43.org/") => {
+    if (helperWindow) {
+        helperWindow.show();
+        helperWindow.loadURL(url);
+    } else {
+        createHelperWindow(url);
+    }
+});
