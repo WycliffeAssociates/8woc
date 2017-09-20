@@ -1,96 +1,91 @@
-const React = require('react');
-const bootstrap = require('react-bootstrap');
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import fs from 'fs-extra';
+import path from 'path-extra';
+import { Grid, Row } from 'react-bootstrap';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+// injectTapEventPlugin Handles onTouchTap events from material-ui components
+injectTapEventPlugin();
+// container
+import KonamiContainer from "../containers/KonamiContainer";
+import StatusBarContainer from '../containers/StatusBarContainer';
+import BodyContainer from '../containers/home/BodyContainer';
+import LoaderContainer from '../containers/LoaderContainer';
+import PopoverContainer from '../containers/PopoverContainer';
+import ModalContainer from '../containers/mainModal/ModalContainer';
+import AlertDialogContainer from '../containers/AlertDialogContainer';
+import ProjectValidationContainer from '../containers/projectValidation/ProjectValidationContainer';
+// actions
+import * as ResourcesActions from '../actions/ResourcesActions';
+import * as OnlineModeActions from '../actions/OnlineModeActions';
+import * as MigrationActions from '../actions/MigrationActions';
 
-const NavMenu = require('./../components/core/navigation_menu/NavigationMenu.js');
-const SideNavBar = require('../components/core/SideBar/SideNavBar');
-const LoginModal = require('../components/core/login/LoginModal');
-const SwitchCheckModal = require('../components/core/SwitchCheckModal');
-const SettingsModal = require('../components/core/SettingsModal.js');
-const ProjectModal = require('../components/core/create_project/ProjectModal');
-const Loader = require('../components/core/Loader');
-const RootStyles = require('./RootStyle');
-const Grid = require('react-bootstrap/lib/Grid.js');
-const Row = require('react-bootstrap/lib/Row.js');
-const Col = require('react-bootstrap/lib/Col.js');
-const Toast = require('../NotificationApi/ToastComponent');
-const Welcome = require('../components/core/welcome/welcome');
-const AlertModal = require('../components/core/AlertModal');
-const Access = require('../components/core/AccessProject.js');
-const api = window.ModuleApi;
-const CheckStore = require('../stores/CheckStore.js');
-const ModuleWrapper = require('../components/core/ModuleWrapper');
-const CoreActions = require('../actions/CoreActions.js');
-const Popover = require('../components/core/Popover');
+import packageJson from '../../../package.json';
 
-var Main = React.createClass({
-  getInitialState() {
-    var tutorialState = localStorage.getItem('showTutorial');
-    if (tutorialState == 'true' || tutorialState === null) {
-      return({
-        firstTime: true
-      })
-    } else {
-      return({
-        firstTime: false
-      })
-    }
-  },
+class Main extends Component {
 
-  componentDidMount: function() {
-    var saveLocation = localStorage.getItem('lastProject');
-    if (localStorage.getItem('showTutorial') != 'true' && saveLocation) {
-        Access.loadFromFilePath(saveLocation);
-    }
-  },
-
-  componentDidUpdate: function(prevProps, prevState){
-    if (this.showCheck == true) {
-      CoreActions.updateCheckModal(true);
-      this.showCheck = false;
-    }
-  },
-
-  finishWelcome: function(){
-    this.setState({
-      firstTime: false
-    });
-    this.showCheck = true;
-  },
-
-  render: function(){
-    var _this = this;
-    if(this.state.firstTime){
-      return(
-        <Welcome initialize={this.finishWelcome}/>
-      )
-    }else{
-      return(
-        <div className='fill-height'>
-        <SettingsModal />
-        <LoginModal />
-        <SideNavBar />
-        <SwitchCheckModal />
-        <Popover />
-        <Toast />
-          <Grid fluid className='fill-height' style={{marginLeft: '85px'}}>
-            <Row className='fill-height main-view'>
-              <Col className='fill-height' xs={5} sm={4} md={3} lg={2}>
-                <NavMenu />
-                <ProjectModal />
-              </Col>
-              <Col style={RootStyles.ScrollableSection} xs={7} sm={8} md={9} lg={10}>
-                <Loader />
-                <AlertModal />
-                <ModuleWrapper />
-              </Col>
-            </Row>
-          </Grid>
-        </div>
-      )
-    }
+  componentWillMount() {
+    const tCDir = path.join(path.homedir(), 'translationCore', 'projects');
+    fs.ensureDirSync(tCDir);
   }
-});
 
-module.exports = (
-    <Main />
-);
+  componentDidMount() {
+    if (localStorage.getItem('version') !== packageJson.version) {
+      localStorage.setItem('version', packageJson.version);
+      // the users resources folder will be deleted for every new app version and then regenerated.
+      this.props.actions.migrateResourcesFolder();
+    }
+    // migration logic for toolsSettings in settings.json
+    this.props.actions.migrateToolsSettings();
+    this.props.actions.getResourcesFromStaticPackage();
+    this.props.actions.getAnchorTags();
+  }
+
+  render() {
+
+    return (
+      <div className="fill-height">
+        <ProjectValidationContainer />
+        <AlertDialogContainer />
+        <KonamiContainer />
+        <ModalContainer />
+        <PopoverContainer />
+        <LoaderContainer />
+        <Grid fluid style={{ padding: 0 }}>
+          <Row style={{ margin: 0 }}>
+            <StatusBarContainer />
+          </Row>
+          <BodyContainer />
+        </Grid>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = state => {
+  return state;
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: {
+      getResourcesFromStaticPackage: () => {
+        ResourcesActions.getResourcesFromStaticPackage();
+      },
+      getAnchorTags: () => {
+        dispatch(OnlineModeActions.getAnchorTags());
+      },
+      migrateToolsSettings: () => {
+        dispatch(MigrationActions.migrateToolsSettings());
+      },
+      migrateResourcesFolder: () => {
+        dispatch(MigrationActions.migrateResourcesFolder());
+      }
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Main);
